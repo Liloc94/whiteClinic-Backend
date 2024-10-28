@@ -27,9 +27,5 @@ export function setupSwagger(app: INestApplication) {
     .build();
 
   const document = SwaggerModule.createDocument(app, options);
-  writeFileSync(
-    join(__dirname, '..', 'public', 'api-docs.json'),
-    JSON.stringify(document),
-  );
-  SwaggerModule.setup('api-docs', app, document, { url: '/api-docs.json' });
+  SwaggerModule.setup('api', app, document);
 }

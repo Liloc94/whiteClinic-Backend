@@ -16,10 +16,6 @@ import { AuthModule } from './auth/auth.module';
     ConfigModule.forRoot({
       isGlobal: true, // 환경 변수를 전역으로 사용
     }),
-    ServeStaticModule.forRoot({
-      rootPath: join(__dirname, '..', 'public'),
-      serveRoot: '/api-docs',
-    }),
     TypeOrmModule.forRoot({
       type: 'postgres',
       host: 'ep-cold-band-a71ed1zj-pooler.ap-southeast-2.aws.neon.tech',
