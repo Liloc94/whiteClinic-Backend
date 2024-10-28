@@ -1,7 +1,5 @@
 import { INestApplication } from '@nestjs/common';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
-import { writeFileSync } from 'fs';
-import { join } from 'path';
 
 /**
  * Swagger 세팅
@@ -27,5 +25,6 @@ export function setupSwagger(app: INestApplication) {
     .build();
 
   const document = SwaggerModule.createDocument(app, options);
-  SwaggerModule.setup('api', app, document);
+
+  SwaggerModule.setup('api-docs', app, document);
 }

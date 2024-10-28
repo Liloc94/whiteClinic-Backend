@@ -3,8 +3,6 @@ import { AppController } from './app/app.controller';
 import { OrderInfoModule } from './order-info/order-info.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { EngineerInfoModule } from './engineer-info/engineer-info.module';
-import { ServeStaticModule } from '@nestjs/serve-static';
-import { join } from 'path';
 import { RegistrationModule } from './engineer-registration/registration.module';
 import { RefreshTokenModule } from './refresh_token/refresh_token.module';
 import { AdminModule } from './admin/admin.module';

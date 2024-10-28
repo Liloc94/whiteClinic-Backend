@@ -12,8 +12,6 @@ const app_controller_1 = require("./app/app.controller");
 const order_info_module_1 = require("./order-info/order-info.module");
 const typeorm_1 = require("@nestjs/typeorm");
 const engineer_info_module_1 = require("./engineer-info/engineer-info.module");
-const serve_static_1 = require("@nestjs/serve-static");
-const path_1 = require("path");
 const registration_module_1 = require("./engineer-registration/registration.module");
 const refresh_token_module_1 = require("./refresh_token/refresh_token.module");
 const admin_module_1 = require("./admin/admin.module");
@@ -27,10 +25,6 @@ exports.AppModule = AppModule = __decorate([
         imports: [
             config_1.ConfigModule.forRoot({
                 isGlobal: true,
-            }),
-            serve_static_1.ServeStaticModule.forRoot({
-                rootPath: (0, path_1.join)(__dirname, '..', 'public'),
-                serveRoot: '/api-docs',
             }),
             typeorm_1.TypeOrmModule.forRoot({
                 type: 'postgres',
