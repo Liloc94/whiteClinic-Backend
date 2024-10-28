@@ -14,8 +14,6 @@ async function bootstrap() {
 
   const port = SERVER_PORT;
 
-  app.setGlobalPrefix('api');
-
   app.useGlobalPipes(
     new ValidationPipe({
       whitelist: true, // DTO에 정의되지 않은 속성 제거

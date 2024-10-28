@@ -17,6 +17,8 @@ const refresh_token_module_1 = require("./refresh_token/refresh_token.module");
 const admin_module_1 = require("./admin/admin.module");
 const config_1 = require("@nestjs/config");
 const auth_module_1 = require("./auth/auth.module");
+const serve_static_1 = require("@nestjs/serve-static");
+const path_1 = require("path");
 let AppModule = class AppModule {
 };
 exports.AppModule = AppModule;
@@ -25,6 +27,10 @@ exports.AppModule = AppModule = __decorate([
         imports: [
             config_1.ConfigModule.forRoot({
                 isGlobal: true,
+            }),
+            serve_static_1.ServeStaticModule.forRoot({
+                rootPath: (0, path_1.join)(__dirname, '..', 'dist'),
+                serveRoot: '/api-docs',
             }),
             typeorm_1.TypeOrmModule.forRoot({
                 type: 'postgres',

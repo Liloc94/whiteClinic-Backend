@@ -11,7 +11,6 @@ async function bootstrap() {
     (0, dotenv_1.config)();
     const app = await core_1.NestFactory.create(app_module_1.AppModule);
     const port = URLS_1.SERVER_PORT;
-    app.setGlobalPrefix('api');
     app.useGlobalPipes(new common_1.ValidationPipe({
         whitelist: true,
         forbidNonWhitelisted: true,
