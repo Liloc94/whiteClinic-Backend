@@ -18,7 +18,7 @@ import { join } from 'path';
     }),
     ServeStaticModule.forRoot({
       rootPath: join(__dirname, '..', 'dist'),
-      serveRoot: '/api-docs',
+      serveRoot: 'public/api-docs',
     }),
     TypeOrmModule.forRoot({
       type: 'postgres',
