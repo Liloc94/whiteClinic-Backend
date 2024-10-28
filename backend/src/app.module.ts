@@ -31,7 +31,7 @@ import { join } from 'path';
       entities: [],
       autoLoadEntities: true,
       synchronize: false,
-      logging: false, // 로그 확인용 옵션
+      logging: true, // 로그 확인용 옵션
     }),
     OrderInfoModule,
     EngineerInfoModule,
