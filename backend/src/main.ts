@@ -14,7 +14,7 @@ async function bootstrap() {
 
   const port = SERVER_PORT;
 
-  app.useStaticAssets('public/api-docs'); // 정적 파일 제공 경로 설정
+  app.setGlobalPrefix('api');
 
   app.useGlobalPipes(
     new ValidationPipe({
