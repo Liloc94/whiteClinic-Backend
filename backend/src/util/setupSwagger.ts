@@ -1,5 +1,7 @@
 import { INestApplication } from '@nestjs/common';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import { writeFileSync } from 'fs';
+import { join } from 'path';
 
 /**
  * Swagger 세팅
@@ -21,10 +23,13 @@ export function setupSwagger(app: INestApplication) {
       },
       'access-token',
     )
-    .addTag('auth')
+    .addTag('API Docs Lists..')
     .build();
 
   const document = SwaggerModule.createDocument(app, options);
-
-  SwaggerModule.setup('api-docs', app, document);
+  writeFileSync(
+    join(__dirname, '..', 'public', 'api-docs.json'),
+    JSON.stringify(document),
+  );
+  SwaggerModule.setup('api-docs', app, document, { url: '/api-docs.json' });
 }

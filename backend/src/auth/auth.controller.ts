@@ -1,6 +1,6 @@
 import { Body, Controller, Get, Post, Req, UseGuards } from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { ApiBearerAuth, ApiBody, ApiResponse } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiBody, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { RegisterAuthDTO } from './dto/register-auth.dto';
 import { CreateAuthDto } from './dto/create-auth.dto';
 import { RefreshTokenDTO } from 'src/refresh_token/dto/refresh_token.dto';
@@ -11,6 +11,7 @@ import { Request } from 'express';
 import { Admin } from 'src/admin/entities/admin.entity';
 
 @Controller('auth')
+@ApiTags('토큰인증 API')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
