@@ -15,7 +15,7 @@ let AppController = class AppController {
     getHello() {
         return `
     <h1>WhiteClinic Server is running...</h1>
-    <button><Link="">api redirect</Link></button>
+    <button><Link="https://whiteclinic-server-5uxfywibo-deployproject.vercel.app/api-docs">api redirect</Link></button>
     `;
     }
 };
@@ -27,6 +27,6 @@ __decorate([
     __metadata("design:returntype", String)
 ], AppController.prototype, "getHello", null);
 exports.AppController = AppController = __decorate([
-    (0, common_1.Controller)('/')
+    (0, common_1.Controller)()
 ], AppController);
 //# sourceMappingURL=app.controller.js.map
