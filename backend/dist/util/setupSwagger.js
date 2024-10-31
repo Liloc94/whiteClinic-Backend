@@ -22,8 +22,14 @@ function setupSwagger(app) {
             'https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/4.15.5/swagger-ui-standalone-preset.js',
         ],
         customCssUrl: 'https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/4.15.5/swagger-ui.min.css',
+        customfavIcon: 'https://swagger.io/favicon.png',
         swaggerOptions: {
             persistAuthorization: true,
+            tryItOutEnabled: true,
+            displayRequestDuration: true,
+            filter: true,
+            defaultModelsExpandDepth: -1,
+            explorer: true,
         },
     });
 }

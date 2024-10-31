@@ -34,8 +34,14 @@ export function setupSwagger(app: INestApplication) {
     ],
     customCssUrl:
       'https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/4.15.5/swagger-ui.min.css',
+    customfavIcon: 'https://swagger.io/favicon.png', // Swagger 공식 favicon 사용
     swaggerOptions: {
       persistAuthorization: true,
+      tryItOutEnabled: true,
+      displayRequestDuration: true,
+      filter: true,
+      defaultModelsExpandDepth: -1, // 기본 스키마 섹션 숨기기
+      explorer: true,
     },
   });
 }
