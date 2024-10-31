@@ -27,11 +27,11 @@ export function setupSwagger(app: INestApplication) {
   const document = SwaggerModule.createDocument(app, options);
 
   SwaggerModule.setup('api-docs', app, document, {
-    customCssUrl: '/swagger-ui.css',
-    customJs: '/swagger-ui-bundle.js',
-    customfavIcon: '/favicon.png',
-    swaggerOptions: {
-      persistAuthorization: true,
-    },
+    customJs: [
+      'https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/4.15.5/swagger-ui-bundle.js',
+      'https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/4.15.5/swagger-ui-standalone-preset.js',
+    ],
+    customCssUrl:
+      'https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/4.15.5/swagger-ui.min.css',
   });
 }
