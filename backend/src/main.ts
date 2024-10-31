@@ -23,6 +23,11 @@ async function bootstrap() {
     }),
   );
 
+  // 정적 파일 제공 설정
+  app.useStaticAssets(join(__dirname, '..', 'public'), {
+    prefix: '/public',
+  });
+
   app.enableCors({
     origin: SERVER_URL || LOCAL_URL,
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
