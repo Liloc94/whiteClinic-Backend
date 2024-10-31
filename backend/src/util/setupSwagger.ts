@@ -26,6 +26,7 @@ export function setupSwagger(app: INestApplication) {
 
   const document = SwaggerModule.createDocument(app, options);
 
+  // CDN 링크를 사용하도록 Swagger UI 설정 수정
   SwaggerModule.setup('api-docs', app, document, {
     customJs: [
       'https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/4.15.5/swagger-ui-bundle.js',
@@ -33,5 +34,8 @@ export function setupSwagger(app: INestApplication) {
     ],
     customCssUrl:
       'https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/4.15.5/swagger-ui.min.css',
+    swaggerOptions: {
+      persistAuthorization: true,
+    },
   });
 }
