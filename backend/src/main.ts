@@ -6,7 +6,6 @@ import { config } from 'dotenv';
 import { ValidationPipe } from '@nestjs/common';
 import { LOCAL_URL, SERVER_PORT, SERVER_URL } from './util/URLS';
 import { NestExpressApplication } from '@nestjs/platform-express';
-import { join } from 'path';
 
 async function bootstrap() {
   config(); // .env 파일 로드
@@ -34,6 +33,7 @@ async function bootstrap() {
   setupSwagger(app);
 
   await app.listen(process.env.PORT || port);
+
   console.log(`Server is running on port:${port}!`);
 }
 
