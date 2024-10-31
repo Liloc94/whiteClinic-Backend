@@ -29,8 +29,8 @@ exports.AppModule = AppModule = __decorate([
                 isGlobal: true,
             }),
             serve_static_1.ServeStaticModule.forRoot({
-                rootPath: (0, path_1.join)(__dirname, '..', 'dist'),
-                serveRoot: '/api-docs',
+                rootPath: (0, path_1.join)(__dirname, '..', 'dist', 'public'),
+                serveRoot: 'api-docs',
             }),
             typeorm_1.TypeOrmModule.forRoot({
                 type: 'postgres',
@@ -43,7 +43,7 @@ exports.AppModule = AppModule = __decorate([
                 entities: [],
                 autoLoadEntities: true,
                 synchronize: false,
-                logging: false,
+                logging: true,
             }),
             order_info_module_1.OrderInfoModule,
             engineer_info_module_1.EngineerInfoModule,
