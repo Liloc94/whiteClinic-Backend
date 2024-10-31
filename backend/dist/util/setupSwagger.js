@@ -16,6 +16,13 @@ function setupSwagger(app) {
         .addTag('API Docs Lists..')
         .build();
     const document = swagger_1.SwaggerModule.createDocument(app, options);
-    swagger_1.SwaggerModule.setup('api-docs', app, document);
+    swagger_1.SwaggerModule.setup('api-docs', app, document, {
+        customCssUrl: '/swagger-ui.css',
+        customJs: '/swagger-ui-bundle.js',
+        customfavIcon: '/favicon.png',
+        swaggerOptions: {
+            persistAuthorization: true,
+        },
+    });
 }
 //# sourceMappingURL=setupSwagger.js.map

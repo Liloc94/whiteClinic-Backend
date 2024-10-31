@@ -29,8 +29,9 @@ exports.AppModule = AppModule = __decorate([
                 isGlobal: true,
             }),
             serve_static_1.ServeStaticModule.forRoot({
-                rootPath: (0, path_1.join)(__dirname, '..', 'dist', 'public'),
-                serveRoot: 'api-docs',
+                rootPath: (0, path_1.join)(__dirname, '..', 'node_modules/swagger-ui-dist'),
+                serveRoot: '/api-docs',
+                exclude: ['/api*'],
             }),
             typeorm_1.TypeOrmModule.forRoot({
                 type: 'postgres',

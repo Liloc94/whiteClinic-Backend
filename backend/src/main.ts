@@ -23,10 +23,6 @@ async function bootstrap() {
     }),
   );
 
-  app.useStaticAssets(join(__dirname, '..', 'public'), {
-    prefix: '/',
-  });
-
   app.enableCors({
     origin: SERVER_URL || LOCAL_URL,
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',

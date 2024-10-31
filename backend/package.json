@@ -6,7 +6,9 @@
   "private": true,
   "license": "UNLICENSED",
   "scripts": {
+    "prebuild": "if not exist dist\\public mkdir dist\\public",
     "build": "nest build",
+    "postbuild": "xcopy /E /I /Y node_modules\\swagger-ui-dist\\* dist\\public\\",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "start": "nest start",
     "start:dev": "nest start --watch",
