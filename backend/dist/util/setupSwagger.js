@@ -17,9 +17,11 @@ function setupSwagger(app) {
         .build();
     const document = swagger_1.SwaggerModule.createDocument(app, options);
     swagger_1.SwaggerModule.setup('api-docs', app, document, {
-        customCssUrl: '/swagger-ui.css',
-        customJs: '/swagger-ui-bundle.js',
-        customfavIcon: '/favicon.png',
+        customJs: [
+            'https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/4.15.5/swagger-ui-bundle.js',
+            'https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/4.15.5/swagger-ui-standalone-preset.js',
+        ],
+        customCssUrl: 'https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/4.15.5/swagger-ui.min.css',
         swaggerOptions: {
             persistAuthorization: true,
         },

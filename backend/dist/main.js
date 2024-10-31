@@ -7,7 +7,6 @@ const HttpErrorFilter_1 = require("./util/HttpErrorFilter");
 const dotenv_1 = require("dotenv");
 const common_1 = require("@nestjs/common");
 const URLS_1 = require("./util/URLS");
-const path_1 = require("path");
 async function bootstrap() {
     (0, dotenv_1.config)();
     const app = await core_1.NestFactory.create(app_module_1.AppModule);
@@ -17,9 +16,6 @@ async function bootstrap() {
         forbidNonWhitelisted: true,
         transform: true,
     }));
-    app.useStaticAssets((0, path_1.join)(__dirname, '..', 'public'), {
-        prefix: '/public',
-    });
     app.enableCors({
         origin: URLS_1.SERVER_URL || URLS_1.LOCAL_URL,
         methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
