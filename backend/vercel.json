@@ -2,21 +2,37 @@
   "version": 2,
   "builds": [
     {
-      "src": "backend/dist/main.js",
+      "src": "dist/main.js",
       "use": "@vercel/node"
     }
   ],
   "routes": [
     {
+      "src": "/api-docs",
+      "dest": "dist/main.js"
+    },
+    {
       "src": "/api-docs/(.*)",
-      "dest": "/backend/dist/public/api-docs/$1",
+      "dest": "dist/main.js",
       "headers": {
-        "cache-control": "no-store"
+        "cache-control": "public, max-age=0, must-revalidate"
       }
     },
     {
+      "src": "/swagger-ui-bundle.js",
+      "dest": "dist/main.js"
+    },
+    {
+      "src": "/swagger-ui.css",
+      "dest": "dist/main.js"
+    },
+    {
+      "src": "/api/(.*)",
+      "dest": "dist/main.js"
+    },
+    {
       "src": "/(.*)",
-      "dest": "/backend/dist/main.js"
+      "dest": "dist/main.js"
     }
   ]
 }

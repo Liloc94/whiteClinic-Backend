@@ -6,6 +6,7 @@ import { config } from 'dotenv';
 import { ValidationPipe } from '@nestjs/common';
 import { LOCAL_URL, SERVER_PORT, SERVER_URL } from './util/URLS';
 import { NestExpressApplication } from '@nestjs/platform-express';
+import { join } from 'path';
 
 async function bootstrap() {
   config(); // .env 파일 로드
@@ -21,6 +22,10 @@ async function bootstrap() {
       transform: true, // 자동 변환
     }),
   );
+
+  app.useStaticAssets(join(__dirname, '..', 'public'), {
+    prefix: '/',
+  });
 
   app.enableCors({
     origin: SERVER_URL || LOCAL_URL,
