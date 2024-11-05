@@ -1,39 +1,96 @@
-import { IsNotEmpty, IsString } from 'class-validator';
+import { ApiProperty } from '@nestjs/swagger';
+import {
+  IsArray,
+  IsBoolean,
+  IsNotEmpty,
+  IsOptional,
+  IsString,
+  ValidateNested,
+} from 'class-validator';
+import { EngineerSkillsDTO } from './engineer-skills.dto';
+import { Type } from 'class-transformer';
+import { EngineerDailyEarningDto } from './engineer-dailyearning.dto';
 
 export class CreateRegistrationDto {
-  @IsNotEmpty()
+  @ApiProperty({
+    description: '기사님 성함',
+  })
   @IsString()
-  engineerName: string; // 기사성함
+  @IsNotEmpty()
+  readonly name: string;
 
-  @IsNotEmpty()
+  @ApiProperty({
+    description: '폰번호',
+  })
   @IsString()
-  phoneNumber: string; // 연락처
+  @IsNotEmpty()
+  readonly phoneNumber: string;
 
-  @IsNotEmpty()
+  @ApiProperty({
+    description: '거주 지역',
+  })
   @IsString()
-  location: string; // 거주지역
+  @IsNotEmpty()
+  readonly location: string;
 
-  @IsNotEmpty()
+  @ApiProperty({
+    description: '비고',
+  })
   @IsString()
-  skill: string; // 가능품목
+  @IsOptional()
+  readonly remark?: string;
 
-  @IsNotEmpty()
-  @IsString()
-  remark: string; // 특이사항
+  @ApiProperty({
+    description: '기사님 스킬 목록',
+  })
+  @IsArray()
+  @ValidateNested({ each: true })
+  @Type(() => EngineerSkillsDTO)
+  readonly skills: EngineerSkillsDTO[];
 
-  @IsNotEmpty()
+  @ApiProperty({
+    description: '수당률',
+  })
   @IsString()
-  commissionRate: string; // 수당률
+  @IsNotEmpty()
+  readonly commissionRate: string;
 
-  @IsNotEmpty()
+  @ApiProperty({
+    description: '주급 지급 요일',
+  })
   @IsString()
-  paymentDay: string; // 급여요일
+  @IsNotEmpty()
+  readonly payday: string;
 
-  @IsNotEmpty()
-  @IsString()
-  specialHoliday: string; // 비정기휴무등록
+  @ApiProperty({
+    description: '지급 여부',
+    example: false,
+  })
+  @IsBoolean()
+  readonly isPaid: boolean;
 
-  @IsNotEmpty()
-  @IsString()
-  regularHoliday: string; // 정기휴무
+  @ApiProperty({
+    description: '일급 목록',
+  })
+  @IsArray()
+  @ValidateNested({ each: true })
+  @Type(() => EngineerDailyEarningDto)
+  readonly dailyEarnings: EngineerDailyEarningDto[];
+
+  @ApiProperty({
+    description: '정기 휴무 요일',
+  })
+  @IsOptional()
+  @IsArray()
+  @IsString({ each: true })
+  readonly dayoff?: string[];
+
+  @ApiProperty({
+    description: '비정기 휴무일',
+    required: false,
+  })
+  @IsOptional()
+  @IsArray()
+  @IsString({ each: true })
+  readonly holiday?: string[];
 }

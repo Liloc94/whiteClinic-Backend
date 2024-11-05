@@ -1,7 +1,6 @@
 import { Controller, Get } from '@nestjs/common';
 import { EngineerInfoService } from '../service/engineer-info.service';
-import { ApiBody, ApiOperation, ApiTags } from '@nestjs/swagger';
-import { Engineer } from '../entities/engineer-info.entity';
+import { ApiOperation, ApiTags } from '@nestjs/swagger';
 
 @Controller('engineer-info')
 @ApiTags('기사정보 API')

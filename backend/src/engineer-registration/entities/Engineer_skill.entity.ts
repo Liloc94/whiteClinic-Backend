@@ -1,11 +1,5 @@
 import { Engineer } from 'src/engineer-info/entities/engineer-info.entity';
-import {
-  Column,
-  Entity,
-  JoinColumn,
-  PrimaryColumn,
-  PrimaryGeneratedColumn,
-} from 'typeorm';
+import { Column, Entity, JoinColumn, PrimaryGeneratedColumn } from 'typeorm';
 import { Skill } from './skill.entity';
 
 @Entity('engineer_skill')
