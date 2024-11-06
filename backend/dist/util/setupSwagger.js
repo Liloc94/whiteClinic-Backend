@@ -13,7 +13,6 @@ function setupSwagger(app) {
         bearerFormat: 'JWT',
         description: 'Enter JWT token **_only_**',
     }, 'access-token')
-        .addTag('API Docs Lists..')
         .build();
     const document = swagger_1.SwaggerModule.createDocument(app, options);
     swagger_1.SwaggerModule.setup('api-docs', app, document, {
@@ -28,7 +27,6 @@ function setupSwagger(app) {
             tryItOutEnabled: true,
             displayRequestDuration: true,
             filter: true,
-            defaultModelsExpandDepth: -1,
             explorer: true,
         },
     });
