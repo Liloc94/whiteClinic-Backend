@@ -27,8 +27,8 @@ exports.AuthModule = AuthModule = __decorate([
             jwt_1.JwtModule.registerAsync({
                 useFactory: async () => {
                     return {
-                        privateKey: process.env.PRIVATE_KEY,
-                        publicKey: process.env.PUBLIC_KEY,
+                        privateKey: process.env.PRIVATE_KEY.replace(/\\n/g, '\n'),
+                        publicKey: process.env.PUBLIC_KEY.replace(/\\n/g, '\n'),
                         signOptions: {
                             algorithm: 'RS256',
                             expiresIn: '5m',
