@@ -15,7 +15,7 @@ export class AdminService {
     adminid: string,
     adminpw: string,
     role: string = 'admin',
-  ): Promise<Admin> {
+  ): Promise<Admin | string> {
     const hashedPassword = await bcrypt.hash(adminpw, 10);
     console.log(
       'hashedPassword : ' + hashedPassword,
@@ -26,7 +26,17 @@ export class AdminService {
       adminpw: hashedPassword,
       role,
     });
-    return this.adminRepository.save(admin);
+
+    const idDupCheck = this.adminRepository.findOne({
+      where: { adminid },
+      relations: [admin.adminid],
+    });
+
+    if (idDupCheck) {
+      return '중복되는 id가 존재합니다.';
+    } else {
+      return this.adminRepository.save(admin);
+    }
   }
 
   // 아이디와 일치하는 리프레시 토큰을 가진 회원정보 찾기
