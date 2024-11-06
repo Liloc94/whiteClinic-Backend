@@ -25,8 +25,8 @@ exports.AuthModule = AuthModule = __decorate([
             refresh_token_module_1.RefreshTokenModule,
             passport_1.PassportModule,
             jwt_1.JwtModule.register({
-                privateKey: process.env.PRIVATE_KEY.replace(/\\n/g, '\n'),
-                publicKey: process.env.PUBLIC_KEY.replace(/\\n/g, '\n'),
+                privateKey: process.env.PRIVATE_KEY,
+                publicKey: process.env.PUBLIC_KEY,
                 signOptions: {
                     algorithm: 'RS256',
                     expiresIn: '5m',

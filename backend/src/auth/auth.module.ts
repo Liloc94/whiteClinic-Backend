@@ -13,8 +13,8 @@ import { JwtStrategy } from './jwt.strategy';
     RefreshTokenModule,
     PassportModule,
     JwtModule.register({
-      privateKey: process.env.PRIVATE_KEY.replace(/\\n/g, '\n'),
-      publicKey: process.env.PUBLIC_KEY.replace(/\\n/g, '\n'),
+      privateKey: process.env.PRIVATE_KEY,
+      publicKey: process.env.PUBLIC_KEY,
       signOptions: {
         algorithm: 'RS256',
         expiresIn: '5m',
