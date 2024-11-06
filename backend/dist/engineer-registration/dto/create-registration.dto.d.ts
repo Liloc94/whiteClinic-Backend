@@ -1,11 +1,15 @@
+import { EngineerSkillsDTO } from './engineer-skills.dto';
+import { EngineerDailyEarningDto } from './engineer-dailyearning.dto';
 export declare class CreateRegistrationDto {
-    engineerName: string;
-    phoneNumber: string;
-    location: string;
-    skill: string;
-    remark: string;
-    commissionRate: string;
-    paymentDay: string;
-    specialHoliday: string;
-    regularHoliday: string;
+    readonly name: string;
+    readonly phoneNumber: string;
+    readonly location: string;
+    readonly remark?: string;
+    readonly skills: EngineerSkillsDTO[];
+    readonly commissionRate: string;
+    readonly payday: string;
+    readonly isPaid: boolean;
+    readonly dailyEarnings: EngineerDailyEarningDto[];
+    readonly dayoff?: string[];
+    readonly holiday?: string[];
 }

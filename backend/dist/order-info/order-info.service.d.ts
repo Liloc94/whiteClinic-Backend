@@ -2,7 +2,7 @@ import { OrderData } from './entities/OrderData.entity';
 import { SubmitOrderDto } from './dto/submit-order.dto';
 import { Repository } from 'typeorm';
 export declare class OrderInfoService {
-    private orderDataRepository;
+    private readonly orderDataRepository;
     constructor(orderDataRepository: Repository<OrderData>);
     private orderDatas;
     findAll(): Promise<SubmitOrderDto[]>;

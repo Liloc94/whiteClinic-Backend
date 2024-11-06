@@ -16,6 +16,7 @@ exports.RegistrationController = void 0;
 const common_1 = require("@nestjs/common");
 const registration_service_1 = require("../service/registration.service");
 const create_registration_dto_1 = require("../dto/create-registration.dto");
+const swagger_1 = require("@nestjs/swagger");
 let RegistrationController = class RegistrationController {
     constructor(registrationService) {
         this.registrationService = registrationService;
@@ -34,6 +35,7 @@ __decorate([
 ], RegistrationController.prototype, "create", null);
 exports.RegistrationController = RegistrationController = __decorate([
     (0, common_1.Controller)('registration'),
+    (0, swagger_1.ApiTags)('기사정보 등록 API'),
     __metadata("design:paramtypes", [registration_service_1.RegistrationService])
 ], RegistrationController);
 //# sourceMappingURL=registration.controller.js.map

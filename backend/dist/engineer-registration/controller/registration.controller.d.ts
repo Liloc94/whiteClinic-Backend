@@ -8,14 +8,14 @@ export declare class RegistrationController {
         message: string;
         data: {
             engineer: Promise<{
-                name: string;
+                name: any;
                 phoneNumber: string;
                 location: string;
                 remark: string;
             } & import("../../engineer-info/entities/engineer-info.entity").Engineer>;
-            skillNames: string[];
+            skillNames: any;
             commissionRate: import("../entities/commissionRates.entity").CommissionRates;
-            specialHolidays: string[];
+            specialHolidays: any;
             regularHolidays: import("../entities/weekDay.entity").WeekDays;
             paymentDay: import("../entities/weekDay.entity").WeekDays;
         };

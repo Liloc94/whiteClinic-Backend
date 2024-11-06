@@ -10,53 +10,105 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.CreateRegistrationDto = void 0;
+const swagger_1 = require("@nestjs/swagger");
 const class_validator_1 = require("class-validator");
+const engineer_skills_dto_1 = require("./engineer-skills.dto");
+const class_transformer_1 = require("class-transformer");
+const engineer_dailyearning_dto_1 = require("./engineer-dailyearning.dto");
 class CreateRegistrationDto {
 }
 exports.CreateRegistrationDto = CreateRegistrationDto;
 __decorate([
-    (0, class_validator_1.IsNotEmpty)(),
+    (0, swagger_1.ApiProperty)({
+        description: '기사님 성함',
+    }),
     (0, class_validator_1.IsString)(),
+    (0, class_validator_1.IsNotEmpty)(),
     __metadata("design:type", String)
-], CreateRegistrationDto.prototype, "engineerName", void 0);
+], CreateRegistrationDto.prototype, "name", void 0);
 __decorate([
-    (0, class_validator_1.IsNotEmpty)(),
+    (0, swagger_1.ApiProperty)({
+        description: '폰번호',
+    }),
     (0, class_validator_1.IsString)(),
+    (0, class_validator_1.IsNotEmpty)(),
     __metadata("design:type", String)
 ], CreateRegistrationDto.prototype, "phoneNumber", void 0);
 __decorate([
-    (0, class_validator_1.IsNotEmpty)(),
+    (0, swagger_1.ApiProperty)({
+        description: '거주 지역',
+    }),
     (0, class_validator_1.IsString)(),
+    (0, class_validator_1.IsNotEmpty)(),
     __metadata("design:type", String)
 ], CreateRegistrationDto.prototype, "location", void 0);
 __decorate([
-    (0, class_validator_1.IsNotEmpty)(),
+    (0, swagger_1.ApiProperty)({
+        description: '비고',
+    }),
     (0, class_validator_1.IsString)(),
-    __metadata("design:type", String)
-], CreateRegistrationDto.prototype, "skill", void 0);
-__decorate([
-    (0, class_validator_1.IsNotEmpty)(),
-    (0, class_validator_1.IsString)(),
+    (0, class_validator_1.IsOptional)(),
     __metadata("design:type", String)
 ], CreateRegistrationDto.prototype, "remark", void 0);
 __decorate([
-    (0, class_validator_1.IsNotEmpty)(),
+    (0, swagger_1.ApiProperty)({
+        description: '기사님 스킬 목록',
+    }),
+    (0, class_validator_1.IsArray)(),
+    (0, class_validator_1.ValidateNested)({ each: true }),
+    (0, class_transformer_1.Type)(() => engineer_skills_dto_1.EngineerSkillsDTO),
+    __metadata("design:type", Array)
+], CreateRegistrationDto.prototype, "skills", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({
+        description: '수당률',
+    }),
     (0, class_validator_1.IsString)(),
+    (0, class_validator_1.IsNotEmpty)(),
     __metadata("design:type", String)
 ], CreateRegistrationDto.prototype, "commissionRate", void 0);
 __decorate([
-    (0, class_validator_1.IsNotEmpty)(),
+    (0, swagger_1.ApiProperty)({
+        description: '주급 지급 요일',
+    }),
     (0, class_validator_1.IsString)(),
+    (0, class_validator_1.IsNotEmpty)(),
     __metadata("design:type", String)
-], CreateRegistrationDto.prototype, "paymentDay", void 0);
+], CreateRegistrationDto.prototype, "payday", void 0);
 __decorate([
-    (0, class_validator_1.IsNotEmpty)(),
-    (0, class_validator_1.IsString)(),
-    __metadata("design:type", String)
-], CreateRegistrationDto.prototype, "specialHoliday", void 0);
+    (0, swagger_1.ApiProperty)({
+        description: '지급 여부',
+        example: false,
+    }),
+    (0, class_validator_1.IsBoolean)(),
+    __metadata("design:type", Boolean)
+], CreateRegistrationDto.prototype, "isPaid", void 0);
 __decorate([
-    (0, class_validator_1.IsNotEmpty)(),
-    (0, class_validator_1.IsString)(),
-    __metadata("design:type", String)
-], CreateRegistrationDto.prototype, "regularHoliday", void 0);
+    (0, swagger_1.ApiProperty)({
+        description: '일급 목록',
+    }),
+    (0, class_validator_1.IsArray)(),
+    (0, class_validator_1.ValidateNested)({ each: true }),
+    (0, class_transformer_1.Type)(() => engineer_dailyearning_dto_1.EngineerDailyEarningDto),
+    __metadata("design:type", Array)
+], CreateRegistrationDto.prototype, "dailyEarnings", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({
+        description: '정기 휴무 요일',
+    }),
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsArray)(),
+    (0, class_validator_1.IsString)({ each: true }),
+    __metadata("design:type", Array)
+], CreateRegistrationDto.prototype, "dayoff", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({
+        description: '비정기 휴무일',
+        required: false,
+    }),
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsArray)(),
+    (0, class_validator_1.IsString)({ each: true }),
+    __metadata("design:type", Array)
+], CreateRegistrationDto.prototype, "holiday", void 0);
 //# sourceMappingURL=create-registration.dto.js.map

@@ -13,14 +13,14 @@ export declare class RegistrationService {
         message: string;
         data: {
             engineer: Promise<{
-                name: string;
+                name: any;
                 phoneNumber: string;
                 location: string;
                 remark: string;
             } & Engineer>;
-            skillNames: string[];
+            skillNames: any;
             commissionRate: CommissionRates;
-            specialHolidays: string[];
+            specialHolidays: any;
             regularHolidays: WeekDays;
             paymentDay: WeekDays;
         };

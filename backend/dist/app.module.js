@@ -17,6 +17,7 @@ const refresh_token_module_1 = require("./refresh_token/refresh_token.module");
 const admin_module_1 = require("./admin/admin.module");
 const config_1 = require("@nestjs/config");
 const auth_module_1 = require("./auth/auth.module");
+const customer_module_1 = require("./customer/customer.module");
 let AppModule = class AppModule {
 };
 exports.AppModule = AppModule;
@@ -46,6 +47,7 @@ exports.AppModule = AppModule = __decorate([
             admin_module_1.AdminModule,
             auth_module_1.AuthModule,
             registration_module_1.RegistrationModule,
+            customer_module_1.CustomerModule,
         ],
         controllers: [app_controller_1.AppController],
         providers: [],
