@@ -15,7 +15,6 @@ import { RolesGuard } from './guards/roles.guard';
 import { Roles } from './decorators/roles.decorator';
 import { Request } from 'express';
 import { Admin } from 'src/admin/entities/admin.entity';
-
 @Controller('auth')
 @ApiTags('토큰인증 API')
 export class AuthController {
@@ -32,6 +31,7 @@ export class AuthController {
   async register(@Body() registerDto: RegisterAuthDTO) {
     const { adminID, adminPW, role } = registerDto;
     const admin = await this.authService.register(adminID, adminPW, role);
+
     return { message: '회원가입 성공', id: admin.id };
   }
 

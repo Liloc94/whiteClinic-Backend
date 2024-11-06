@@ -1,39 +1,49 @@
+import { ApiProperty } from '@nestjs/swagger';
 import { IsNotEmpty, IsString } from 'class-validator';
 
 export class CreateRegistrationDto {
   @IsNotEmpty()
   @IsString()
-  engineerName: string; // 기사성함
+  @ApiProperty({ description: '기사성함' })
+  engineerName: string;
 
   @IsNotEmpty()
   @IsString()
-  phoneNumber: string; // 연락처
+  @ApiProperty({ description: '연락처' })
+  phoneNumber: string;
 
   @IsNotEmpty()
   @IsString()
-  location: string; // 거주지역
+  @ApiProperty({ description: '거주지역' })
+  location: string;
 
   @IsNotEmpty()
   @IsString()
-  skill: string; // 가능품목
+  @ApiProperty({ description: '가능품목' })
+  skill: string;
 
   @IsNotEmpty()
   @IsString()
-  remark: string; // 특이사항
+  @ApiProperty({ description: '특이사항' })
+  remark: string;
 
   @IsNotEmpty()
   @IsString()
-  commissionRate: string; // 수당률
+  @ApiProperty({ description: '수당률' })
+  commissionRate: string;
 
   @IsNotEmpty()
   @IsString()
-  paymentDay: string; // 급여요일
+  @ApiProperty({ description: '급여요일' })
+  paymentDay: string;
 
   @IsNotEmpty()
   @IsString()
-  specialHoliday: string; // 비정기휴무등록
+  @ApiProperty({ description: '비정기휴무등록' })
+  specialHoliday: string;
 
   @IsNotEmpty()
   @IsString()
-  regularHoliday: string; // 정기휴무
+  @ApiProperty({ description: '정기휴무' })
+  regularHoliday: string;
 }
