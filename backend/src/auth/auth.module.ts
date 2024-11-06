@@ -29,14 +29,6 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
           throw new Error('환경변수에 올바르지 않은 JWT Key가 존재합니다.');
         }
 
-        // 키가 올바른 형식인지 검증
-        if (
-          !privateKey.includes('-----BEGIN PRIVATE KEY-----') &&
-          !privateKey.includes('-----BEGIN RSA PRIVATE KEY-----')
-        ) {
-          throw new Error('올바르지 않은 키 포맷입니다.');
-        }
-
         return {
           privateKey: privateKey,
           publicKey: publicKey,
