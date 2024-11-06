@@ -66,7 +66,7 @@ export class RegistrationService {
 
       //수당률
       // post 해당률과 일치하는 데이터를 찾고 id 리턴
-      let CommissionRate = await queryRunner.manager.findOneBy(
+      const CommissionRate = await queryRunner.manager.findOneBy(
         CommissionRates,
         {
           rate: parseFloat(dto.commissionRate),
@@ -95,7 +95,7 @@ export class RegistrationService {
 
       //정기휴무
       //post로 받은 날짜와 weekDay 테이블안에 해당하는 날짜의 id 찾아오기
-      let selectedDayId = await queryRunner.manager.findOneBy(WeekDays, {
+      const selectedDayId = await queryRunner.manager.findOneBy(WeekDays, {
         dayName: dto.regularHoliday,
       });
 
@@ -106,7 +106,7 @@ export class RegistrationService {
       console.log('정기휴무 나오냐?', selectedDayId);
 
       //급여요일
-      let selectPaymentDay = await queryRunner.manager.findOneBy(WeekDays, {
+      const selectPaymentDay = await queryRunner.manager.findOneBy(WeekDays, {
         dayName: dto.paymentDay,
       });
 
