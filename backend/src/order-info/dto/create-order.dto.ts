@@ -7,14 +7,14 @@ export class CreateOrderDTO {
   })
   @IsNumber()
   @IsNotEmpty()
-  readonly customerId: number;
+  customerId: number;
 
   @ApiProperty({
     description: '세척 품목 ID',
   })
   @IsNumber()
   @IsNotEmpty()
-  readonly productDetailId: number;
+  productDetailId: number;
 
   @ApiProperty({
     description: '제품 관련 특이사항',
@@ -22,14 +22,14 @@ export class CreateOrderDTO {
   })
   @IsString()
   @IsOptional()
-  readonly productRemark?: string;
+  productRemark?: string;
 
   @ApiProperty({
     description: '세척 대수',
   })
   @IsNumber()
   @IsNotEmpty()
-  readonly count: number;
+  count: number;
 
   @ApiProperty({
     description: '할인 금액',
@@ -37,14 +37,14 @@ export class CreateOrderDTO {
   })
   @IsNumber()
   @IsOptional()
-  readonly discountAmount?: number;
+  discountAmount?: number;
 
   @ApiProperty({
     description: '총 금액',
   })
   @IsNumber()
   @IsNotEmpty()
-  readonly totalAmount: number;
+  totalAmount: number;
 
   @ApiProperty({
     description: '비고',
@@ -52,5 +52,5 @@ export class CreateOrderDTO {
   })
   @IsString()
   @IsOptional()
-  readonly remark?: string;
+  remark?: string;
 }

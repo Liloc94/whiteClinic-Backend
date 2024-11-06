@@ -7,12 +7,12 @@ export class EngineerSkillsDTO {
   })
   @IsArray()
   @IsString({ each: true })
-  readonly product: string[];
+  product: string[];
 
   @ApiProperty({
     description: '특이사항',
   })
   @IsString()
   @IsOptional()
-  readonly remark?: string;
+  remark?: string;
 }

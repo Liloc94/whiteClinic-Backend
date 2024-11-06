@@ -6,11 +6,11 @@ export class EngineerDailyEarningDto {
     description: '일자',
   })
   @IsDateString()
-  readonly date: string;
+  date: string;
 
   @ApiProperty({
     description: '일급 총액',
   })
   @IsNumber()
-  readonly dailyAmount: number;
+  dailyAmount: number;
 }
