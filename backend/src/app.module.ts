@@ -9,6 +9,7 @@ import { AdminModule } from './admin/admin.module';
 import { ConfigModule } from '@nestjs/config';
 import { AuthModule } from './auth/auth.module';
 import { CustomerModule } from './customer/customer.module';
+import { JwtModule } from '@nestjs/jwt';
 
 @Module({
   imports: [
@@ -36,6 +37,7 @@ import { CustomerModule } from './customer/customer.module';
     AuthModule,
     RegistrationModule,
     CustomerModule,
+    JwtModule,
   ],
   controllers: [AppController],
   providers: [],
