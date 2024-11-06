@@ -6,6 +6,8 @@ import { RefreshTokenModule } from 'src/refresh_token/refresh_token.module';
 import { PassportModule } from '@nestjs/passport';
 import { JwtModule } from '@nestjs/jwt';
 import { JwtStrategy } from './jwt.strategy';
+import * as path from 'path';
+import * as fs from 'fs';
 
 @Module({
   imports: [
@@ -14,9 +16,16 @@ import { JwtStrategy } from './jwt.strategy';
     PassportModule,
     JwtModule.registerAsync({
       useFactory: async () => {
-        const publicKey = process.env.PUBLIC_KEY;
-        const privateKey = process.env.PRIVATE_KEY;
-
+        // Load the private key (Keep this secure!)
+        const privateKey = fs.readFileSync(
+          path.join(__dirname, 'private.pem'),
+          'utf8',
+        );
+        // Load the public key
+        const publicKey = fs.readFileSync(
+          path.join(__dirname, 'public.pem'),
+          'utf8',
+        );
         return {
           privateKey: privateKey,
           publicKey: publicKey,
@@ -24,6 +33,7 @@ import { JwtStrategy } from './jwt.strategy';
             algorithm: 'RS256',
             expiresIn: '5m',
           },
+          verifyOptions: { algorithms: ['RS256'] },
         };
       },
     }),

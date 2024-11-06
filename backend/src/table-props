@@ -197,7 +197,7 @@ CREATE TABLE orders (
     order_id SERIAL PRIMARY KEY,
     customer_id INT,
     product_detail_id INT, 
-   product_remark    VARCHAR(255),
+    product_remark VARCHAR(255),
     count INT,
     discount_amount DECIMAL(20,2),
     total_amount DECIMAL(20,2),

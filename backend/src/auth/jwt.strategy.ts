@@ -3,7 +3,6 @@ import { ExtractJwt, Strategy } from 'passport-jwt';
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { AdminService } from 'src/admin/admin.service';
 import { Admin } from 'src/admin/entities/admin.entity';
-import * as fs from 'fs';
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
@@ -16,7 +15,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
       ignoreExpiration: false,
 
       // Private key를 Public key 경로에서 가져옴
-      secretOrKey: process.env.PUBLIC_KEY.replace(/\\n/g, '\n'),
+      secretOrKey: process.env.PUBLIC_KEY,
 
       // RSA256 알고리즘 사용하여 JWT 검증
       algorithms: ['RS256'],
