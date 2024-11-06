@@ -1,4 +1,4 @@
 export declare class EngineerDailyEarningDto {
-    readonly date: string;
-    readonly dailyAmount: number;
+    date: string;
+    dailyAmount: number;
 }

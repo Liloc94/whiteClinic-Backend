@@ -15,6 +15,7 @@ const refresh_token_module_1 = require("../refresh_token/refresh_token.module");
 const passport_1 = require("@nestjs/passport");
 const jwt_1 = require("@nestjs/jwt");
 const jwt_strategy_1 = require("./jwt.strategy");
+const config_1 = require("@nestjs/config");
 let AuthModule = class AuthModule {
 };
 exports.AuthModule = AuthModule;
@@ -25,9 +26,22 @@ exports.AuthModule = AuthModule = __decorate([
             refresh_token_module_1.RefreshTokenModule,
             passport_1.PassportModule,
             jwt_1.JwtModule.registerAsync({
-                useFactory: async () => {
-                    const publicKey = process.env.PUBLIC_KEY;
-                    const privateKey = process.env.PRIVATE_KEY;
+                imports: [config_1.ConfigModule],
+                inject: [config_1.ConfigService],
+                useFactory: async (configService) => {
+                    const privateKey = configService
+                        .get('PRIVATE_KEY')
+                        ?.replace(/\\n/g, '\n');
+                    const publicKey = configService
+                        .get('PUBLIC_KEY')
+                        ?.replace(/\\n/g, '\n');
+                    if (!privateKey || !publicKey) {
+                        throw new Error('환경변수에 올바르지 않은 JWT Key가 존재합니다.');
+                    }
+                    if (!privateKey.includes('-----BEGIN PRIVATE KEY-----') &&
+                        !privateKey.includes('-----BEGIN RSA PRIVATE KEY-----')) {
+                        throw new Error('올바르지 않은 키 포맷입니다.');
+                    }
                     return {
                         privateKey: privateKey,
                         publicKey: publicKey,
@@ -35,6 +49,7 @@ exports.AuthModule = AuthModule = __decorate([
                             algorithm: 'RS256',
                             expiresIn: '5m',
                         },
+                        verifyOptions: { algorithms: ['RS256'] },
                     };
                 },
             }),

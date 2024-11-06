@@ -2,11 +2,13 @@ import { AdminService } from 'src/admin/admin.service';
 import { RefreshTokenService } from 'src/refresh_token/refresh_token.service';
 import { JwtService } from '@nestjs/jwt';
 import { RefreshResponseDTO } from 'src/refresh_token/dto/refresh_response.dto';
+import { ConfigService } from '@nestjs/config';
 export declare class AuthService {
     private readonly adminService;
     private readonly refreshTokenService;
     private readonly jwtService;
-    constructor(adminService: AdminService, refreshTokenService: RefreshTokenService, jwtService: JwtService);
+    private readonly configService;
+    constructor(adminService: AdminService, refreshTokenService: RefreshTokenService, jwtService: JwtService, configService: ConfigService);
     signIn(adminID: string, adminPW: string): Promise<{
         access_token: string;
         refresh_token: string;

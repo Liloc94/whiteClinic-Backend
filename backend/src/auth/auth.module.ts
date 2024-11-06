@@ -6,8 +6,7 @@ import { RefreshTokenModule } from 'src/refresh_token/refresh_token.module';
 import { PassportModule } from '@nestjs/passport';
 import { JwtModule } from '@nestjs/jwt';
 import { JwtStrategy } from './jwt.strategy';
-import * as path from 'path';
-import * as fs from 'fs';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 
 @Module({
   imports: [
@@ -15,11 +14,28 @@ import * as fs from 'fs';
     RefreshTokenModule,
     PassportModule,
     JwtModule.registerAsync({
-      useFactory: async () => {
-        // Load the private key (Keep this secure!)
-        const privateKey = process.env.PRIVATE_KEY.replace(/\\n/g, '\n');
-        // Load the public key
-        const publicKey = process.env.PUBLIC_KEY.replace(/\\n/g, '\n');
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: async (configService: ConfigService) => {
+        // 환경 변수에서 키 가져오기
+        const privateKey = configService
+          .get<string>('PRIVATE_KEY')
+          ?.replace(/\\n/g, '\n');
+        const publicKey = configService
+          .get<string>('PUBLIC_KEY')
+          ?.replace(/\\n/g, '\n');
+
+        if (!privateKey || !publicKey) {
+          throw new Error('환경변수에 올바르지 않은 JWT Key가 존재합니다.');
+        }
+
+        // 키가 올바른 형식인지 검증
+        if (
+          !privateKey.includes('-----BEGIN PRIVATE KEY-----') &&
+          !privateKey.includes('-----BEGIN RSA PRIVATE KEY-----')
+        ) {
+          throw new Error('올바르지 않은 키 포맷입니다.');
+        }
 
         return {
           privateKey: privateKey,

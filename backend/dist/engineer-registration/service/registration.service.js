@@ -60,7 +60,7 @@ let RegistrationService = class RegistrationService {
                 console.log('engineerId : ', (await engineer).id);
                 console.log('skillId', skill.id);
             }
-            let CommissionRate = await queryRunner.manager.findOneBy(commissionRates_entity_1.CommissionRates, {
+            const CommissionRate = await queryRunner.manager.findOneBy(commissionRates_entity_1.CommissionRates, {
                 rate: parseFloat(dto.commissionRate),
             });
             await queryRunner.manager.save(engineer_commissionRates_entity_1.EngineerCommissionRates, {
@@ -77,7 +77,7 @@ let RegistrationService = class RegistrationService {
                 });
             }
             console.log('비정기 완료', ArraySPecialHolidays);
-            let selectedDayId = await queryRunner.manager.findOneBy(weekDay_entity_1.WeekDays, {
+            const selectedDayId = await queryRunner.manager.findOneBy(weekDay_entity_1.WeekDays, {
                 dayName: dto.regularHoliday,
             });
             await queryRunner.manager.save(reaularHolidays_entity_1.RegularHolidays, {
@@ -85,7 +85,7 @@ let RegistrationService = class RegistrationService {
                 weekdayId: selectedDayId.id,
             });
             console.log('정기휴무 나오냐?', selectedDayId);
-            let selectPaymentDay = await queryRunner.manager.findOneBy(weekDay_entity_1.WeekDays, {
+            const selectPaymentDay = await queryRunner.manager.findOneBy(weekDay_entity_1.WeekDays, {
                 dayName: dto.paymentDay,
             });
             await queryRunner.manager.save(engineer_payDay_entity_1.EngineerPayDay, {

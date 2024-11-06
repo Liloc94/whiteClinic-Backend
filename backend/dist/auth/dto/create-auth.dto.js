@@ -16,13 +16,13 @@ class CreateAuthDto {
 }
 exports.CreateAuthDto = CreateAuthDto;
 __decorate([
-    (0, swagger_1.ApiProperty)({ description: 'adminID' }),
+    (0, swagger_1.ApiProperty)({ description: '관리자 아이디' }),
     (0, class_validator_1.IsString)(),
     (0, class_validator_1.IsNotEmpty)(),
     __metadata("design:type", String)
 ], CreateAuthDto.prototype, "adminID", void 0);
 __decorate([
-    (0, swagger_1.ApiProperty)({ description: 'adminPW' }),
+    (0, swagger_1.ApiProperty)({ description: '관리자 비밀번호' }),
     (0, class_validator_1.IsString)(),
     (0, class_validator_1.IsNotEmpty)(),
     __metadata("design:type", String)

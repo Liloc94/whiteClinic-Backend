@@ -16,11 +16,14 @@ const refresh_token_service_1 = require("../refresh_token/refresh_token.service"
 const jwt_1 = require("@nestjs/jwt");
 const bcrypt = require("bcrypt");
 const crypto = require("crypto");
+const config_1 = require("@nestjs/config");
 let AuthService = class AuthService {
-    constructor(adminService, refreshTokenService, jwtService) {
+    constructor(adminService, refreshTokenService, jwtService, configService) {
         this.adminService = adminService;
         this.refreshTokenService = refreshTokenService;
         this.jwtService = jwtService;
+        this.configService = configService;
+        console.log('Private Key:', this.configService.get('PRIVATE_KEY')?.substring(0, 50));
     }
     async signIn(adminID, adminPW) {
         const user = await this.adminService.findOne(adminID);
@@ -96,6 +99,7 @@ exports.AuthService = AuthService = __decorate([
     (0, common_1.Injectable)(),
     __metadata("design:paramtypes", [admin_service_1.AdminService,
         refresh_token_service_1.RefreshTokenService,
-        jwt_1.JwtService])
+        jwt_1.JwtService,
+        config_1.ConfigService])
 ], AuthService);
 //# sourceMappingURL=auth.service.js.map

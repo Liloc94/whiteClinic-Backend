@@ -1,12 +1,12 @@
 export declare class CreateOrderPayDTO {
-    readonly customerId: number;
-    readonly totalAmount: number;
-    readonly depositAmount: number;
-    readonly balanceAmount: number;
-    readonly discountAmount?: number;
-    readonly depositMethodType: string;
-    readonly balanceMethodType: string;
-    readonly depositReceipt: string;
-    readonly balanceReceipt: string;
-    readonly receiptIssued: boolean;
+    customerId: number;
+    totalAmount: number;
+    depositAmount: number;
+    balanceAmount: number;
+    discountAmount?: number;
+    depositMethodType: string;
+    balanceMethodType: string;
+    depositReceipt: string;
+    balanceReceipt: string;
+    receiptIssued: boolean;
 }
