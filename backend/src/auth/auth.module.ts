@@ -6,7 +6,6 @@ import { RefreshTokenModule } from 'src/refresh_token/refresh_token.module';
 import { PassportModule } from '@nestjs/passport';
 import { JwtModule } from '@nestjs/jwt';
 import { JwtStrategy } from './jwt.strategy';
-import { ConfigModule, ConfigService } from '@nestjs/config';
 
 @Module({
   imports: [
@@ -14,24 +13,10 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
     RefreshTokenModule,
     PassportModule,
     JwtModule.registerAsync({
-      imports: [ConfigModule],
-      inject: [ConfigService],
-      useFactory: async (configService: ConfigService) => {
-        // 환경 변수에서 키 가져오기
-        const privateKey = configService
-          .get<string>('PRIVATE_KEY')
-          ?.replace(/\\n/g, '\n');
-        const publicKey = configService
-          .get<string>('PUBLIC_KEY')
-          ?.replace(/\\n/g, '\n');
-
-        if (!privateKey || !publicKey) {
-          throw new Error('환경변수에 올바르지 않은 JWT Key가 존재합니다.');
-        }
-
+      useFactory: async () => {
         return {
-          privateKey: privateKey,
-          publicKey: publicKey,
+          privateKey: process.env.PRIVATE_KEY?.replace(/\\n/g, '\n'),
+          publicKey: process.env.PUBLIC_KEY?.replace(/\\n/g, '\n'),
           signOptions: {
             algorithm: 'RS256',
             expiresIn: '5m',
