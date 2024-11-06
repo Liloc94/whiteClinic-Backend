@@ -8,7 +8,7 @@ import { Repository } from 'typeorm';
 export class OrderInfoService {
   constructor(
     @InjectRepository(OrderData)
-    private orderDataRepository: Repository<OrderData>,
+    private readonly orderDataRepository: Repository<OrderData>,
   ) {}
 
   private orderDatas: OrderData[] = [];
