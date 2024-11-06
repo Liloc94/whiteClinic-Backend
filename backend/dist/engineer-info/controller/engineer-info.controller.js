@@ -43,6 +43,7 @@ __decorate([
     (0, common_1.Get)('getAll'),
     (0, swagger_1.ApiOperation)({
         summary: '기사 이름, 전화번호, 주소, 날짜-급여, 수당률, 스킬, 지급여부,지급일',
+        description: '기사 이름, 전화번호, 주소를 불러온다.',
     }),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", []),

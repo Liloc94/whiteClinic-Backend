@@ -4,6 +4,7 @@ import { IsNotEmpty, IsOptional, IsNumber, IsBoolean } from 'class-validator';
 export class CreateOrderPayDTO {
   @ApiProperty({
     description: '고객 ID',
+    example: '1, 2, 3 ...',
   })
   @IsNumber()
   @IsNotEmpty()
@@ -11,6 +12,7 @@ export class CreateOrderPayDTO {
 
   @ApiProperty({
     description: '총 결제 금액',
+    example: '32500, 72000, 12900 ...',
   })
   @IsNumber()
   @IsNotEmpty()
@@ -18,6 +20,7 @@ export class CreateOrderPayDTO {
 
   @ApiProperty({
     description: '계약금',
+    example: '32500, 72000, 12900 ...',
   })
   @IsNumber()
   @IsNotEmpty()
@@ -25,6 +28,7 @@ export class CreateOrderPayDTO {
 
   @ApiProperty({
     description: '잔금',
+    example: '32500, 72000, 12900 ...',
   })
   @IsNumber()
   @IsNotEmpty()
@@ -32,6 +36,7 @@ export class CreateOrderPayDTO {
 
   @ApiProperty({
     description: '할인 금액',
+    example: '32500, 72000, 12900 ...',
     required: false,
   })
   @IsNumber()

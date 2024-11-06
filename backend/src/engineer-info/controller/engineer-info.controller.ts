@@ -12,7 +12,7 @@ export class EngineerInfoController {
   @ApiOperation({
     summary:
       '기사 이름, 전화번호, 주소, 날짜-급여, 수당률, 스킬, 지급여부,지급일',
-    // description: '기사 이름, 전화번호, 주소를 불러온다.',
+    description: '기사 이름, 전화번호, 주소를 불러온다.',
   })
   async findAll() {
     try {

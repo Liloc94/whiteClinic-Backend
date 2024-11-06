@@ -86,7 +86,7 @@ __decorate([
     (0, common_1.Post)('login'),
     (0, swagger_1.ApiOperation)({
         summary: '입력한 회원정보 DB 조회 및 대조 이후 로그인',
-        description: 'DB 내에서 회원 아이디 및 패스워드 조회 이후 입력된 로그인 정보와 대조한 후에 일치하면 로그인.',
+        description: 'DB 내에서 회원 아이디 및 패스워드 조회 이후 입력된 로그인 정보와 대조한 후에 일치하면 로그인. 이후 accessToken과 refreshToken이 발급 된다. 해당 토큰들을 사용하여 authorize 가능하다.',
     }),
     (0, swagger_1.ApiBody)({ type: create_auth_dto_1.CreateAuthDto }),
     (0, swagger_1.ApiResponse)({ status: 201, description: '로그인 성공' }),

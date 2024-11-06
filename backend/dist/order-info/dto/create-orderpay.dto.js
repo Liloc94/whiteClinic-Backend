@@ -18,6 +18,7 @@ exports.CreateOrderPayDTO = CreateOrderPayDTO;
 __decorate([
     (0, swagger_1.ApiProperty)({
         description: '고객 ID',
+        example: '1, 2, 3 ...',
     }),
     (0, class_validator_1.IsNumber)(),
     (0, class_validator_1.IsNotEmpty)(),
@@ -26,6 +27,7 @@ __decorate([
 __decorate([
     (0, swagger_1.ApiProperty)({
         description: '총 결제 금액',
+        example: '32500, 72000, 12900 ...',
     }),
     (0, class_validator_1.IsNumber)(),
     (0, class_validator_1.IsNotEmpty)(),
@@ -34,6 +36,7 @@ __decorate([
 __decorate([
     (0, swagger_1.ApiProperty)({
         description: '계약금',
+        example: '32500, 72000, 12900 ...',
     }),
     (0, class_validator_1.IsNumber)(),
     (0, class_validator_1.IsNotEmpty)(),
@@ -42,6 +45,7 @@ __decorate([
 __decorate([
     (0, swagger_1.ApiProperty)({
         description: '잔금',
+        example: '32500, 72000, 12900 ...',
     }),
     (0, class_validator_1.IsNumber)(),
     (0, class_validator_1.IsNotEmpty)(),
@@ -50,6 +54,7 @@ __decorate([
 __decorate([
     (0, swagger_1.ApiProperty)({
         description: '할인 금액',
+        example: '32500, 72000, 12900 ...',
         required: false,
     }),
     (0, class_validator_1.IsNumber)(),
