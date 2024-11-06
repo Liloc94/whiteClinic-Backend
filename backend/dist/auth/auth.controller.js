@@ -55,10 +55,16 @@ let AuthController = class AuthController {
     getAdminData() {
         return { message: 'Admin Data' };
     }
-    testEnv() {
+    testPrivateKey() {
         return {
             keyExists: !!process.env.PRIVATE_KEY,
             keyLength: process.env.PRIVATE_KEY?.length,
+        };
+    }
+    testPublicKey() {
+        return {
+            keyExists: !!process.env.PUBLIC_KEY,
+            keyLength: process.env.PUBLIC_KEY?.length,
         };
     }
 };
@@ -165,12 +171,19 @@ __decorate([
     __metadata("design:returntype", void 0)
 ], AuthController.prototype, "getAdminData", null);
 __decorate([
-    (0, common_1.Get)('test-env'),
+    (0, common_1.Get)('test-env-privateKey'),
     (0, swagger_1.ApiOperation)({ summary: 'env 키값 확인용' }),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", void 0)
-], AuthController.prototype, "testEnv", null);
+], AuthController.prototype, "testPrivateKey", null);
+__decorate([
+    (0, common_1.Get)('test-env-publicKey'),
+    (0, swagger_1.ApiOperation)({ summary: 'env 키값 확인용' }),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", []),
+    __metadata("design:returntype", void 0)
+], AuthController.prototype, "testPublicKey", null);
 exports.AuthController = AuthController = __decorate([
     (0, common_1.Controller)('auth'),
     (0, swagger_1.ApiTags)('토큰인증 API'),

@@ -129,12 +129,20 @@ export class AuthController {
   }
 
   // 임시로 API 엔드포인트 추가해서 테스트
-  @Get('test-env')
+  @Get('test-env-privateKey')
   @ApiOperation({ summary: 'env 키값 확인용' })
-  testEnv() {
+  testPrivateKey() {
     return {
       keyExists: !!process.env.PRIVATE_KEY,
       keyLength: process.env.PRIVATE_KEY?.length,
+    };
+  }
+  @Get('test-env-publicKey')
+  @ApiOperation({ summary: 'env 키값 확인용' })
+  testPublicKey() {
+    return {
+      keyExists: !!process.env.PUBLIC_KEY,
+      keyLength: process.env.PUBLIC_KEY?.length,
     };
   }
 }

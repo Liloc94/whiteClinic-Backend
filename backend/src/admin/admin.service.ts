@@ -37,7 +37,6 @@ export class AdminService {
     });
     if (admin) {
       console.log('refreshTokensResult :', (await admin).refreshTokens);
-
       console.log('adminID', (await admin).adminid);
       console.log('adminPW', (await admin).adminpw);
     }
