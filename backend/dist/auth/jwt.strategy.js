@@ -27,10 +27,10 @@ let JwtStrategy = class JwtStrategy extends (0, passport_1.PassportStrategy)(pas
     async validate(payload) {
         const user = await this.adminService.findOne(payload.username);
         if (!user) {
-            throw new common_1.UnauthorizedException('unvalid token');
+            throw new common_1.UnauthorizedException('유효하지 않은 토큰입니다.');
         }
         if (user.tokenVersion !== payload.tokenVersion) {
-            throw new common_1.UnauthorizedException('tokenVersion does not match');
+            throw new common_1.UnauthorizedException('토큰 버전이 맞지 않습니다.');
         }
         return user;
     }

@@ -3,7 +3,10 @@ import { ExtractJwt, Strategy } from 'passport-jwt';
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { AdminService } from 'src/admin/admin.service';
 import { Admin } from 'src/admin/entities/admin.entity';
-
+interface JwtPayload {
+  username: string;
+  tokenVersion: number;
+}
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
   constructor(private readonly adminService: AdminService) {
@@ -23,14 +26,14 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
   }
 
   // 검증된 JWT payload 를 처리하는 함수
-  async validate(payload: any): Promise<Admin> {
+  async validate(payload: JwtPayload): Promise<Admin> {
     const user = await this.adminService.findOne(payload.username);
     if (!user) {
-      throw new UnauthorizedException('unvalid token');
+      throw new UnauthorizedException('유효하지 않은 토큰입니다.');
     }
 
     if (user.tokenVersion !== payload.tokenVersion) {
-      throw new UnauthorizedException('tokenVersion does not match');
+      throw new UnauthorizedException('토큰 버전이 맞지 않습니다.');
     }
 
     return user;

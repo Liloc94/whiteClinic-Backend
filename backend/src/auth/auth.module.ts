@@ -12,18 +12,14 @@ import { JwtStrategy } from './jwt.strategy';
     AdminModule,
     RefreshTokenModule,
     PassportModule,
-    JwtModule.registerAsync({
-      useFactory: async () => {
-        return {
-          privateKey: process.env.PRIVATE_KEY.replace(/\\n/g, '\n'),
-          publicKey: process.env.PUBLIC_KEY.replace(/\\n/g, '\n'),
-          signOptions: {
-            algorithm: 'RS256',
-            expiresIn: '5m',
-          },
-          verifyOptions: { algorithms: ['RS256'] },
-        };
+    JwtModule.register({
+      privateKey: process.env.PRIVATE_KEY.replace(/\\n/g, '\n'),
+      publicKey: process.env.PUBLIC_KEY.replace(/\\n/g, '\n'),
+      signOptions: {
+        algorithm: 'RS256',
+        expiresIn: '5m',
       },
+      verifyOptions: { algorithms: ['RS256'] },
     }),
   ],
   controllers: [AuthController],

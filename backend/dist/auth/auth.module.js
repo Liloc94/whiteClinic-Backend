@@ -24,18 +24,14 @@ exports.AuthModule = AuthModule = __decorate([
             admin_module_1.AdminModule,
             refresh_token_module_1.RefreshTokenModule,
             passport_1.PassportModule,
-            jwt_1.JwtModule.registerAsync({
-                useFactory: async () => {
-                    return {
-                        privateKey: process.env.PRIVATE_KEY.replace(/\\n/g, '\n'),
-                        publicKey: process.env.PUBLIC_KEY.replace(/\\n/g, '\n'),
-                        signOptions: {
-                            algorithm: 'RS256',
-                            expiresIn: '5m',
-                        },
-                        verifyOptions: { algorithms: ['RS256'] },
-                    };
+            jwt_1.JwtModule.register({
+                privateKey: process.env.PRIVATE_KEY.replace(/\\n/g, '\n'),
+                publicKey: process.env.PUBLIC_KEY.replace(/\\n/g, '\n'),
+                signOptions: {
+                    algorithm: 'RS256',
+                    expiresIn: '5m',
                 },
+                verifyOptions: { algorithms: ['RS256'] },
             }),
         ],
         controllers: [auth_controller_1.AuthController],
