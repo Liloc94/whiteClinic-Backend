@@ -17,15 +17,10 @@ import * as fs from 'fs';
     JwtModule.registerAsync({
       useFactory: async () => {
         // Load the private key (Keep this secure!)
-        const privateKey = fs.readFileSync(
-          path.join(__dirname, 'private.pem'),
-          'utf8',
-        );
+        const privateKey = process.env.PRIVATE_KEY.replace(/\\n/g, '\n');
         // Load the public key
-        const publicKey = fs.readFileSync(
-          path.join(__dirname, 'public.pem'),
-          'utf8',
-        );
+        const publicKey = process.env.PUBLIC_KEY.replace(/\\n/g, '\n');
+
         return {
           privateKey: privateKey,
           publicKey: publicKey,
