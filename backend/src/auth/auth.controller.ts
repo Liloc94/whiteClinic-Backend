@@ -127,4 +127,13 @@ export class AuthController {
   getAdminData() {
     return { message: 'Admin Data' };
   }
+
+  // 임시로 API 엔드포인트 추가해서 테스트
+  @Get('test-env')
+  testEnv() {
+    return {
+      keyExists: !!process.env.PRIVATE_KEY,
+      keyLength: process.env.PRIVATE_KEY?.length,
+    };
+  }
 }
