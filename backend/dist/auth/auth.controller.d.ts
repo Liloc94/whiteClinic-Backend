@@ -29,4 +29,8 @@ export declare class AuthController {
     getAdminData(): {
         message: string;
     };
+    testEnv(): {
+        keyExists: boolean;
+        keyLength: number;
+    };
 }
