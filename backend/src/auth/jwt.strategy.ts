@@ -16,7 +16,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
       ignoreExpiration: false,
 
       // Private key를 Public key 경로에서 가져옴
-      secretOrKey: fs.readFileSync(process.env.PUBLIC_KEY_PATH, 'utf8'),
+      secretOrKey: process.env.PUBLIC_KEY.replace(/\\n/g, '\n'),
 
       // RSA256 알고리즘 사용하여 JWT 검증
       algorithms: ['RS256'],
