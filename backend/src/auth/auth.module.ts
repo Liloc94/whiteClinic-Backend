@@ -6,20 +6,20 @@ import { RefreshTokenModule } from 'src/refresh_token/refresh_token.module';
 import { PassportModule } from '@nestjs/passport';
 import { JwtModule } from '@nestjs/jwt';
 import { JwtStrategy } from './jwt.strategy';
+import { ConfigService } from '@nestjs/config';
 
 @Module({
   imports: [
     AdminModule,
     RefreshTokenModule,
     PassportModule,
-    JwtModule.register({
-      privateKey: process.env.PRIVATE_KEY,
-      publicKey: process.env.PUBLIC_KEY,
-      signOptions: {
-        algorithm: 'RS256',
-        expiresIn: '5m',
-      },
-      verifyOptions: { algorithms: ['RS256'] },
+    JwtModule.registerAsync({
+      inject: [ConfigService],
+      global: true,
+      useFactory: (config: ConfigService) => ({
+        secret: config.get<string>('PRIVATE_KEY'),
+        signOptions: { expiresIn: '5m' },
+      }),
     }),
   ],
   controllers: [AuthController],
