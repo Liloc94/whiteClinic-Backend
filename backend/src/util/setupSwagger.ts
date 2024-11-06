@@ -21,7 +21,6 @@ export function setupSwagger(app: INestApplication) {
       },
       'access-token',
     )
-    .addTag('API Docs Lists..')
     .build();
 
   const document = SwaggerModule.createDocument(app, options);
@@ -40,7 +39,6 @@ export function setupSwagger(app: INestApplication) {
       tryItOutEnabled: true,
       displayRequestDuration: true,
       filter: true,
-      defaultModelsExpandDepth: -1, // 기본 스키마 섹션 숨기기
       explorer: true,
     },
   });
