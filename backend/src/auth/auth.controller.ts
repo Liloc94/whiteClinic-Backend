@@ -130,6 +130,7 @@ export class AuthController {
 
   // 임시로 API 엔드포인트 추가해서 테스트
   @Get('test-env')
+  @ApiOperation({ summary: 'env 키값 확인용' })
   testEnv() {
     return {
       keyExists: !!process.env.PRIVATE_KEY,
