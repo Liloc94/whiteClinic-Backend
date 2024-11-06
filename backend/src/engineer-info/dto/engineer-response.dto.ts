@@ -51,8 +51,4 @@ export class EngineerResponseDTO {
     required: false,
   })
   readonly holidays?: string[];
-
-  constructor(partial: Partial<EngineerResponseDTO>) {
-    Object.assign(this, partial);
-  }
 }

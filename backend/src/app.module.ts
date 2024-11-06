@@ -8,8 +8,7 @@ import { RefreshTokenModule } from './refresh_token/refresh_token.module';
 import { AdminModule } from './admin/admin.module';
 import { ConfigModule } from '@nestjs/config';
 import { AuthModule } from './auth/auth.module';
-import { ServeStaticModule } from '@nestjs/serve-static';
-import { join } from 'path';
+import { CustomerModule } from './customer/customer.module';
 
 @Module({
   imports: [
@@ -36,6 +35,7 @@ import { join } from 'path';
     AdminModule,
     AuthModule,
     RegistrationModule,
+    CustomerModule,
   ],
   controllers: [AppController],
   providers: [],
