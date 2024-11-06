@@ -15,7 +15,6 @@ const refresh_token_module_1 = require("../refresh_token/refresh_token.module");
 const passport_1 = require("@nestjs/passport");
 const jwt_1 = require("@nestjs/jwt");
 const jwt_strategy_1 = require("./jwt.strategy");
-const fs = require("fs");
 let AuthModule = class AuthModule {
 };
 exports.AuthModule = AuthModule;
@@ -28,8 +27,8 @@ exports.AuthModule = AuthModule = __decorate([
             jwt_1.JwtModule.registerAsync({
                 useFactory: async () => {
                     return {
-                        privateKey: fs.readFileSync('private.pem'),
-                        publicKey: fs.readFileSync('public.pem'),
+                        privateKey: process.env.PRIVATE_KEY.replace(/\\n/g, '\n'),
+                        publicKey: process.env.PUBLIC_KEY.replace(/\\n/g, '\n'),
                         signOptions: {
                             algorithm: 'RS256',
                             expiresIn: '5m',
