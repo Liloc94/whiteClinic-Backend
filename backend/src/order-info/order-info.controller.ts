@@ -1,13 +1,12 @@
 import {
   Body,
   Controller,
-  Delete,
   Get,
   HttpStatus,
   Param,
+  ParseIntPipe,
   Post,
-  Query,
-  Redirect,
+  Put,
   Res,
 } from '@nestjs/common';
 import { SubmitOrderDto } from './dto/submit-order.dto';
@@ -23,32 +22,14 @@ export class OrderInfoController {
 
   @Get('getAll')
   @ApiOperation({
-    summary: '주문정보 전체조회 API',
-    description: '모든 주문정보를 불러온다.',
+    summary: 'OrderInfo 테이블 전체정보 조회 API',
+    description: 'OrderInfo 테이블 정보를 일괄 조회한다.',
   })
-  async getAll(): Promise<OrderData[]> {
+  async getAll(): Promise<SubmitOrderDto[]> {
     return this.orderService.getAll();
   }
 
-  @Get('getAllInfo')
-  @ApiOperation({
-    summary: 'DB 내부 정보 전체조회 API',
-    description: 'vercel db 연결 테스트용 API.',
-  })
-  async getAllInfos(): Promise<SubmitOrderDto[]> {
-    return this.orderService.findAll();
-  }
-
-  @Get('search')
-  @ApiOperation({
-    summary: 'id 파라미터 확인 API',
-    description: 'id 파라미터 값을 반환한다.',
-  })
-  async search(@Query('id') searchingId: number): Promise<string> {
-    return `We are searching for a orderData id matched with ${searchingId}`;
-  }
-
-  @Get('searchBy:id')
+  @Get('searchOrderBy:id')
   @ApiOperation({
     summary: 'id 기반 주문정보 조회 API',
     description: 'id 파라미터와 매치되는 주문정보를 불러온다.',
@@ -57,15 +38,18 @@ export class OrderInfoController {
     return this.orderService.getOne(orderId);
   }
 
-  //TODO : 차후 DB에서 ID 조회 후 내용 수정하는 SQL 문 작성 필요
-  // @Post('updateOrderBy:id')
-  // @ApiOperation({
-  //   summary: 'id 기반 주문정보 수정',
-  //   description: 'id 파라미터와 매치되는 주문정보를 DB 에서 찾아 수정한다.',
-  // })
-  // async updateOne(@Param('id') orderId: number): Promise<OrderData> {
-  //   return this.orderService.
-  // }
+  @Put('updateOrderBy/:id')
+  @ApiOperation({
+    summary: 'id 기반 주문정보 수정',
+    description:
+      'id 파라미터와 매치되는 주문정보를 DB 에서 찾아 수정한다. !! @Body 는 id를 제외하고 요청해야 한다.',
+  })
+  async updateOne(
+    @Param('id', ParseIntPipe) id: number, // ParseIntPipe로 숫자로 변환
+    @Body() req: SubmitOrderDto, // @Body로 요청 본문을 가져옴
+  ) {
+    await this.orderService.update(id, req);
+  }
 
   @Post('createOrder')
   @ApiOperation({
@@ -80,24 +64,14 @@ export class OrderInfoController {
     return this.orderService.create(orderInfo);
   }
 
-  @Delete('deleteBy:id')
-  @ApiOperation({
-    summary: 'id 기반 주문정보 삭제 API',
-    description: 'id 파라미터와 매치되는 주문정보를 DB에서 삭제한다.',
-  })
-  async remove(@Param('id') orderId: number): Promise<void> {
-    return this.orderService.remove(orderId);
-  }
-
-  @Get('redirectTest')
-  @Redirect('http://localhost:8000/orderInfo/getAll', 302)
-  @ApiOperation({
-    summary: 'getAll GET 메서드 리디렉트 API',
-    description: '리디렉트 테스트 API',
-  })
-  async toSwaggerUI(): Promise<any> {
-    return { url: 'http://localhost:8000/orderInfo/getAll' };
-  }
+  // @Delete('deleteBy:id')
+  // @ApiOperation({
+  //   summary: 'id 기반 주문정보 삭제 API',
+  //   description: 'id 파라미터와 매치되는 주문정보를 DB에서 삭제한다.',
+  // })
+  // async remove(@Param('id') orderId: number): Promise<void> {
+  // return this.orderService.remove(orderId);
+  // }
 
   @Get('responseObject')
   findAll(@Res() res: Response) {

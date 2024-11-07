@@ -24,23 +24,21 @@ let AuthService = class AuthService {
     }
     async signIn(adminID, adminPW) {
         const user = await this.adminService.findOne(adminID);
-        if (!user || !(await bcrypt.compare(adminPW, user.adminpw))) {
+        if (!user || !(await bcrypt.compare(adminPW, user.password))) {
             throw new common_1.UnauthorizedException('인증되지 않은 사용자');
         }
         await this.logoutAll(user.id);
         const updateUser = await this.adminService.findOne(adminID);
         const payload = {
             sub: updateUser.id,
-            username: updateUser.adminid,
+            username: updateUser.admin_user_id,
             role: updateUser.role,
             tokenVersion: updateUser.tokenVersion,
         };
-        console.log('===========before get accessToken===========');
         const accessToken = await this.jwtService.signAsync(payload, {
             expiresIn: '5m',
             algorithm: 'RS256',
         });
-        console.log('accesstoken : ' + accessToken);
         const refreshToken = this.generateRefreshToken();
         const expiresAt = new Date();
         expiresAt.setDate(expiresAt.getDate() + 7);
@@ -63,14 +61,14 @@ let AuthService = class AuthService {
         const user = storedRefreshToken.admin;
         await this.refreshTokenService.removeRefreshToken(refreshToken);
         await this.adminService.incrementTokenVersion(user.id);
-        const updateUser = await this.adminService.findOne(user.adminid);
+        const updateUser = await this.adminService.findOne(user.admin_user_id);
         const newRefreshToken = this.generateRefreshToken();
         const newExpiresAt = new Date();
         newExpiresAt.setDate(newExpiresAt.getDate() + 7);
         await this.refreshTokenService.saveRefreshToken(updateUser, newRefreshToken, newExpiresAt);
         const payload = {
             sub: updateUser.id,
-            username: updateUser.adminid,
+            username: updateUser.admin_user_id,
             role: updateUser.role,
             tokenVersion: updateUser.tokenVersion,
         };

@@ -20,36 +20,35 @@ const typeorm_2 = require("typeorm");
 let OrderInfoService = class OrderInfoService {
     constructor(orderDataRepository) {
         this.orderDataRepository = orderDataRepository;
-        this.orderDatas = [];
     }
-    async findAll() {
+    async getAll() {
         return this.orderDataRepository.find();
     }
-    getAll() {
-        return this.orderDatas;
-    }
-    getOne(id) {
-        const order = this.orderDatas.find((order) => order.id === +id);
+    async getOne(id) {
+        const order = await this.orderDataRepository.findOne({ where: { id } });
         if (!order) {
             throw new common_1.NotFoundException(`Order with ID: ${id} not found`);
         }
-        return order;
+        else {
+            return order;
+        }
     }
-    create(orderInfo) {
-        this.orderDataRepository.create({ ...orderInfo });
+    async update(id, updateData) {
+        const order = await this.orderDataRepository.findOneBy({ id });
+        if (!order) {
+            throw new common_1.NotFoundException(`Order with ID : ${id} not found`);
+        }
+        else {
+            Object.assign(order, updateData);
+            const result = await this.orderDataRepository.save(order);
+            return result;
+        }
     }
-    remove(id) {
-        this.getOne(id);
-        this.orderDatas = this.orderDatas.filter((order) => order.id !== +id);
+    async create(orderInfo) {
+        await this.orderDataRepository.save({ ...orderInfo });
     }
 };
 exports.OrderInfoService = OrderInfoService;
-__decorate([
-    (0, common_1.Get)(),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", []),
-    __metadata("design:returntype", Array)
-], OrderInfoService.prototype, "getAll", null);
 exports.OrderInfoService = OrderInfoService = __decorate([
     (0, common_1.Injectable)(),
     __param(0, (0, typeorm_1.InjectRepository)(OrderData_entity_1.OrderData)),

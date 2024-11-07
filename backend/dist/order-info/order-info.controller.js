@@ -24,23 +24,14 @@ let OrderInfoController = class OrderInfoController {
     async getAll() {
         return this.orderService.getAll();
     }
-    async getAllInfos() {
-        return this.orderService.findAll();
-    }
-    async search(searchingId) {
-        return `We are searching for a orderData id matched with ${searchingId}`;
-    }
     async getOne(orderId) {
         return this.orderService.getOne(orderId);
     }
+    async updateOne(id, req) {
+        await this.orderService.update(id, req);
+    }
     async create(orderInfo) {
         return this.orderService.create(orderInfo);
-    }
-    async remove(orderId) {
-        return this.orderService.remove(orderId);
-    }
-    async toSwaggerUI() {
-        return { url: 'http://localhost:8000/orderInfo/getAll' };
     }
     findAll(res) {
         res.status(common_1.HttpStatus.OK).json([' library-specific response object test']);
@@ -50,36 +41,15 @@ exports.OrderInfoController = OrderInfoController;
 __decorate([
     (0, common_1.Get)('getAll'),
     (0, swagger_1.ApiOperation)({
-        summary: '주문정보 전체조회 API',
-        description: '모든 주문정보를 불러온다.',
+        summary: 'OrderInfo 테이블 전체정보 조회 API',
+        description: 'OrderInfo 테이블 정보를 일괄 조회한다.',
     }),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", Promise)
 ], OrderInfoController.prototype, "getAll", null);
 __decorate([
-    (0, common_1.Get)('getAllInfo'),
-    (0, swagger_1.ApiOperation)({
-        summary: 'DB 내부 정보 전체조회 API',
-        description: 'vercel db 연결 테스트용 API.',
-    }),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", []),
-    __metadata("design:returntype", Promise)
-], OrderInfoController.prototype, "getAllInfos", null);
-__decorate([
-    (0, common_1.Get)('search'),
-    (0, swagger_1.ApiOperation)({
-        summary: 'id 파라미터 확인 API',
-        description: 'id 파라미터 값을 반환한다.',
-    }),
-    __param(0, (0, common_1.Query)('id')),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Number]),
-    __metadata("design:returntype", Promise)
-], OrderInfoController.prototype, "search", null);
-__decorate([
-    (0, common_1.Get)('searchBy:id'),
+    (0, common_1.Get)('searchOrderBy:id'),
     (0, swagger_1.ApiOperation)({
         summary: 'id 기반 주문정보 조회 API',
         description: 'id 파라미터와 매치되는 주문정보를 불러온다.',
@@ -89,6 +59,18 @@ __decorate([
     __metadata("design:paramtypes", [Number]),
     __metadata("design:returntype", Promise)
 ], OrderInfoController.prototype, "getOne", null);
+__decorate([
+    (0, common_1.Put)('updateOrderBy/:id'),
+    (0, swagger_1.ApiOperation)({
+        summary: 'id 기반 주문정보 수정',
+        description: 'id 파라미터와 매치되는 주문정보를 DB 에서 찾아 수정한다. !! @Body 는 id를 제외하고 요청해야 한다.',
+    }),
+    __param(0, (0, common_1.Param)('id', common_1.ParseIntPipe)),
+    __param(1, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Number, submit_order_dto_1.SubmitOrderDto]),
+    __metadata("design:returntype", Promise)
+], OrderInfoController.prototype, "updateOne", null);
 __decorate([
     (0, common_1.Post)('createOrder'),
     (0, swagger_1.ApiOperation)({
@@ -104,28 +86,6 @@ __decorate([
     __metadata("design:paramtypes", [submit_order_dto_1.SubmitOrderDto]),
     __metadata("design:returntype", Promise)
 ], OrderInfoController.prototype, "create", null);
-__decorate([
-    (0, common_1.Delete)('deleteBy:id'),
-    (0, swagger_1.ApiOperation)({
-        summary: 'id 기반 주문정보 삭제 API',
-        description: 'id 파라미터와 매치되는 주문정보를 DB에서 삭제한다.',
-    }),
-    __param(0, (0, common_1.Param)('id')),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Number]),
-    __metadata("design:returntype", Promise)
-], OrderInfoController.prototype, "remove", null);
-__decorate([
-    (0, common_1.Get)('redirectTest'),
-    (0, common_1.Redirect)('http://localhost:8000/orderInfo/getAll', 302),
-    (0, swagger_1.ApiOperation)({
-        summary: 'getAll GET 메서드 리디렉트 API',
-        description: '리디렉트 테스트 API',
-    }),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", []),
-    __metadata("design:returntype", Promise)
-], OrderInfoController.prototype, "toSwaggerUI", null);
 __decorate([
     (0, common_1.Get)('responseObject'),
     __param(0, (0, common_1.Res)()),

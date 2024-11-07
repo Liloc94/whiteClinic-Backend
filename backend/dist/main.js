@@ -24,7 +24,7 @@ async function bootstrap() {
     app.useGlobalFilters(new HttpErrorFilter_1.HttpErrorFilter());
     (0, setupSwagger_1.setupSwagger)(app);
     await app.listen(process.env.PORT || port);
-    console.log(`Server is running on port:${port}!`);
+    console.log(`server's now runnig on port ${URLS_1.SERVER_PORT}!!`);
 }
 bootstrap();
 //# sourceMappingURL=main.js.map

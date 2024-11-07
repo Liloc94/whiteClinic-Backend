@@ -27,7 +27,6 @@ let JwtStrategy = class JwtStrategy extends (0, passport_1.PassportStrategy)(pas
         this.config = config;
     }
     async validate(payload) {
-        console.log('validate fn payload logging : ' + payload);
         const user = await this.adminService.findOne(payload.username);
         if (!user) {
             throw new common_1.UnauthorizedException('유효하지 않은 토큰입니다.');

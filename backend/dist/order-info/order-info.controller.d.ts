@@ -5,12 +5,9 @@ import { Response } from 'express';
 export declare class OrderInfoController {
     private readonly orderService;
     constructor(orderService: OrderInfoService);
-    getAll(): Promise<OrderData[]>;
-    getAllInfos(): Promise<SubmitOrderDto[]>;
-    search(searchingId: number): Promise<string>;
+    getAll(): Promise<SubmitOrderDto[]>;
     getOne(orderId: number): Promise<OrderData>;
+    updateOne(id: number, req: SubmitOrderDto): Promise<void>;
     create(orderInfo: SubmitOrderDto): Promise<void>;
-    remove(orderId: number): Promise<void>;
-    toSwaggerUI(): Promise<any>;
     findAll(res: Response): void;
 }

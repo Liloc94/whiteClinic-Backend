@@ -19,21 +19,12 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
       imports: [ConfigModule],
       inject: [ConfigService],
       useFactory: (config: ConfigService) => {
-        const privateKey = config
-          .get<string>('PRIVATE_KEY')
-          ?.replace(/\\n/g, '\n');
-        const publicKey = config
-          .get<string>('PUBLIC_KEY')
-          ?.replace(/\\n/g, '\n');
-
-        // 디버깅 로그 추가
-        console.log('Private Key:', privateKey);
-        console.log('Public Key:', publicKey);
+        const privateKey = config.get<string>('PRIVATE_KEY');
+        const publicKey = config.get<string>('PUBLIC_KEY');
 
         if (!privateKey || !publicKey) {
           throw new Error('Private or Public key is missing');
         }
-
         return {
           privateKey,
           publicKey,

@@ -6,11 +6,11 @@ export class Admin {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ unique: true })
-  adminid: string;
+  @Column({ unique: true, nullable: true })
+  admin_user_id: string;
 
-  @Column()
-  adminpw: string;
+  @Column({ nullable: true })
+  password: string;
 
   @Column({ default: 'admin' })
   role: string;

@@ -4,10 +4,8 @@ import { Repository } from 'typeorm';
 export declare class OrderInfoService {
     private readonly orderDataRepository;
     constructor(orderDataRepository: Repository<OrderData>);
-    private orderDatas;
-    findAll(): Promise<SubmitOrderDto[]>;
-    getAll(): OrderData[];
-    getOne(id: number): OrderData;
-    create(orderInfo: SubmitOrderDto): void;
-    remove(id: number): void;
+    getAll(): Promise<SubmitOrderDto[]>;
+    getOne(id: number): Promise<OrderData>;
+    update(id: number, updateData: SubmitOrderDto): Promise<OrderData>;
+    create(orderInfo: SubmitOrderDto): Promise<void>;
 }

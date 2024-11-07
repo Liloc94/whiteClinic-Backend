@@ -20,13 +20,13 @@ __decorate([
     __metadata("design:type", Number)
 ], Admin.prototype, "id", void 0);
 __decorate([
-    (0, typeorm_1.Column)({ unique: true }),
+    (0, typeorm_1.Column)({ unique: true, nullable: true }),
     __metadata("design:type", String)
-], Admin.prototype, "adminid", void 0);
+], Admin.prototype, "admin_user_id", void 0);
 __decorate([
-    (0, typeorm_1.Column)(),
+    (0, typeorm_1.Column)({ nullable: true }),
     __metadata("design:type", String)
-], Admin.prototype, "adminpw", void 0);
+], Admin.prototype, "password", void 0);
 __decorate([
     (0, typeorm_1.Column)({ default: 'admin' }),
     __metadata("design:type", String)

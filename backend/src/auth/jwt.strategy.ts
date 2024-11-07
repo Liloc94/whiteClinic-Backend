@@ -32,7 +32,6 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
 
   // 검증된 JWT payload 를 처리하는 함수
   async validate(payload: JwtPayload): Promise<Admin> {
-    console.log('validate fn payload logging : ' + payload);
     const user = await this.adminService.findOne(payload.username);
     if (!user) {
       throw new UnauthorizedException('유효하지 않은 토큰입니다.');

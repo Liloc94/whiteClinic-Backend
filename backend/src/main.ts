@@ -34,7 +34,7 @@ async function bootstrap() {
 
   await app.listen(process.env.PORT || port);
 
-  console.log(`Server is running on port:${port}!`);
+  console.log(`server's now runnig on port ${SERVER_PORT}!!`);
 }
 
 bootstrap();

@@ -50,7 +50,7 @@ let AuthController = class AuthController {
     }
     getProfile(req) {
         const user = req.user;
-        return { id: user.id, username: user.adminid, role: user.role };
+        return { id: user.id, username: user.admin_user_id, role: user.role };
     }
     getAdminData() {
         return { message: 'Admin Data' };

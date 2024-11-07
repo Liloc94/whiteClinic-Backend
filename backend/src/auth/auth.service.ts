@@ -21,7 +21,7 @@ export class AuthService {
   ): Promise<{ access_token: string; refresh_token: string }> {
     const user = await this.adminService.findOne(adminID);
 
-    if (!user || !(await bcrypt.compare(adminPW, user.adminpw))) {
+    if (!user || !(await bcrypt.compare(adminPW, user.password))) {
       throw new UnauthorizedException('인증되지 않은 사용자');
     }
 
@@ -34,16 +34,15 @@ export class AuthService {
     // Access Token에 들어갈 유저의 정보
     const payload = {
       sub: updateUser.id,
-      username: updateUser.adminid,
+      username: updateUser.admin_user_id,
       role: updateUser.role,
       tokenVersion: updateUser.tokenVersion,
     };
-    console.log('===========before get accessToken===========');
+
     const accessToken = await this.jwtService.signAsync(payload, {
       expiresIn: '5m',
       algorithm: 'RS256',
     });
-    console.log('accesstoken : ' + accessToken);
 
     // Refresh Token 만료 시간 설정
     const refreshToken = this.generateRefreshToken();
@@ -89,7 +88,7 @@ export class AuthService {
     await this.adminService.incrementTokenVersion(user.id);
 
     // 최신 tokenVersion 조회
-    const updateUser = await this.adminService.findOne(user.adminid);
+    const updateUser = await this.adminService.findOne(user.admin_user_id);
 
     // 새로운 Refresh Token 생성
     const newRefreshToken = this.generateRefreshToken();
@@ -106,7 +105,7 @@ export class AuthService {
     // 새로운 Access Token 생성
     const payload = {
       sub: updateUser.id,
-      username: updateUser.adminid,
+      username: updateUser.admin_user_id,
       role: updateUser.role,
       tokenVersion: updateUser.tokenVersion,
     };

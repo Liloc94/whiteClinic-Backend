@@ -18,8 +18,8 @@ export class AdminService {
   ): Promise<Admin> {
     const hashedPassword = await bcrypt.hash(adminpw, 10);
     const admin = this.adminRepository.create({
-      adminid,
-      adminpw: hashedPassword,
+      admin_user_id: adminid,
+      password: hashedPassword,
       role,
     });
     return this.adminRepository.save(admin);
@@ -28,16 +28,10 @@ export class AdminService {
   // 아이디와 일치하는 리프레시 토큰을 가진 회원정보 찾기
   async findOne(adminid: string): Promise<Admin | undefined> {
     try {
-      const startTime = Date.now();
       const admin = await this.adminRepository.findOne({
-        where: { adminid },
+        where: { admin_user_id: adminid },
         relations: ['refreshTokens'],
       });
-      const endTime = Date.now();
-
-      console.log('findOne execution time:', endTime - startTime, 'ms');
-      console.log('admin:', admin);
-      console.log('refreshTokens:', admin?.refreshTokens);
 
       if (!admin) {
         throw new UnauthorizedException(

@@ -30,14 +30,8 @@ exports.AuthModule = AuthModule = __decorate([
                 imports: [config_1.ConfigModule],
                 inject: [config_1.ConfigService],
                 useFactory: (config) => {
-                    const privateKey = config
-                        .get('PRIVATE_KEY')
-                        ?.replace(/\\n/g, '\n');
-                    const publicKey = config
-                        .get('PUBLIC_KEY')
-                        ?.replace(/\\n/g, '\n');
-                    console.log('Private Key:', privateKey);
-                    console.log('Public Key:', publicKey);
+                    const privateKey = config.get('PRIVATE_KEY');
+                    const publicKey = config.get('PUBLIC_KEY');
                     if (!privateKey || !publicKey) {
                         throw new Error('Private or Public key is missing');
                     }
