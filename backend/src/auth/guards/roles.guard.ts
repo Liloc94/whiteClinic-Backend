@@ -16,6 +16,8 @@ export class RolesGuard implements CanActivate {
       [context.getHandler(), context.getClass()],
     );
 
+    console.log('RolesGuard - Required roles:', requiredRoles); // 메타데이터에서 가져온 역할 확인
+
     if (!requiredRoles) {
       // role이 필요없는 경우 접근 허용
       return true;

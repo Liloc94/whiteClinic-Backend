@@ -25,7 +25,6 @@ import { JwtModule } from '@nestjs/jwt';
       password: 'hNOtdfu8sWy3',
       database: 'verceldb',
       entities: [],
-      autoLoadEntities: true,
       synchronize: false,
       logging: true, // 로그 확인용 옵션
     }),

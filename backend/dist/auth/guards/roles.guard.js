@@ -19,6 +19,7 @@ let RolesGuard = class RolesGuard {
     }
     canActivate(context) {
         const requiredRoles = this.reflector.getAllAndOverride(roles_decorator_1.ROLES_KEY, [context.getHandler(), context.getClass()]);
+        console.log('RolesGuard - Required roles:', requiredRoles);
         if (!requiredRoles) {
             return true;
         }

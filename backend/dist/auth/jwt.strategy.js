@@ -19,8 +19,8 @@ let JwtStrategy = class JwtStrategy extends (0, passport_1.PassportStrategy)(pas
         super({
             jwtFromRequest: passport_jwt_1.ExtractJwt.fromAuthHeaderAsBearerToken(),
             ignoreExpiration: false,
-            secretOrKey: process.env.PRIVATE_KEY.replace(/\\n/g, '\n'),
-            algorithms: ['HS256'],
+            secretOrKey: process.env.PUBLIC_KEY.replace(/\\n/g, '\n'),
+            algorithms: ['RS256'],
         });
         this.adminService = adminService;
     }

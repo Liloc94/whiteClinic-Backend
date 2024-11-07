@@ -16,18 +16,14 @@ const refresh_token_service_1 = require("../refresh_token/refresh_token.service"
 const jwt_1 = require("@nestjs/jwt");
 const bcrypt = require("bcrypt");
 const crypto = require("crypto");
-const config_1 = require("@nestjs/config");
 let AuthService = class AuthService {
-    constructor(adminService, refreshTokenService, jwtService, configService) {
+    constructor(adminService, refreshTokenService, jwtService) {
         this.adminService = adminService;
         this.refreshTokenService = refreshTokenService;
         this.jwtService = jwtService;
-        this.configService = configService;
-        console.log('Private Key:', this.configService.get('PRIVATE_KEY')?.substring(0, 50));
     }
     async signIn(adminID, adminPW) {
         const user = await this.adminService.findOne(adminID);
-        console.log('authService signIn fn called : ' + user.adminid);
         if (!user || !(await bcrypt.compare(adminPW, user.adminpw))) {
             throw new common_1.UnauthorizedException('인증되지 않은 사용자');
         }
@@ -41,7 +37,9 @@ let AuthService = class AuthService {
         };
         const accessToken = await this.jwtService.signAsync(payload, {
             expiresIn: '5m',
+            algorithm: 'RS256',
         });
+        console.log('accesstoken : ' + accessToken);
         const refreshToken = this.generateRefreshToken();
         const expiresAt = new Date();
         expiresAt.setDate(expiresAt.getDate() + 7);
@@ -77,6 +75,7 @@ let AuthService = class AuthService {
         };
         const accessToken = await this.jwtService.signAsync(payload, {
             expiresIn: '5m',
+            algorithm: 'RS256',
         });
         return { access_token: accessToken, refresh_token: newRefreshToken };
     }
@@ -100,7 +99,6 @@ exports.AuthService = AuthService = __decorate([
     (0, common_1.Injectable)(),
     __metadata("design:paramtypes", [admin_service_1.AdminService,
         refresh_token_service_1.RefreshTokenService,
-        jwt_1.JwtService,
-        config_1.ConfigService])
+        jwt_1.JwtService])
 ], AuthService);
 //# sourceMappingURL=auth.service.js.map

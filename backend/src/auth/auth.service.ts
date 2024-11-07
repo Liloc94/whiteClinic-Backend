@@ -20,7 +20,6 @@ export class AuthService {
     adminPW: string,
   ): Promise<{ access_token: string; refresh_token: string }> {
     const user = await this.adminService.findOne(adminID);
-    console.log('authService signIn fn called : ' + user.adminid);
 
     if (!user || !(await bcrypt.compare(adminPW, user.adminpw))) {
       throw new UnauthorizedException('인증되지 않은 사용자');
@@ -42,7 +41,10 @@ export class AuthService {
 
     const accessToken = await this.jwtService.signAsync(payload, {
       expiresIn: '5m',
+      algorithm: 'RS256',
     });
+
+    console.log('accesstoken : ' + accessToken);
 
     // Refresh Token 만료 시간 설정
     const refreshToken = this.generateRefreshToken();
@@ -112,6 +114,7 @@ export class AuthService {
 
     const accessToken = await this.jwtService.signAsync(payload, {
       expiresIn: '5m',
+      algorithm: 'RS256',
     });
 
     return { access_token: accessToken, refresh_token: newRefreshToken };

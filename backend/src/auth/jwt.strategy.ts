@@ -19,10 +19,10 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
       ignoreExpiration: false,
 
       // Private key를 Public key 경로에서 가져옴
-      secretOrKey: process.env.PRIVATE_KEY.replace(/\\n/g, '\n'),
+      secretOrKey: process.env.PUBLIC_KEY.replace(/\\n/g, '\n'),
 
       // 알고리즘 사용하여 JWT 검증
-      algorithms: ['HS256'],
+      algorithms: ['RS256'],
     });
   }
 

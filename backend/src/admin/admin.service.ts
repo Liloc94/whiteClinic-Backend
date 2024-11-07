@@ -27,19 +27,27 @@ export class AdminService {
 
   // 아이디와 일치하는 리프레시 토큰을 가진 회원정보 찾기
   async findOne(adminid: string): Promise<Admin | undefined> {
-    const admin = await this.adminRepository.findOne({
-      where: { adminid },
-      relations: ['refreshTokens'],
-    });
-    if (admin) {
-      console.log('refreshTokensResult :', admin.refreshTokens);
-      console.log('adminID', admin.adminid);
-      console.log('adminPW', admin.adminpw);
+    try {
+      const startTime = Date.now();
+      const admin = await this.adminRepository.findOne({
+        where: { adminid },
+        relations: ['refreshTokens'],
+      });
+      const endTime = Date.now();
+
+      console.log('findOne execution time:', endTime - startTime, 'ms');
+      console.log('admin:', admin);
+      console.log('refreshTokens:', admin?.refreshTokens);
+
+      if (!admin) {
+        throw new UnauthorizedException(
+          '아이디와 일치하는 회원정보가 존재하지 않습니다.',
+        );
+      }
       return admin;
-    } else {
-      throw new UnauthorizedException(
-        '아이디와 일치하는 회원정보가 존재하지 않습니다.',
-      );
+    } catch (error) {
+      console.error('Error finding admin:', error);
+      throw error;
     }
   }
 
