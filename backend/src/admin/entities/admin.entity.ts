@@ -6,7 +6,7 @@ export class Admin {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ unique: true, name: 'adminid' })
+  @Column({ unique: true })
   adminid: string;
 
   @Column()

@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { Admin } from './entities/admin.entity';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -17,10 +17,6 @@ export class AdminService {
     role: string = 'admin',
   ): Promise<Admin> {
     const hashedPassword = await bcrypt.hash(adminpw, 10);
-    console.log(
-      'hashedPassword : ' + hashedPassword,
-      'inputPassword : ' + adminpw,
-    );
     const admin = this.adminRepository.create({
       adminid,
       adminpw: hashedPassword,
@@ -31,17 +27,20 @@ export class AdminService {
 
   // 아이디와 일치하는 리프레시 토큰을 가진 회원정보 찾기
   async findOne(adminid: string): Promise<Admin | undefined> {
-    const admin = this.adminRepository.findOne({
+    const admin = await this.adminRepository.findOne({
       where: { adminid },
       relations: ['refreshTokens'],
     });
-    if (await admin) {
-      console.log('refreshTokensResult :', (await admin).refreshTokens);
-      console.log('adminID', (await admin).adminid);
-      console.log('adminPW', (await admin).adminpw);
+    if (admin) {
+      console.log('refreshTokensResult :', admin.refreshTokens);
+      console.log('adminID', admin.adminid);
+      console.log('adminPW', admin.adminpw);
+      return admin;
+    } else {
+      throw new UnauthorizedException(
+        '아이디와 일치하는 회원정보가 존재하지 않습니다.',
+      );
     }
-
-    return admin;
   }
 
   // tokenVersion 증가 함수

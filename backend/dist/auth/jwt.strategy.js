@@ -19,12 +19,13 @@ let JwtStrategy = class JwtStrategy extends (0, passport_1.PassportStrategy)(pas
         super({
             jwtFromRequest: passport_jwt_1.ExtractJwt.fromAuthHeaderAsBearerToken(),
             ignoreExpiration: false,
-            secretOrKey: process.env.PUBLIC_KEY.replace(/\\n/g, '\n'),
-            algorithms: ['RS256'],
+            secretOrKey: process.env.PRIVATE_KEY.replace(/\\n/g, '\n'),
+            algorithms: ['HS256'],
         });
         this.adminService = adminService;
     }
     async validate(payload) {
+        console.log('validate fn payload logging : ' + payload);
         const user = await this.adminService.findOne(payload.username);
         if (!user) {
             throw new common_1.UnauthorizedException('유효하지 않은 토큰입니다.');

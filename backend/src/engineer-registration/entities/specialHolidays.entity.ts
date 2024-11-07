@@ -9,7 +9,7 @@ export class SpecialHolidays {
   @Column({ name: 'engineer_id' })
   engineerId: number;
 
-  @Column()
+  @Column({ nullable: true })
   holiday: Date;
 
   @JoinColumn({ name: 'engineerId' })

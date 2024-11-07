@@ -26,6 +26,9 @@ let RolesGuard = class RolesGuard {
         if (!user) {
             return false;
         }
+        console.log('rolesGuard user info checking log : ' + user);
+        const hasRole = requiredRoles.some((role) => user.role?.includes(role));
+        return hasRole;
     }
 };
 exports.RolesGuard = RolesGuard;

@@ -24,7 +24,6 @@ let AdminService = class AdminService {
     }
     async createAdmin(adminid, adminpw, role = 'admin') {
         const hashedPassword = await bcrypt.hash(adminpw, 10);
-        console.log('hashedPassword : ' + hashedPassword, 'inputPassword : ' + adminpw);
         const admin = this.adminRepository.create({
             adminid,
             adminpw: hashedPassword,
@@ -33,16 +32,19 @@ let AdminService = class AdminService {
         return this.adminRepository.save(admin);
     }
     async findOne(adminid) {
-        const admin = this.adminRepository.findOne({
+        const admin = await this.adminRepository.findOne({
             where: { adminid },
             relations: ['refreshTokens'],
         });
-        if (await admin) {
-            console.log('refreshTokensResult :', (await admin).refreshTokens);
-            console.log('adminID', (await admin).adminid);
-            console.log('adminPW', (await admin).adminpw);
+        if (admin) {
+            console.log('refreshTokensResult :', admin.refreshTokens);
+            console.log('adminID', admin.adminid);
+            console.log('adminPW', admin.adminpw);
+            return admin;
         }
-        return admin;
+        else {
+            throw new common_1.UnauthorizedException('아이디와 일치하는 회원정보가 존재하지 않습니다.');
+        }
     }
     async incrementTokenVersion(id) {
         await this.adminRepository.increment({ id }, 'tokenVersion', 1);

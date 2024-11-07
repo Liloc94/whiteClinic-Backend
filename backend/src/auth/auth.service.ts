@@ -6,21 +6,13 @@ import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
 import * as crypto from 'crypto';
 import { RefreshResponseDTO } from 'src/refresh_token/dto/refresh_response.dto';
-import { ConfigService } from '@nestjs/config';
 @Injectable()
 export class AuthService {
   constructor(
     private readonly adminService: AdminService,
     private readonly refreshTokenService: RefreshTokenService,
     private readonly jwtService: JwtService,
-    private readonly configService: ConfigService,
-  ) {
-    console.log(
-      'Private Key:',
-      this.configService.get('PRIVATE_KEY')?.substring(0, 50),
-    );
-  }
-  // auth.service.ts에서 테스트
+  ) {}
 
   // 로그인 : Access Token과 Refresh Token 발급
   async signIn(
@@ -28,6 +20,7 @@ export class AuthService {
     adminPW: string,
   ): Promise<{ access_token: string; refresh_token: string }> {
     const user = await this.adminService.findOne(adminID);
+    console.log('authService signIn fn called : ' + user.adminid);
 
     if (!user || !(await bcrypt.compare(adminPW, user.adminpw))) {
       throw new UnauthorizedException('인증되지 않은 사용자');

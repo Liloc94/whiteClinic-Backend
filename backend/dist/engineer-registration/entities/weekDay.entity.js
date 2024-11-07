@@ -19,7 +19,7 @@ __decorate([
     __metadata("design:type", Number)
 ], WeekDays.prototype, "id", void 0);
 __decorate([
-    (0, typeorm_1.Column)({ name: 'day_name' }),
+    (0, typeorm_1.Column)({ name: 'day_name', nullable: true }),
     __metadata("design:type", String)
 ], WeekDays.prototype, "dayName", void 0);
 exports.WeekDays = WeekDays = __decorate([

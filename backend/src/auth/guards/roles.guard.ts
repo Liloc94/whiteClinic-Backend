@@ -5,7 +5,7 @@ import { ROLES_KEY } from '../decorators/roles.decorator';
 
 @Injectable()
 export class RolesGuard implements CanActivate {
-  constructor(private reflector: Reflector) {}
+  constructor(private readonly reflector: Reflector) {}
 
   canActivate(
     context: ExecutionContext,
@@ -26,5 +26,13 @@ export class RolesGuard implements CanActivate {
       // 인증되지 않은 사용자의 경우
       return false;
     }
+
+    console.log('rolesGuard user info checking log : ' + user); // user 객체가 제대로 전달되는지 확인
+
+    // 사용자 역할이 메타데이터의 requiredRoles와 일치하는지 확인
+    const hasRole = requiredRoles.some((role) => user.role?.includes(role));
+
+    // 역할이 일치하면 접근 허용, 아니면 접근 거부
+    return hasRole;
   }
 }

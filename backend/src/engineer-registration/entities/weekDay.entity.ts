@@ -5,6 +5,6 @@ export class WeekDays {
   @PrimaryColumn()
   id: number;
 
-  @Column({ name: 'day_name' })
+  @Column({ name: 'day_name', nullable: true })
   dayName: string;
 }

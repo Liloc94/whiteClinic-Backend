@@ -27,6 +27,7 @@ let AuthService = class AuthService {
     }
     async signIn(adminID, adminPW) {
         const user = await this.adminService.findOne(adminID);
+        console.log('authService signIn fn called : ' + user.adminid);
         if (!user || !(await bcrypt.compare(adminPW, user.adminpw))) {
             throw new common_1.UnauthorizedException('인증되지 않은 사용자');
         }

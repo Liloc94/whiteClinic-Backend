@@ -19,7 +19,7 @@ __decorate([
     __metadata("design:type", Number)
 ], Skill.prototype, "id", void 0);
 __decorate([
-    (0, typeorm_1.Column)(),
+    (0, typeorm_1.Column)({ nullable: true }),
     __metadata("design:type", String)
 ], Skill.prototype, "skill", void 0);
 exports.Skill = Skill = __decorate([
