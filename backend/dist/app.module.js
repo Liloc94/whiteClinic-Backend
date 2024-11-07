@@ -38,7 +38,7 @@ exports.AppModule = AppModule = __decorate([
                 database: 'verceldb',
                 entities: [],
                 autoLoadEntities: true,
-                synchronize: true,
+                synchronize: false,
                 logging: true,
             }),
             order_info_module_1.OrderInfoModule,
