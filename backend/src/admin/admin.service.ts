@@ -35,7 +35,7 @@ export class AdminService {
       where: { adminid },
       relations: ['refreshTokens'],
     });
-    if (admin) {
+    if (await admin) {
       console.log('refreshTokensResult :', (await admin).refreshTokens);
       console.log('adminID', (await admin).adminid);
       console.log('adminPW', (await admin).adminpw);
