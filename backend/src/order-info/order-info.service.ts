@@ -42,8 +42,12 @@ export class OrderInfoService {
     await this.orderDataRepository.save({ ...orderInfo });
   }
 
-  // async remove(id: number) {
-  //   this.getOne(id);
-  //   this.orderDatas = this.orderDatas.filter((order) => order.id !== +id);
-  // }
+  async remove(id: number) {
+    const order = await this.orderDataRepository.findOneBy({ id });
+    if (!order) {
+      throw new NotFoundException(`Order with ID : ${id} not found`);
+    } else {
+      await this.orderDataRepository.delete({ id });
+    }
+  }
 }

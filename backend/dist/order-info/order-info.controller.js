@@ -28,10 +28,13 @@ let OrderInfoController = class OrderInfoController {
         return this.orderService.getOne(orderId);
     }
     async updateOne(id, req) {
-        await this.orderService.update(id, req);
+        return this.orderService.update(id, req);
     }
     async create(orderInfo) {
         return this.orderService.create(orderInfo);
+    }
+    async remove(orderId) {
+        return this.orderService.remove(orderId);
     }
     findAll(res) {
         res.status(common_1.HttpStatus.OK).json([' library-specific response object test']);
@@ -44,6 +47,7 @@ __decorate([
         summary: 'OrderInfo 테이블 전체정보 조회 API',
         description: 'OrderInfo 테이블 정보를 일괄 조회한다.',
     }),
+    (0, swagger_1.ApiResponse)({ status: 200, description: '주문정보 불러오기 성공' }),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", Promise)
@@ -54,6 +58,7 @@ __decorate([
         summary: 'id 기반 주문정보 조회 API',
         description: 'id 파라미터와 매치되는 주문정보를 불러온다.',
     }),
+    (0, swagger_1.ApiResponse)({ status: 200, description: '주문정보 불러오기 성공' }),
     __param(0, (0, common_1.Param)('id')),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Number]),
@@ -65,6 +70,7 @@ __decorate([
         summary: 'id 기반 주문정보 수정',
         description: 'id 파라미터와 매치되는 주문정보를 DB 에서 찾아 수정한다. !! @Body 는 id를 제외하고 요청해야 한다.',
     }),
+    (0, swagger_1.ApiResponse)({ status: 200, description: '주문정보 불러오기 성공' }),
     __param(0, (0, common_1.Param)('id', common_1.ParseIntPipe)),
     __param(1, (0, common_1.Body)()),
     __metadata("design:type", Function),
@@ -81,11 +87,24 @@ __decorate([
         description: '주문정보를 생성한다.',
         type: submit_order_dto_1.SubmitOrderDto,
     }),
+    (0, swagger_1.ApiResponse)({ status: 200, description: '주문정보 불러오기 성공' }),
     __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [submit_order_dto_1.SubmitOrderDto]),
     __metadata("design:returntype", Promise)
 ], OrderInfoController.prototype, "create", null);
+__decorate([
+    (0, common_1.Delete)('deleteBy:id'),
+    (0, swagger_1.ApiOperation)({
+        summary: 'id 기반 주문정보 삭제 API',
+        description: 'id 파라미터와 매치되는 주문정보를 DB에서 삭제한다.',
+    }),
+    (0, swagger_1.ApiResponse)({ status: 200, description: '주문정보 불러오기 성공' }),
+    __param(0, (0, common_1.Param)('id')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Number]),
+    __metadata("design:returntype", Promise)
+], OrderInfoController.prototype, "remove", null);
 __decorate([
     (0, common_1.Get)('responseObject'),
     __param(0, (0, common_1.Res)()),

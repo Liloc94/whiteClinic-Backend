@@ -47,6 +47,15 @@ let OrderInfoService = class OrderInfoService {
     async create(orderInfo) {
         await this.orderDataRepository.save({ ...orderInfo });
     }
+    async remove(id) {
+        const order = await this.orderDataRepository.findOneBy({ id });
+        if (!order) {
+            throw new common_1.NotFoundException(`Order with ID : ${id} not found`);
+        }
+        else {
+            await this.orderDataRepository.delete({ id });
+        }
+    }
 };
 exports.OrderInfoService = OrderInfoService;
 exports.OrderInfoService = OrderInfoService = __decorate([

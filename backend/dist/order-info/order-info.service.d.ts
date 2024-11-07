@@ -8,4 +8,5 @@ export declare class OrderInfoService {
     getOne(id: number): Promise<OrderData>;
     update(id: number, updateData: SubmitOrderDto): Promise<OrderData>;
     create(orderInfo: SubmitOrderDto): Promise<void>;
+    remove(id: number): Promise<void>;
 }

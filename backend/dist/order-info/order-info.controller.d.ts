@@ -7,7 +7,8 @@ export declare class OrderInfoController {
     constructor(orderService: OrderInfoService);
     getAll(): Promise<SubmitOrderDto[]>;
     getOne(orderId: number): Promise<OrderData>;
-    updateOne(id: number, req: SubmitOrderDto): Promise<void>;
+    updateOne(id: number, req: SubmitOrderDto): Promise<OrderData>;
     create(orderInfo: SubmitOrderDto): Promise<void>;
+    remove(orderId: number): Promise<void>;
     findAll(res: Response): void;
 }
