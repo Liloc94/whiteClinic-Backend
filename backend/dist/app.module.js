@@ -37,6 +37,7 @@ exports.AppModule = AppModule = __decorate([
                 password: 'hNOtdfu8sWy3',
                 database: 'verceldb',
                 entities: [],
+                autoLoadEntities: true,
                 synchronize: false,
                 logging: true,
             }),

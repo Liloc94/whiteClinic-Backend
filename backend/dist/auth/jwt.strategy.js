@@ -14,15 +14,17 @@ const passport_1 = require("@nestjs/passport");
 const passport_jwt_1 = require("passport-jwt");
 const common_1 = require("@nestjs/common");
 const admin_service_1 = require("../admin/admin.service");
+const config_1 = require("@nestjs/config");
 let JwtStrategy = class JwtStrategy extends (0, passport_1.PassportStrategy)(passport_jwt_1.Strategy) {
-    constructor(adminService) {
+    constructor(adminService, config) {
         super({
             jwtFromRequest: passport_jwt_1.ExtractJwt.fromAuthHeaderAsBearerToken(),
             ignoreExpiration: false,
-            secretOrKey: process.env.PUBLIC_KEY.replace(/\\n/g, '\n'),
+            secretOrKey: config.get('PUBLIC_KEY'),
             algorithms: ['RS256'],
         });
         this.adminService = adminService;
+        this.config = config;
     }
     async validate(payload) {
         console.log('validate fn payload logging : ' + payload);
@@ -39,6 +41,7 @@ let JwtStrategy = class JwtStrategy extends (0, passport_1.PassportStrategy)(pas
 exports.JwtStrategy = JwtStrategy;
 exports.JwtStrategy = JwtStrategy = __decorate([
     (0, common_1.Injectable)(),
-    __metadata("design:paramtypes", [admin_service_1.AdminService])
+    __metadata("design:paramtypes", [admin_service_1.AdminService,
+        config_1.ConfigService])
 ], JwtStrategy);
 //# sourceMappingURL=jwt.strategy.js.map

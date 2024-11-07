@@ -6,19 +6,40 @@ import { RefreshTokenModule } from 'src/refresh_token/refresh_token.module';
 import { PassportModule } from '@nestjs/passport';
 import { JwtModule } from '@nestjs/jwt';
 import { JwtStrategy } from './jwt.strategy';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 
 @Module({
   imports: [
     AdminModule,
     RefreshTokenModule,
     PassportModule,
-    // register 함수 사용 시, secret에 환경변수로부터 읽어온 키값을 등록하기 전에 먼저 호출되어 오류가 발생한다 -> registerAsync 함수 사용으로 문제해결 가능
+    // register 함수 사용 시, secret에 환경변수로부터 읽어온 키값을 등록하기 전에 먼저 호출되어 오류가 발생한다 -> registerAsync 함수 사용으로 비동기 처리하여 문제해결 가능
     JwtModule.registerAsync({
       global: true,
-      useFactory: () => ({
-        secret: process.env.PRIVATE_KEY.replace(/\\n/g, '\n'),
-        signOptions: { expiresIn: '5m', algorithm: 'RS256' },
-      }),
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: (config: ConfigService) => {
+        const privateKey = config
+          .get<string>('PRIVATE_KEY')
+          ?.replace(/\\n/g, '\n');
+        const publicKey = config
+          .get<string>('PUBLIC_KEY')
+          ?.replace(/\\n/g, '\n');
+
+        // 디버깅 로그 추가
+        console.log('Private Key:', privateKey);
+        console.log('Public Key:', publicKey);
+
+        if (!privateKey || !publicKey) {
+          throw new Error('Private or Public key is missing');
+        }
+
+        return {
+          privateKey,
+          publicKey,
+          signOptions: { expiresIn: '5m', algorithm: 'RS256' },
+        };
+      },
     }),
   ],
   controllers: [AuthController],

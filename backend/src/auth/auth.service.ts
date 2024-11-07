@@ -38,12 +38,11 @@ export class AuthService {
       role: updateUser.role,
       tokenVersion: updateUser.tokenVersion,
     };
-
+    console.log('===========before get accessToken===========');
     const accessToken = await this.jwtService.signAsync(payload, {
       expiresIn: '5m',
       algorithm: 'RS256',
     });
-
     console.log('accesstoken : ' + accessToken);
 
     // Refresh Token 만료 시간 설정

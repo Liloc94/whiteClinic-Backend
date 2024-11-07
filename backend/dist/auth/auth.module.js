@@ -15,6 +15,7 @@ const refresh_token_module_1 = require("../refresh_token/refresh_token.module");
 const passport_1 = require("@nestjs/passport");
 const jwt_1 = require("@nestjs/jwt");
 const jwt_strategy_1 = require("./jwt.strategy");
+const config_1 = require("@nestjs/config");
 let AuthModule = class AuthModule {
 };
 exports.AuthModule = AuthModule;
@@ -26,10 +27,26 @@ exports.AuthModule = AuthModule = __decorate([
             passport_1.PassportModule,
             jwt_1.JwtModule.registerAsync({
                 global: true,
-                useFactory: () => ({
-                    secret: process.env.PRIVATE_KEY.replace(/\\n/g, '\n'),
-                    signOptions: { expiresIn: '5m', algorithm: 'RS256' },
-                }),
+                imports: [config_1.ConfigModule],
+                inject: [config_1.ConfigService],
+                useFactory: (config) => {
+                    const privateKey = config
+                        .get('PRIVATE_KEY')
+                        ?.replace(/\\n/g, '\n');
+                    const publicKey = config
+                        .get('PUBLIC_KEY')
+                        ?.replace(/\\n/g, '\n');
+                    console.log('Private Key:', privateKey);
+                    console.log('Public Key:', publicKey);
+                    if (!privateKey || !publicKey) {
+                        throw new Error('Private or Public key is missing');
+                    }
+                    return {
+                        privateKey,
+                        publicKey,
+                        signOptions: { expiresIn: '5m', algorithm: 'RS256' },
+                    };
+                },
             }),
         ],
         controllers: [auth_controller_1.AuthController],

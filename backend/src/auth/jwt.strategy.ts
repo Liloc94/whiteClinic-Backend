@@ -3,6 +3,7 @@ import { ExtractJwt, Strategy } from 'passport-jwt';
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { AdminService } from 'src/admin/admin.service';
 import { Admin } from 'src/admin/entities/admin.entity';
+import { ConfigService } from '@nestjs/config';
 
 interface JwtPayload {
   username: string;
@@ -10,7 +11,10 @@ interface JwtPayload {
 }
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
-  constructor(private readonly adminService: AdminService) {
+  constructor(
+    private readonly adminService: AdminService,
+    private readonly config: ConfigService,
+  ) {
     super({
       // JWT를 요청 헤더에서 추출
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
@@ -19,7 +23,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
       ignoreExpiration: false,
 
       // Private key를 Public key 경로에서 가져옴
-      secretOrKey: process.env.PUBLIC_KEY.replace(/\\n/g, '\n'),
+      secretOrKey: config.get<string>('PUBLIC_KEY'),
 
       // 알고리즘 사용하여 JWT 검증
       algorithms: ['RS256'],
