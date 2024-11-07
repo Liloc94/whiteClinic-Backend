@@ -20,7 +20,7 @@ __decorate([
     __metadata("design:type", Number)
 ], Admin.prototype, "id", void 0);
 __decorate([
-    (0, typeorm_1.Column)({ unique: true }),
+    (0, typeorm_1.Column)({ unique: true, name: 'adminid' }),
     __metadata("design:type", String)
 ], Admin.prototype, "adminid", void 0);
 __decorate([
