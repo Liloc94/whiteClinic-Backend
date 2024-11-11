@@ -12,12 +12,14 @@ const admin_service_1 = require("./admin.service");
 const admin_controller_1 = require("./admin.controller");
 const typeorm_1 = require("@nestjs/typeorm");
 const admin_entity_1 = require("./entities/admin.entity");
+const admin_auth_tokens_entity_1 = require("./entities/admin_auth_tokens.entity");
+const refresh_token_entity_1 = require("../refresh_token/entities/refresh_token.entity");
 let AdminModule = class AdminModule {
 };
 exports.AdminModule = AdminModule;
 exports.AdminModule = AdminModule = __decorate([
     (0, common_1.Module)({
-        imports: [typeorm_1.TypeOrmModule.forFeature([admin_entity_1.Admin])],
+        imports: [typeorm_1.TypeOrmModule.forFeature([admin_entity_1.Admin, admin_auth_tokens_entity_1.AdminAuthTokens, refresh_token_entity_1.RefreshToken])],
         controllers: [admin_controller_1.AdminController],
         providers: [admin_service_1.AdminService],
         exports: [admin_service_1.AdminService, typeorm_1.TypeOrmModule],

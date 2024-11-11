@@ -18,7 +18,7 @@ export class AdminService {
   ): Promise<Admin> {
     const hashedPassword = await bcrypt.hash(adminpw, 10);
     const admin = this.adminRepository.create({
-      admin_user_id: adminid,
+      adminId: adminid,
       password: hashedPassword,
       role,
     });
@@ -29,7 +29,7 @@ export class AdminService {
   async findOne(adminid: string): Promise<Admin | undefined> {
     try {
       const admin = await this.adminRepository.findOne({
-        where: { admin_user_id: adminid },
+        where: { adminId: adminid },
         relations: ['refreshTokens'],
       });
 

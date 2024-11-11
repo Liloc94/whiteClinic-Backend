@@ -31,7 +31,7 @@ let AuthService = class AuthService {
         const updateUser = await this.adminService.findOne(adminID);
         const payload = {
             sub: updateUser.id,
-            username: updateUser.admin_user_id,
+            username: updateUser.adminId,
             role: updateUser.role,
             tokenVersion: updateUser.tokenVersion,
         };
@@ -61,14 +61,14 @@ let AuthService = class AuthService {
         const user = storedRefreshToken.admin;
         await this.refreshTokenService.removeRefreshToken(refreshToken);
         await this.adminService.incrementTokenVersion(user.id);
-        const updateUser = await this.adminService.findOne(user.admin_user_id);
+        const updateUser = await this.adminService.findOne(user.adminId);
         const newRefreshToken = this.generateRefreshToken();
         const newExpiresAt = new Date();
         newExpiresAt.setDate(newExpiresAt.getDate() + 7);
         await this.refreshTokenService.saveRefreshToken(updateUser, newRefreshToken, newExpiresAt);
         const payload = {
             sub: updateUser.id,
-            username: updateUser.admin_user_id,
+            username: updateUser.adminId,
             role: updateUser.role,
             tokenVersion: updateUser.tokenVersion,
         };

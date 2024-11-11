@@ -1,4 +1,4 @@
-import { Engineer } from 'src/engineer-info/entities/engineer-info.entity';
+import { Engineer } from 'src/engineer-info/entities/engineer.entity';
 import { Column, Entity, JoinColumn, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity('specialholidays')

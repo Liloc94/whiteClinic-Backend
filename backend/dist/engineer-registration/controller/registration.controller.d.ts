@@ -12,12 +12,12 @@ export declare class RegistrationController {
                 phoneNumber: string;
                 location: string;
                 remark: string;
-            } & import("../../engineer-info/entities/engineer-info.entity").Engineer>;
+            } & import("../../engineer-info/entities/engineer.entity").Engineer>;
             skillNames: string[];
             commissionRate: import("../entities/commissionRates.entity").CommissionRates;
             specialHolidays: string[];
-            regularHolidays: import("../entities/weekDay.entity").WeekDays;
-            paymentDay: import("../entities/weekDay.entity").WeekDays;
+            regularHolidays: import("../entities/WeekDays.entity").WeekDays;
+            paymentDay: import("../entities/WeekDays.entity").WeekDays;
         };
     }>;
 }

@@ -10,8 +10,8 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.RefreshToken = void 0;
-const admin_entity_1 = require("../../admin/entities/admin.entity");
 const typeorm_1 = require("typeorm");
+const admin_entity_1 = require("../../admin/entities/admin.entity");
 let RefreshToken = class RefreshToken {
 };
 exports.RefreshToken = RefreshToken;
@@ -20,15 +20,15 @@ __decorate([
     __metadata("design:type", Number)
 ], RefreshToken.prototype, "id", void 0);
 __decorate([
-    (0, typeorm_1.Column)({ unique: true }),
+    (0, typeorm_1.Column)({ name: 'token', type: 'varchar', length: 100 }),
     __metadata("design:type", String)
 ], RefreshToken.prototype, "token", void 0);
 __decorate([
-    (0, typeorm_1.CreateDateColumn)(),
+    (0, typeorm_1.CreateDateColumn)({ name: 'created_at', type: 'date' }),
     __metadata("design:type", Date)
-], RefreshToken.prototype, "createAt", void 0);
+], RefreshToken.prototype, "createdAt", void 0);
 __decorate([
-    (0, typeorm_1.Column)(),
+    (0, typeorm_1.Column)({ name: 'expires_at', type: 'date' }),
     __metadata("design:type", Date)
 ], RefreshToken.prototype, "expiresAt", void 0);
 __decorate([
@@ -38,6 +38,6 @@ __decorate([
     __metadata("design:type", admin_entity_1.Admin)
 ], RefreshToken.prototype, "admin", void 0);
 exports.RefreshToken = RefreshToken = __decorate([
-    (0, typeorm_1.Entity)()
+    (0, typeorm_1.Entity)('refresh_token')
 ], RefreshToken);
 //# sourceMappingURL=refresh_token.entity.js.map

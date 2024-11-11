@@ -15,11 +15,11 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.EngineerInfoService = void 0;
 const common_1 = require("@nestjs/common");
 const typeorm_1 = require("@nestjs/typeorm");
-const engineer_info_entity_1 = require("../entities/engineer-info.entity");
-const engineer_dailyearnings_entity_1 = require("../entities/engineer-dailyearnings.entity");
-const engineer_payDay_entity_1 = require("../entities/engineer-payDay.entity");
-const engineer_commissionRates_entity_1 = require("../entities/engineer-commissionRates.entity");
+const engineer_entity_1 = require("../entities/engineer.entity");
+const engineer_commission_rate_entity_1 = require("../entities/engineer_commission.rate.entity");
 const typeorm_2 = require("typeorm");
+const engineer_daily_earnings_entity_1 = require("../entities/engineer_daily_earnings.entity");
+const engineer_payday_entity_1 = require("../entities/engineer_payday.entity");
 let EngineerInfoService = class EngineerInfoService {
     constructor(EngineerRepository, engineerDailyearningsReopsitory, EngineerPayDayRepository, EngineerCommissionRatesRepository) {
         this.EngineerRepository = EngineerRepository;
@@ -51,7 +51,7 @@ let EngineerInfoService = class EngineerInfoService {
             '토요일',
             '일요일',
         ];
-        const dayName = dayNames[payDay.weekdays - 1] || '없음';
+        const dayName = dayNames[payDay.weekday.id - 1] || '없음';
         return {
             ...payDay,
             weekdays: dayName,
@@ -64,7 +64,7 @@ let EngineerInfoService = class EngineerInfoService {
     }
     RatesToFilter(rate) {
         const rateArray = [50, 55, 60, 65, 70, 75, 80];
-        const resultRate = rateArray[rate.rateId - 1] || '없음';
+        const resultRate = rateArray[rate.commissionRateId - 1] || '없음';
         return {
             ...rate,
             rateId: resultRate,
@@ -74,10 +74,10 @@ let EngineerInfoService = class EngineerInfoService {
 exports.EngineerInfoService = EngineerInfoService;
 exports.EngineerInfoService = EngineerInfoService = __decorate([
     (0, common_1.Injectable)(),
-    __param(0, (0, typeorm_1.InjectRepository)(engineer_info_entity_1.Engineer)),
-    __param(1, (0, typeorm_1.InjectRepository)(engineer_dailyearnings_entity_1.EngineerDailyearnings)),
-    __param(2, (0, typeorm_1.InjectRepository)(engineer_payDay_entity_1.EngineerPayDay)),
-    __param(3, (0, typeorm_1.InjectRepository)(engineer_commissionRates_entity_1.EngineerCommissionRates)),
+    __param(0, (0, typeorm_1.InjectRepository)(engineer_entity_1.Engineer)),
+    __param(1, (0, typeorm_1.InjectRepository)(engineer_daily_earnings_entity_1.EngineerDailyEarnings)),
+    __param(2, (0, typeorm_1.InjectRepository)(engineer_payday_entity_1.EngineerPayday)),
+    __param(3, (0, typeorm_1.InjectRepository)(engineer_commission_rate_entity_1.EngineerCommissionRates)),
     __metadata("design:paramtypes", [typeorm_2.Repository,
         typeorm_2.Repository,
         typeorm_2.Repository,

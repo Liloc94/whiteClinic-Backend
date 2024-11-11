@@ -1,9 +1,10 @@
-export declare class CreateOrderDTO {
+export declare class CreateOrderDto {
+    orderId: number;
     customerId: number;
     productDetailId: number;
-    productRemark?: string;
+    productRemark: string;
     count: number;
-    discountAmount?: number;
+    discountAmount: number;
     totalAmount: number;
-    remark?: string;
+    remark: string;
 }

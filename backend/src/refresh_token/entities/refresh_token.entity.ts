@@ -1,24 +1,24 @@
-import { Admin } from 'src/admin/entities/admin.entity';
 import {
-  Column,
-  CreateDateColumn,
   Entity,
-  ManyToOne,
   PrimaryGeneratedColumn,
+  Column,
+  ManyToOne,
+  CreateDateColumn,
 } from 'typeorm';
+import { Admin } from 'src/admin/entities/admin.entity';
 
-@Entity()
+@Entity('refresh_token')
 export class RefreshToken {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ unique: true }) // 단일 세션 환경
+  @Column({ name: 'token', type: 'varchar', length: 100 })
   token: string;
 
-  @CreateDateColumn()
-  createAt: Date;
+  @CreateDateColumn({ name: 'created_at', type: 'date' })
+  createdAt: Date;
 
-  @Column()
+  @Column({ name: 'expires_at', type: 'date' })
   expiresAt: Date;
 
   @ManyToOne(() => Admin, (admin) => admin.refreshTokens, {

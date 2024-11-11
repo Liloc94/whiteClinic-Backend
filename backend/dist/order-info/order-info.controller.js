@@ -14,9 +14,9 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.OrderInfoController = void 0;
 const common_1 = require("@nestjs/common");
-const submit_order_dto_1 = require("./dto/submit-order.dto");
 const order_info_service_1 = require("./order-info.service");
 const swagger_1 = require("@nestjs/swagger");
+const create_order_dto_1 = require("./dto/create-order.dto");
 let OrderInfoController = class OrderInfoController {
     constructor(orderService) {
         this.orderService = orderService;
@@ -74,7 +74,7 @@ __decorate([
     __param(0, (0, common_1.Param)('id', common_1.ParseIntPipe)),
     __param(1, (0, common_1.Body)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Number, submit_order_dto_1.SubmitOrderDto]),
+    __metadata("design:paramtypes", [Number, create_order_dto_1.CreateOrderDto]),
     __metadata("design:returntype", Promise)
 ], OrderInfoController.prototype, "updateOne", null);
 __decorate([
@@ -85,12 +85,12 @@ __decorate([
     }),
     (0, swagger_1.ApiCreatedResponse)({
         description: '주문정보를 생성한다.',
-        type: submit_order_dto_1.SubmitOrderDto,
+        type: create_order_dto_1.CreateOrderDto,
     }),
     (0, swagger_1.ApiResponse)({ status: 200, description: '주문정보 불러오기 성공' }),
     __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [submit_order_dto_1.SubmitOrderDto]),
+    __metadata("design:paramtypes", [create_order_dto_1.CreateOrderDto]),
     __metadata("design:returntype", Promise)
 ], OrderInfoController.prototype, "create", null);
 __decorate([

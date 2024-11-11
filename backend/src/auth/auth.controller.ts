@@ -111,7 +111,7 @@ export class AuthController {
   })
   getProfile(@Req() req: Request) {
     const user = req.user as Admin;
-    return { id: user.id, username: user.admin_user_id, role: user.role };
+    return { id: user.id, username: user.adminId, role: user.role };
   }
 
   // 관리자 전용

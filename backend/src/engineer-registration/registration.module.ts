@@ -2,23 +2,19 @@ import { Module } from '@nestjs/common';
 import { RegistrationService } from './service/registration.service';
 import { RegistrationController } from './controller/registration.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { Engineer } from 'src/engineer-info/entities/engineer-info.entity';
-import { Skill } from './entities/skill.entity';
-import { EngineerCommissionRates } from 'src/engineer-info/entities/engineer-commissionRates.entity';
-import { EngineerSkill } from './entities/Engineer_skill.entity';
-import { CommissionRates } from './entities/commissionRates.entity';
-import { SpecialHolidays } from './entities/specialHolidays.entity';
-import { WeekDays } from './entities/weekDay.entity';
-import { RegularHolidays } from './entities/reaularHolidays.entity';
+import { Engineer } from 'src/engineer-info/entities/engineer.entity';
+import { Skills } from './entities/Skills.entity';
+import { EngineerSkill } from './entities/EngineerSkill.entity';
+import { SpecialHolidays } from './entities/SpecialHolidays.entity';
+import { WeekDays } from './entities/WeekDays.entity';
+import { RegularHolidays } from './entities/RegularHolidays.entity';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([
       Engineer,
-      Skill,
-      EngineerCommissionRates,
+      Skills,
       EngineerSkill,
-      CommissionRates,
       SpecialHolidays,
       WeekDays,
       RegularHolidays,

@@ -3,9 +3,9 @@ export declare class EngineerInfoController {
     private readonly engineerInfoService;
     constructor(engineerInfoService: EngineerInfoService);
     findAll(): Promise<{
-        engineer: import("../entities/engineer-info.entity").Engineer[];
-        engineerPay: import("../entities/engineer-dailyearnings.entity").EngineerDailyearnings[];
-        engineerPayDay: import("../entities/engineer-payDay.entity").EngineerPayDay[];
-        EngineerCommissionRates: import("../entities/engineer-commissionRates.entity").EngineerCommissionRates[];
+        engineer: import("../entities/engineer.entity").Engineer[];
+        engineerPay: import("../entities/engineer_daily_earnings.entity").EngineerDailyEarnings[];
+        engineerPayDay: import("../entities/engineer_payday.entity").EngineerPayday[];
+        EngineerCommissionRates: import("../entities/engineer_commission.rate.entity").EngineerCommissionRates[];
     }>;
 }

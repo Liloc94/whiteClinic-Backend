@@ -34,7 +34,7 @@ export class AuthService {
     // Access Token에 들어갈 유저의 정보
     const payload = {
       sub: updateUser.id,
-      username: updateUser.admin_user_id,
+      username: updateUser.adminId,
       role: updateUser.role,
       tokenVersion: updateUser.tokenVersion,
     };
@@ -88,7 +88,7 @@ export class AuthService {
     await this.adminService.incrementTokenVersion(user.id);
 
     // 최신 tokenVersion 조회
-    const updateUser = await this.adminService.findOne(user.admin_user_id);
+    const updateUser = await this.adminService.findOne(user.adminId);
 
     // 새로운 Refresh Token 생성
     const newRefreshToken = this.generateRefreshToken();
@@ -105,7 +105,7 @@ export class AuthService {
     // 새로운 Access Token 생성
     const payload = {
       sub: updateUser.id,
-      username: updateUser.admin_user_id,
+      username: updateUser.adminId,
       role: updateUser.role,
       tokenVersion: updateUser.tokenVersion,
     };

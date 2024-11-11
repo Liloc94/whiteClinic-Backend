@@ -10,9 +10,8 @@ import {
   Put,
   Res,
 } from '@nestjs/common';
-import { SubmitOrderDto } from './dto/submit-order.dto';
 import { OrderInfoService } from './order-info.service';
-import { OrderData } from './entities/OrderData.entity';
+import { OrderInfo } from './entities/order_info.entity';
 import {
   ApiCreatedResponse,
   ApiOperation,
@@ -20,6 +19,7 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 import { Response } from 'express';
+import { CreateOrderDto } from './dto/create-order.dto';
 
 @Controller('orderInfo')
 @ApiTags('주문정보 API')
@@ -32,7 +32,7 @@ export class OrderInfoController {
     description: 'OrderInfo 테이블 정보를 일괄 조회한다.',
   })
   @ApiResponse({ status: 200, description: '주문정보 불러오기 성공' })
-  async getAll(): Promise<SubmitOrderDto[]> {
+  async getAll(): Promise<OrderInfo[]> {
     return this.orderService.getAll();
   }
 
@@ -42,7 +42,7 @@ export class OrderInfoController {
     description: 'id 파라미터와 매치되는 주문정보를 불러온다.',
   })
   @ApiResponse({ status: 200, description: '주문정보 불러오기 성공' })
-  async getOne(@Param('id') orderId: number): Promise<OrderData> {
+  async getOne(@Param('id') orderId: number): Promise<OrderInfo> {
     return this.orderService.getOne(orderId);
   }
 
@@ -55,8 +55,8 @@ export class OrderInfoController {
   @ApiResponse({ status: 200, description: '주문정보 불러오기 성공' })
   async updateOne(
     @Param('id', ParseIntPipe) id: number, // ParseIntPipe로 숫자로 변환
-    @Body() req: SubmitOrderDto, // @Body로 요청 본문을 가져옴
-  ): Promise<OrderData> {
+    @Body() req: CreateOrderDto, // @Body로 요청 본문을 가져옴
+  ): Promise<OrderInfo> {
     return this.orderService.update(id, req);
   }
 
@@ -67,10 +67,10 @@ export class OrderInfoController {
   })
   @ApiCreatedResponse({
     description: '주문정보를 생성한다.',
-    type: SubmitOrderDto,
+    type: CreateOrderDto,
   })
   @ApiResponse({ status: 200, description: '주문정보 불러오기 성공' })
-  async create(@Body() orderInfo: SubmitOrderDto): Promise<void> {
+  async create(@Body() orderInfo: CreateOrderDto): Promise<void> {
     return this.orderService.create(orderInfo);
   }
 

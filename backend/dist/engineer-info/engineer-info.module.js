@@ -11,10 +11,14 @@ const common_1 = require("@nestjs/common");
 const engineer_info_controller_1 = require("./controller/engineer-info.controller");
 const engineer_info_service_1 = require("./service/engineer-info.service");
 const typeorm_1 = require("@nestjs/typeorm");
-const engineer_info_entity_1 = require("./entities/engineer-info.entity");
-const engineer_dailyearnings_entity_1 = require("./entities/engineer-dailyearnings.entity");
-const engineer_payDay_entity_1 = require("./entities/engineer-payDay.entity");
-const engineer_commissionRates_entity_1 = require("./entities/engineer-commissionRates.entity");
+const engineer_entity_1 = require("./entities/engineer.entity");
+const engineer_commission_rate_entity_1 = require("./entities/engineer_commission.rate.entity");
+const engineer_daily_earnings_entity_1 = require("./entities/engineer_daily_earnings.entity");
+const engineer_payday_entity_1 = require("./entities/engineer_payday.entity");
+const commission_rate_entity_1 = require("./entities/commission_rate.entity");
+const engineer_day_off_entity_1 = require("./entities/engineer_day_off.entity");
+const engineer_skill_remark_entity_1 = require("./entities/engineer_skill_remark.entity");
+const engineer_weely_earnings_entity_1 = require("./entities/engineer_weely_earnings.entity");
 let EngineerInfoModule = class EngineerInfoModule {
 };
 exports.EngineerInfoModule = EngineerInfoModule;
@@ -22,10 +26,14 @@ exports.EngineerInfoModule = EngineerInfoModule = __decorate([
     (0, common_1.Module)({
         imports: [
             typeorm_1.TypeOrmModule.forFeature([
-                engineer_info_entity_1.Engineer,
-                engineer_dailyearnings_entity_1.EngineerDailyearnings,
-                engineer_payDay_entity_1.EngineerPayDay,
-                engineer_commissionRates_entity_1.EngineerCommissionRates,
+                engineer_entity_1.Engineer,
+                engineer_daily_earnings_entity_1.EngineerDailyEarnings,
+                engineer_payday_entity_1.EngineerPayday,
+                engineer_commission_rate_entity_1.EngineerCommissionRates,
+                commission_rate_entity_1.CommissionRates,
+                engineer_day_off_entity_1.EngineerDayoff,
+                engineer_skill_remark_entity_1.EngineerSkillRemark,
+                engineer_weely_earnings_entity_1.EngineerWeeklyEarnings,
             ]),
         ],
         controllers: [engineer_info_controller_1.EngineerInfoController],

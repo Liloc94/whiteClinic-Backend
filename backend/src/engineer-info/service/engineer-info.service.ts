@@ -1,10 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Engineer } from '../entities/engineer-info.entity';
-import { EngineerDailyearnings } from '../entities/engineer-dailyearnings.entity';
-import { EngineerPayDay } from '../entities/engineer-payDay.entity';
-import { EngineerCommissionRates } from '../entities/engineer-commissionRates.entity';
+import { Engineer } from '../entities/engineer.entity';
+
+import { EngineerCommissionRates } from '../entities/engineer_commission.rate.entity';
 import { Repository } from 'typeorm';
+import { EngineerDailyEarnings } from '../entities/engineer_daily_earnings.entity';
+import { EngineerPayday } from '../entities/engineer_payday.entity';
 
 @Injectable()
 export class EngineerInfoService {
@@ -12,11 +13,11 @@ export class EngineerInfoService {
     @InjectRepository(Engineer)
     private readonly EngineerRepository: Repository<Engineer>,
 
-    @InjectRepository(EngineerDailyearnings)
-    private readonly engineerDailyearningsReopsitory: Repository<EngineerDailyearnings>,
+    @InjectRepository(EngineerDailyEarnings)
+    private readonly engineerDailyearningsReopsitory: Repository<EngineerDailyEarnings>,
 
-    @InjectRepository(EngineerPayDay)
-    private readonly EngineerPayDayRepository: Repository<EngineerPayDay>,
+    @InjectRepository(EngineerPayday)
+    private readonly EngineerPayDayRepository: Repository<EngineerPayday>,
 
     @InjectRepository(EngineerCommissionRates)
     private readonly EngineerCommissionRatesRepository: Repository<EngineerCommissionRates>,
@@ -28,17 +29,17 @@ export class EngineerInfoService {
     return engineerData;
   }
 
-  async enginnerPay(): Promise<EngineerDailyearnings[]> {
+  async enginnerPay(): Promise<EngineerDailyEarnings[]> {
     const engineerPay = await this.engineerDailyearningsReopsitory.find();
     console.log(engineerPay);
     return engineerPay;
   }
 
-  async engineerPayDay(): Promise<EngineerPayDay[]> {
+  async engineerPayDay(): Promise<EngineerPayday[]> {
     const engineerPayDay = await this.EngineerPayDayRepository.find();
     return engineerPayDay.map(this.dayToName);
   }
-  private dayToName(payDay: EngineerPayDay): any {
+  private dayToName(payDay: EngineerPayday): any {
     const dayNames = [
       '월요일',
       '화요일',
@@ -49,7 +50,7 @@ export class EngineerInfoService {
       '일요일',
     ];
 
-    const dayName = dayNames[payDay.weekdays - 1] || '없음';
+    const dayName = dayNames[payDay.weekday.id - 1] || '없음';
 
     return {
       ...payDay,
@@ -66,7 +67,7 @@ export class EngineerInfoService {
   }
   private RatesToFilter(rate: EngineerCommissionRates): any {
     const rateArray = [50, 55, 60, 65, 70, 75, 80];
-    const resultRate = rateArray[rate.rateId - 1] || '없음';
+    const resultRate = rateArray[rate.commissionRateId - 1] || '없음';
 
     return {
       ...rate,

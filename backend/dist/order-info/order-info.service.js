@@ -14,7 +14,7 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.OrderInfoService = void 0;
 const common_1 = require("@nestjs/common");
-const OrderData_entity_1 = require("./entities/OrderData.entity");
+const order_info_entity_1 = require("./entities/order_info.entity");
 const typeorm_1 = require("@nestjs/typeorm");
 const typeorm_2 = require("typeorm");
 let OrderInfoService = class OrderInfoService {
@@ -24,19 +24,21 @@ let OrderInfoService = class OrderInfoService {
     async getAll() {
         return this.orderDataRepository.find();
     }
-    async getOne(id) {
-        const order = await this.orderDataRepository.findOne({ where: { id } });
+    async getOne(orderId) {
+        const order = await this.orderDataRepository.findOne({
+            where: { orderId },
+        });
         if (!order) {
-            throw new common_1.NotFoundException(`Order with ID: ${id} not found`);
+            throw new common_1.NotFoundException(`Order with ID: ${orderId} not found`);
         }
         else {
             return order;
         }
     }
-    async update(id, updateData) {
-        const order = await this.orderDataRepository.findOneBy({ id });
+    async update(orderId, updateData) {
+        const order = await this.orderDataRepository.findOneBy({ orderId });
         if (!order) {
-            throw new common_1.NotFoundException(`Order with ID : ${id} not found`);
+            throw new common_1.NotFoundException(`Order with ID : ${orderId} not found`);
         }
         else {
             Object.assign(order, updateData);
@@ -47,20 +49,20 @@ let OrderInfoService = class OrderInfoService {
     async create(orderInfo) {
         await this.orderDataRepository.save({ ...orderInfo });
     }
-    async remove(id) {
-        const order = await this.orderDataRepository.findOneBy({ id });
+    async remove(orderId) {
+        const order = await this.orderDataRepository.findOneBy({ orderId });
         if (!order) {
-            throw new common_1.NotFoundException(`Order with ID : ${id} not found`);
+            throw new common_1.NotFoundException(`Order with ID : ${orderId} not found`);
         }
         else {
-            await this.orderDataRepository.delete({ id });
+            await this.orderDataRepository.delete({ orderId });
         }
     }
 };
 exports.OrderInfoService = OrderInfoService;
 exports.OrderInfoService = OrderInfoService = __decorate([
     (0, common_1.Injectable)(),
-    __param(0, (0, typeorm_1.InjectRepository)(OrderData_entity_1.OrderData)),
+    __param(0, (0, typeorm_1.InjectRepository)(order_info_entity_1.OrderInfo)),
     __metadata("design:paramtypes", [typeorm_2.Repository])
 ], OrderInfoService);
 //# sourceMappingURL=order-info.service.js.map

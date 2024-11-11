@@ -11,14 +11,12 @@ const common_1 = require("@nestjs/common");
 const registration_service_1 = require("./service/registration.service");
 const registration_controller_1 = require("./controller/registration.controller");
 const typeorm_1 = require("@nestjs/typeorm");
-const engineer_info_entity_1 = require("../engineer-info/entities/engineer-info.entity");
-const skill_entity_1 = require("./entities/skill.entity");
-const engineer_commissionRates_entity_1 = require("../engineer-info/entities/engineer-commissionRates.entity");
-const Engineer_skill_entity_1 = require("./entities/Engineer_skill.entity");
-const commissionRates_entity_1 = require("./entities/commissionRates.entity");
-const specialHolidays_entity_1 = require("./entities/specialHolidays.entity");
-const weekDay_entity_1 = require("./entities/weekDay.entity");
-const reaularHolidays_entity_1 = require("./entities/reaularHolidays.entity");
+const engineer_entity_1 = require("../engineer-info/entities/engineer.entity");
+const Skills_entity_1 = require("./entities/Skills.entity");
+const EngineerSkill_entity_1 = require("./entities/EngineerSkill.entity");
+const SpecialHolidays_entity_1 = require("./entities/SpecialHolidays.entity");
+const WeekDays_entity_1 = require("./entities/WeekDays.entity");
+const RegularHolidays_entity_1 = require("./entities/RegularHolidays.entity");
 let RegistrationModule = class RegistrationModule {
 };
 exports.RegistrationModule = RegistrationModule;
@@ -26,14 +24,12 @@ exports.RegistrationModule = RegistrationModule = __decorate([
     (0, common_1.Module)({
         imports: [
             typeorm_1.TypeOrmModule.forFeature([
-                engineer_info_entity_1.Engineer,
-                skill_entity_1.Skill,
-                engineer_commissionRates_entity_1.EngineerCommissionRates,
-                Engineer_skill_entity_1.EngineerSkill,
-                commissionRates_entity_1.CommissionRates,
-                specialHolidays_entity_1.SpecialHolidays,
-                weekDay_entity_1.WeekDays,
-                reaularHolidays_entity_1.RegularHolidays,
+                engineer_entity_1.Engineer,
+                Skills_entity_1.Skills,
+                EngineerSkill_entity_1.EngineerSkill,
+                SpecialHolidays_entity_1.SpecialHolidays,
+                WeekDays_entity_1.WeekDays,
+                RegularHolidays_entity_1.RegularHolidays,
             ]),
         ],
         controllers: [registration_controller_1.RegistrationController],

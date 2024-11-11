@@ -11,12 +11,14 @@ const common_1 = require("@nestjs/common");
 const refresh_token_service_1 = require("./refresh_token.service");
 const typeorm_1 = require("@nestjs/typeorm");
 const refresh_token_entity_1 = require("./entities/refresh_token.entity");
+const admin_entity_1 = require("../admin/entities/admin.entity");
+const admin_auth_tokens_entity_1 = require("../admin/entities/admin_auth_tokens.entity");
 let RefreshTokenModule = class RefreshTokenModule {
 };
 exports.RefreshTokenModule = RefreshTokenModule;
 exports.RefreshTokenModule = RefreshTokenModule = __decorate([
     (0, common_1.Module)({
-        imports: [typeorm_1.TypeOrmModule.forFeature([refresh_token_entity_1.RefreshToken])],
+        imports: [typeorm_1.TypeOrmModule.forFeature([admin_entity_1.Admin, admin_auth_tokens_entity_1.AdminAuthTokens, refresh_token_entity_1.RefreshToken])],
         controllers: [],
         providers: [refresh_token_service_1.RefreshTokenService],
         exports: [refresh_token_service_1.RefreshTokenService],

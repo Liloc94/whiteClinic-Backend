@@ -1,56 +1,29 @@
-import { ApiProperty } from '@nestjs/swagger';
-import { IsNotEmpty, IsOptional, IsString, IsNumber } from 'class-validator';
+import { IsInt, IsOptional, IsString, IsDecimal } from 'class-validator';
+export class CreateOrderDto {
+  @IsOptional() // Optional if we want to let the DB auto-generate
+  @IsInt()
+  orderId: number;
 
-export class CreateOrderDTO {
-  @ApiProperty({
-    description: '고객 ID',
-  })
-  @IsNumber()
-  @IsNotEmpty()
+  @IsInt()
   customerId: number;
 
-  @ApiProperty({
-    description: '세척 품목 ID',
-  })
-  @IsNumber()
-  @IsNotEmpty()
+  @IsInt()
   productDetailId: number;
 
-  @ApiProperty({
-    description: '제품 관련 특이사항',
-    required: false,
-  })
-  @IsString()
   @IsOptional()
-  productRemark?: string;
+  @IsString()
+  productRemark: string;
 
-  @ApiProperty({
-    description: '세척 대수',
-  })
-  @IsNumber()
-  @IsNotEmpty()
+  @IsInt()
   count: number;
 
-  @ApiProperty({
-    description: '할인 금액',
-    required: false,
-  })
-  @IsNumber()
-  @IsOptional()
-  discountAmount?: number;
+  @IsDecimal()
+  discountAmount: number;
 
-  @ApiProperty({
-    description: '총 금액',
-  })
-  @IsNumber()
-  @IsNotEmpty()
+  @IsDecimal()
   totalAmount: number;
 
-  @ApiProperty({
-    description: '비고',
-    required: false,
-  })
-  @IsString()
   @IsOptional()
-  remark?: string;
+  @IsString()
+  remark: string;
 }

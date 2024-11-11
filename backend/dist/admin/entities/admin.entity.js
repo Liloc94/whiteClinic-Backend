@@ -20,19 +20,19 @@ __decorate([
     __metadata("design:type", Number)
 ], Admin.prototype, "id", void 0);
 __decorate([
-    (0, typeorm_1.Column)({ unique: true, nullable: true }),
+    (0, typeorm_1.Column)({ name: 'admin_user_id', type: 'varchar', length: 100, unique: true }),
     __metadata("design:type", String)
-], Admin.prototype, "admin_user_id", void 0);
+], Admin.prototype, "adminId", void 0);
 __decorate([
-    (0, typeorm_1.Column)({ nullable: true }),
+    (0, typeorm_1.Column)({ type: 'varchar', length: 100 }),
     __metadata("design:type", String)
 ], Admin.prototype, "password", void 0);
 __decorate([
-    (0, typeorm_1.Column)({ default: 'admin' }),
+    (0, typeorm_1.Column)({ type: 'varchar', length: 100 }),
     __metadata("design:type", String)
 ], Admin.prototype, "role", void 0);
 __decorate([
-    (0, typeorm_1.Column)({ default: 0 }),
+    (0, typeorm_1.Column)({ name: 'token_version', type: 'int', nullable: true }),
     __metadata("design:type", Number)
 ], Admin.prototype, "tokenVersion", void 0);
 __decorate([
@@ -40,6 +40,6 @@ __decorate([
     __metadata("design:type", Array)
 ], Admin.prototype, "refreshTokens", void 0);
 exports.Admin = Admin = __decorate([
-    (0, typeorm_1.Entity)()
+    (0, typeorm_1.Entity)('admin')
 ], Admin);
 //# sourceMappingURL=admin.entity.js.map

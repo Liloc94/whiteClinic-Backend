@@ -1,6 +1,6 @@
-import { RefreshToken } from './entities/refresh_token.entity';
 import { Repository } from 'typeorm';
 import { Admin } from 'src/admin/entities/admin.entity';
+import { RefreshToken } from './entities/refresh_token.entity';
 export declare class RefreshTokenService {
     private readonly refreshTokenRepository;
     constructor(refreshTokenRepository: Repository<RefreshToken>);

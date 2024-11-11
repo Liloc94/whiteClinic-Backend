@@ -1,23 +1,24 @@
 import { RefreshToken } from 'src/refresh_token/entities/refresh_token.entity';
-import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
 
-@Entity()
+@Entity('admin')
 export class Admin {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ unique: true, nullable: true })
-  admin_user_id: string;
+  @Column({ name: 'admin_user_id', type: 'varchar', length: 100, unique: true })
+  adminId: string;
 
-  @Column({ nullable: true })
+  @Column({ type: 'varchar', length: 100 })
   password: string;
 
-  @Column({ default: 'admin' })
+  @Column({ type: 'varchar', length: 100 })
   role: string;
 
-  @Column({ default: 0 })
-  tokenVersion: number; // Access Token 관리
+  @Column({ name: 'token_version', type: 'int', nullable: true })
+  tokenVersion: number | null;
 
+  // RefreshToken과의 양방향 관계 설정
   @OneToMany(() => RefreshToken, (refreshToken) => refreshToken.admin)
   refreshTokens: RefreshToken[];
 }

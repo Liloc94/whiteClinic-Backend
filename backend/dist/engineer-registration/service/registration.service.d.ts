@@ -1,9 +1,9 @@
 import { CreateRegistrationDto } from '../dto/create-registration.dto';
 import { UpdateRegistrationDto } from '../dto/update-registration.dto';
-import { Engineer } from 'src/engineer-info/entities/engineer-info.entity';
+import { Engineer } from 'src/engineer-info/entities/engineer.entity';
 import { Repository, DataSource } from 'typeorm';
 import { CommissionRates } from '../entities/commissionRates.entity';
-import { WeekDays } from '../entities/weekDay.entity';
+import { WeekDays } from '../entities/WeekDays.entity';
 export declare class RegistrationService {
     private dataSource;
     private EngineerRepostiory;
@@ -25,6 +25,6 @@ export declare class RegistrationService {
             paymentDay: WeekDays;
         };
     }>;
-    update(id: number, updateRegistrationDto: UpdateRegistrationDto): string;
+    update(id: number, UpdateRegistrationDto: UpdateRegistrationDto): string;
     remove(id: number): string;
 }

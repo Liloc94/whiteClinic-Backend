@@ -25,7 +25,7 @@ let AdminService = class AdminService {
     async createAdmin(adminid, adminpw, role = 'admin') {
         const hashedPassword = await bcrypt.hash(adminpw, 10);
         const admin = this.adminRepository.create({
-            admin_user_id: adminid,
+            adminId: adminid,
             password: hashedPassword,
             role,
         });
@@ -34,7 +34,7 @@ let AdminService = class AdminService {
     async findOne(adminid) {
         try {
             const admin = await this.adminRepository.findOne({
-                where: { admin_user_id: adminid },
+                where: { adminId: adminid },
                 relations: ['refreshTokens'],
             });
             if (!admin) {

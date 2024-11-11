@@ -244,10 +244,6 @@ foreign key (commission_rate_id) references commission_rates(commission_rate_id)
 
 
 
-
-
-
-
 -- 예약총정보
 create table order_info(
 order_info_id serial primary key,

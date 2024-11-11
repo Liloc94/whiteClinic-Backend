@@ -10,7 +10,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.SpecialHolidays = void 0;
-const engineer_info_entity_1 = require("../../engineer-info/entities/engineer-info.entity");
+const engineer_entity_1 = require("../../engineer-info/entities/engineer.entity");
 const typeorm_1 = require("typeorm");
 let SpecialHolidays = class SpecialHolidays {
 };
@@ -29,9 +29,9 @@ __decorate([
 ], SpecialHolidays.prototype, "holiday", void 0);
 __decorate([
     (0, typeorm_1.JoinColumn)({ name: 'engineerId' }),
-    __metadata("design:type", engineer_info_entity_1.Engineer)
+    __metadata("design:type", engineer_entity_1.Engineer)
 ], SpecialHolidays.prototype, "engineer", void 0);
 exports.SpecialHolidays = SpecialHolidays = __decorate([
     (0, typeorm_1.Entity)('specialholidays')
 ], SpecialHolidays);
-//# sourceMappingURL=specialHolidays.entity.js.map
+//# sourceMappingURL=SpecialHolidays.entity.js.map

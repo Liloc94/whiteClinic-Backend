@@ -2,16 +2,16 @@ import { Injectable } from '@nestjs/common';
 import { CreateRegistrationDto } from '../dto/create-registration.dto';
 import { UpdateRegistrationDto } from '../dto/update-registration.dto';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Engineer } from 'src/engineer-info/entities/engineer-info.entity';
+import { Engineer } from 'src/engineer-info/entities/engineer.entity';
 import { Repository, DataSource } from 'typeorm';
-import { Skill } from '../entities/skill.entity';
-import { EngineerCommissionRates } from 'src/engineer-info/entities/engineer-commissionRates.entity';
+import { EngineerCommissionRates } from 'src/engineer-info/entities/engineer_commission.rate.entity';
 import { CommissionRates } from '../entities/commissionRates.entity';
-import { SpecialHolidays } from '../entities/specialHolidays.entity';
-import { RegularHolidays } from '../entities/reaularHolidays.entity';
-import { WeekDays } from '../entities/weekDay.entity';
-import { EngineerPayDay } from 'src/engineer-info/entities/engineer-payDay.entity';
-import { EngineerSkill } from '../entities/Engineer_skill.entity';
+import { SpecialHolidays } from '../entities/SpecialHolidays.entity';
+import { RegularHolidays } from '../entities/RegularHolidays.entity';
+import { WeekDays } from '../entities/WeekDays.entity';
+import { EngineerSkill } from '../entities/EngineerSkill.entity';
+import { Skills } from '../entities/Skills.entity';
+import { EngineerPayday } from 'src/engineer-info/entities/engineer_payday.entity';
 
 @Injectable()
 export class RegistrationService {
@@ -43,13 +43,13 @@ export class RegistrationService {
 
       //스킬이 Skill 데이터베이스에 있는지 확인
       for (const skillName of skillNames) {
-        let skill = await queryRunner.manager.findOne(Skill, {
+        let skill = await queryRunner.manager.findOne(Skills, {
           where: { skill: skillName },
         });
 
         //만약 skill 데이터베이스에 존재하지 않는 스킬이라면
         if (!skill) {
-          skill = await queryRunner.manager.save(Skill, {
+          skill = await queryRunner.manager.save(Skills, {
             skill: skillName,
           });
           console.log('새로운 스킬인 ' + skill.skill + ' 저장되었습니다.');
@@ -57,11 +57,11 @@ export class RegistrationService {
 
         //Engineer_skill 매핑 및 저장
         await queryRunner.manager.save(EngineerSkill, {
-          engineerId: (await engineer).id,
-          skillId: skill.id,
+          engineerId: (await engineer).engineerId,
+          skillId: skill.skillId,
         });
-        console.log('engineerId : ', (await engineer).id);
-        console.log('skillId', skill.id);
+        console.log('engineerId : ', (await engineer).engineerId);
+        console.log('skillId', skill.skillId);
       }
 
       //수당률
@@ -75,7 +75,7 @@ export class RegistrationService {
 
       //수당률
       await queryRunner.manager.save(EngineerCommissionRates, {
-        engineerId: (await engineer).id,
+        engineerId: (await engineer).engineerId,
         rateId: CommissionRate.id,
       });
 
@@ -87,7 +87,7 @@ export class RegistrationService {
 
       for (const ArraySPecialHoliday of ArraySPecialHolidays) {
         await queryRunner.manager.save(SpecialHolidays, {
-          engineerId: (await engineer).id,
+          engineerId: (await engineer).engineerId,
           holiday: ArraySPecialHoliday,
         });
       }
@@ -100,7 +100,7 @@ export class RegistrationService {
       });
 
       await queryRunner.manager.save(RegularHolidays, {
-        engineerId: (await engineer).id,
+        engineerId: (await engineer).engineerId,
         weekdayId: selectedDayId.id,
       });
       console.log('정기휴무 나오냐?', selectedDayId);
@@ -110,8 +110,8 @@ export class RegistrationService {
         dayName: dto.paymentDay,
       });
 
-      await queryRunner.manager.save(EngineerPayDay, {
-        engineerId: (await engineer).id,
+      await queryRunner.manager.save(EngineerPayday, {
+        engineerId: (await engineer).engineerId,
         weekdays: selectPaymentDay.id,
         isPay: false,
       });
@@ -139,7 +139,7 @@ export class RegistrationService {
     }
   }
 
-  update(id: number, updateRegistrationDto: UpdateRegistrationDto) {
+  update(id: number, UpdateRegistrationDto: UpdateRegistrationDto) {
     return `This action updates a #${id} registration`;
   }
 

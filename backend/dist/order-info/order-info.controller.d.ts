@@ -1,14 +1,14 @@
-import { SubmitOrderDto } from './dto/submit-order.dto';
 import { OrderInfoService } from './order-info.service';
-import { OrderData } from './entities/OrderData.entity';
+import { OrderInfo } from './entities/order_info.entity';
 import { Response } from 'express';
+import { CreateOrderDto } from './dto/create-order.dto';
 export declare class OrderInfoController {
     private readonly orderService;
     constructor(orderService: OrderInfoService);
-    getAll(): Promise<SubmitOrderDto[]>;
-    getOne(orderId: number): Promise<OrderData>;
-    updateOne(id: number, req: SubmitOrderDto): Promise<OrderData>;
-    create(orderInfo: SubmitOrderDto): Promise<void>;
+    getAll(): Promise<OrderInfo[]>;
+    getOne(orderId: number): Promise<OrderInfo>;
+    updateOne(id: number, req: CreateOrderDto): Promise<OrderInfo>;
+    create(orderInfo: CreateOrderDto): Promise<void>;
     remove(orderId: number): Promise<void>;
     findAll(res: Response): void;
 }
