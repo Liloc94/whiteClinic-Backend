@@ -19,12 +19,12 @@ const engineer_entity_1 = require("../../engineer-info/entities/engineer.entity"
 const typeorm_2 = require("typeorm");
 const engineer_commission_rate_entity_1 = require("../../engineer-info/entities/engineer_commission.rate.entity");
 const commissionRates_entity_1 = require("../entities/commissionRates.entity");
-const SpecialHolidays_entity_1 = require("../entities/SpecialHolidays.entity");
 const RegularHolidays_entity_1 = require("../entities/RegularHolidays.entity");
 const WeekDays_entity_1 = require("../entities/WeekDays.entity");
 const EngineerSkill_entity_1 = require("../entities/EngineerSkill.entity");
 const Skills_entity_1 = require("../entities/Skills.entity");
 const engineer_payday_entity_1 = require("../../engineer-info/entities/engineer_payday.entity");
+const SpecialHolidays_entity_1 = require("../entities/SpecialHolidays.entity");
 let RegistrationService = class RegistrationService {
     constructor(dataSource, EngineerRepostiory) {
         this.dataSource = dataSource;

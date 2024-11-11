@@ -6,12 +6,12 @@ import { Engineer } from 'src/engineer-info/entities/engineer.entity';
 import { Repository, DataSource } from 'typeorm';
 import { EngineerCommissionRates } from 'src/engineer-info/entities/engineer_commission.rate.entity';
 import { CommissionRates } from '../entities/commissionRates.entity';
-import { SpecialHolidays } from '../entities/SpecialHolidays.entity';
 import { RegularHolidays } from '../entities/RegularHolidays.entity';
 import { WeekDays } from '../entities/WeekDays.entity';
 import { EngineerSkill } from '../entities/EngineerSkill.entity';
 import { Skills } from '../entities/Skills.entity';
 import { EngineerPayday } from 'src/engineer-info/entities/engineer_payday.entity';
+import { SpecialHolidays } from '../entities/SpecialHolidays.entity';
 
 @Injectable()
 export class RegistrationService {
