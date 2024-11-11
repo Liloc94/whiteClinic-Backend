@@ -24,7 +24,7 @@ const WeekDays_entity_1 = require("../entities/WeekDays.entity");
 const EngineerSkill_entity_1 = require("../entities/EngineerSkill.entity");
 const Skills_entity_1 = require("../entities/Skills.entity");
 const engineer_payday_entity_1 = require("../../engineer-info/entities/engineer_payday.entity");
-const SpecialHolidays_entity_1 = require("../entities/SpecialHolidays.entity");
+const special_holidays_entity_1 = require("../entities/special_holidays.entity");
 let RegistrationService = class RegistrationService {
     constructor(dataSource, EngineerRepostiory) {
         this.dataSource = dataSource;
@@ -71,7 +71,7 @@ let RegistrationService = class RegistrationService {
                 .split(',')
                 .map((data) => data.trim());
             for (const ArraySPecialHoliday of ArraySPecialHolidays) {
-                await queryRunner.manager.save(SpecialHolidays_entity_1.SpecialHolidays, {
+                await queryRunner.manager.save(special_holidays_entity_1.SpecialHolidays, {
                     engineerId: (await engineer).engineerId,
                     holiday: ArraySPecialHoliday,
                 });

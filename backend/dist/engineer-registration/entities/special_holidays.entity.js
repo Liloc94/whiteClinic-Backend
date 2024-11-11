@@ -34,4 +34,4 @@ __decorate([
 exports.SpecialHolidays = SpecialHolidays = __decorate([
     (0, typeorm_1.Entity)('special_holidays')
 ], SpecialHolidays);
-//# sourceMappingURL=SpecialHolidays.entity.js.map
+//# sourceMappingURL=special_holidays.entity.js.map

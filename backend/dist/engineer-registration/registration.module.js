@@ -14,7 +14,7 @@ const typeorm_1 = require("@nestjs/typeorm");
 const engineer_entity_1 = require("../engineer-info/entities/engineer.entity");
 const Skills_entity_1 = require("./entities/Skills.entity");
 const EngineerSkill_entity_1 = require("./entities/EngineerSkill.entity");
-const SpecialHolidays_entity_1 = require("./entities/SpecialHolidays.entity");
+const special_holidays_entity_1 = require("./entities/special_holidays.entity");
 const WeekDays_entity_1 = require("./entities/WeekDays.entity");
 const RegularHolidays_entity_1 = require("./entities/RegularHolidays.entity");
 const commissionRates_entity_1 = require("./entities/commissionRates.entity");
@@ -29,7 +29,7 @@ exports.RegistrationModule = RegistrationModule = __decorate([
                 Skills_entity_1.Skills,
                 commissionRates_entity_1.CommissionRates,
                 EngineerSkill_entity_1.EngineerSkill,
-                SpecialHolidays_entity_1.SpecialHolidays,
+                special_holidays_entity_1.SpecialHolidays,
                 WeekDays_entity_1.WeekDays,
                 RegularHolidays_entity_1.RegularHolidays,
             ]),
