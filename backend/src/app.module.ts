@@ -25,7 +25,7 @@ import { JwtModule } from '@nestjs/jwt';
       password: 'hNOtdfu8sWy3',
       database: 'verceldb',
       schema: 'white_clinic',
-      entities: [__dirname + 'entities/**/*.entity.ts'],
+      entities: [],
       autoLoadEntities: true,
       synchronize: true,
       logging: true,
