@@ -32,6 +32,6 @@ __decorate([
     __metadata("design:type", engineer_entity_1.Engineer)
 ], SpecialHolidays.prototype, "engineer", void 0);
 exports.SpecialHolidays = SpecialHolidays = __decorate([
-    (0, typeorm_1.Entity)('specialholidays')
+    (0, typeorm_1.Entity)('special_holidays')
 ], SpecialHolidays);
 //# sourceMappingURL=SpecialHolidays.entity.js.map

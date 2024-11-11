@@ -1,7 +1,7 @@
 import { Engineer } from 'src/engineer-info/entities/engineer.entity';
 import { Column, Entity, JoinColumn, PrimaryGeneratedColumn } from 'typeorm';
 
-@Entity('specialholidays')
+@Entity('special_holidays')
 export class SpecialHolidays {
   @PrimaryGeneratedColumn()
   id: number;
