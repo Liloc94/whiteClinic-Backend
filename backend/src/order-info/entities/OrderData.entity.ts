@@ -1,6 +1,11 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  CreateDateColumn,
+  Entity,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 
-@Entity({ name: 'order' })
+@Entity({ name: 'orderInfo' })
 export class OrderData {
   @PrimaryGeneratedColumn()
   id: number;
@@ -28,4 +33,28 @@ export class OrderData {
 
   @Column()
   checkReciept: boolean;
+}
+
+@Entity({ name: 'customerInfo' })
+export class CustomerData {
+  @PrimaryGeneratedColumn()
+  customer_id: number;
+
+  @Column({ length: 100, nullable: true })
+  customer_name: string;
+
+  @Column({ length: 100, nullable: true, unique: true })
+  phone_number: number;
+
+  @Column({ length: 100, nullable: true })
+  customer_address: string;
+
+  @CreateDateColumn({ default: new Date(), nullable: true })
+  booking_date: Date;
+
+  @Column({ nullable: true })
+  order_time_id: number;
+
+  @Column({ length: 100, nullable: true })
+  remark: string;
 }
