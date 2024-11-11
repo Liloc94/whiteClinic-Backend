@@ -17,6 +17,7 @@ const EngineerSkill_entity_1 = require("./entities/EngineerSkill.entity");
 const SpecialHolidays_entity_1 = require("./entities/SpecialHolidays.entity");
 const WeekDays_entity_1 = require("./entities/WeekDays.entity");
 const RegularHolidays_entity_1 = require("./entities/RegularHolidays.entity");
+const commissionRates_entity_1 = require("./entities/commissionRates.entity");
 let RegistrationModule = class RegistrationModule {
 };
 exports.RegistrationModule = RegistrationModule;
@@ -26,6 +27,7 @@ exports.RegistrationModule = RegistrationModule = __decorate([
             typeorm_1.TypeOrmModule.forFeature([
                 engineer_entity_1.Engineer,
                 Skills_entity_1.Skills,
+                commissionRates_entity_1.CommissionRates,
                 EngineerSkill_entity_1.EngineerSkill,
                 SpecialHolidays_entity_1.SpecialHolidays,
                 WeekDays_entity_1.WeekDays,
