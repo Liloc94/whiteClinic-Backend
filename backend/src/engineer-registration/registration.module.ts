@@ -5,7 +5,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { Engineer } from 'src/engineer-info/entities/engineer.entity';
 import { Skills } from './entities/Skills.entity';
 import { EngineerSkill } from './entities/EngineerSkill.entity';
-import { SpecialHolidays } from './entities/SpecialHolidays.entity';
+import { SpecialHolidays } from './entities/special_holidays.entity';
 import { WeekDays } from './entities/WeekDays.entity';
 import { RegularHolidays } from './entities/RegularHolidays.entity';
 import { CommissionRates } from './entities/commissionRates.entity';

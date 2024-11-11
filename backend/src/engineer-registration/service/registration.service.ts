@@ -11,7 +11,7 @@ import { WeekDays } from '../entities/WeekDays.entity';
 import { EngineerSkill } from '../entities/EngineerSkill.entity';
 import { Skills } from '../entities/Skills.entity';
 import { EngineerPayday } from 'src/engineer-info/entities/engineer_payday.entity';
-import { SpecialHolidays } from '../entities/SpecialHolidays.entity';
+import { SpecialHolidays } from '../entities/special_holidays.entity';
 
 @Injectable()
 export class RegistrationService {
