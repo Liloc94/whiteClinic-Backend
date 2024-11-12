@@ -1,11 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Engineer } from '../entities/engineer.entity';
-
-import { EngineerCommissionRates } from '../entities/engineer_commission.rate.entity';
 import { Repository } from 'typeorm';
 import { EngineerDailyEarnings } from '../entities/engineer_daily_earnings.entity';
 import { EngineerPayday } from '../entities/engineer_payday.entity';
+import { EngineerCommissionRates } from '../entities/engineer_commission.rate.entity';
 
 @Injectable()
 export class EngineerInfoService {

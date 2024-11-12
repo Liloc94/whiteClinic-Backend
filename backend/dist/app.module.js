@@ -36,7 +36,7 @@ exports.AppModule = AppModule = __decorate([
                 username: 'default',
                 password: 'hNOtdfu8sWy3',
                 database: 'verceldb',
-                schema: 'white_clinic',
+                schema: 'public',
                 entities: [],
                 autoLoadEntities: true,
                 synchronize: false,
