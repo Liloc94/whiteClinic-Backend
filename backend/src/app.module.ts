@@ -27,7 +27,7 @@ import { JwtModule } from '@nestjs/jwt';
       schema: 'white_clinic',
       entities: [],
       autoLoadEntities: true,
-      synchronize: true,
+      synchronize: false,
       logging: true,
     }),
     OrderInfoModule,
