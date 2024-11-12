@@ -1,28 +1,31 @@
+// admin_refresh_tokens.entity.ts
+import { AdminAccount } from 'src/admin/entities/admin_account.entity';
 import {
   Entity,
   PrimaryGeneratedColumn,
   Column,
   ManyToOne,
-  CreateDateColumn,
+  JoinColumn,
 } from 'typeorm';
-import { Admin } from 'src/admin/entities/admin.entity';
 
-@Entity('refresh_token')
-export class RefreshToken {
+@Entity('admin_refresh_tokens')
+export class AdminRefreshToken {
   @PrimaryGeneratedColumn()
-  id: number;
+  idx: number;
 
-  @Column({ name: 'token', type: 'varchar', length: 100 })
-  token: string;
+  @Column({ type: 'int' })
+  token_id: number;
 
-  @CreateDateColumn({ name: 'created_at', type: 'date' })
-  createdAt: Date;
+  @Column({ type: 'varchar', length: 255 })
+  refresh_token: string;
 
-  @Column({ name: 'expires_at', type: 'date' })
-  expiresAt: Date;
+  @Column({ type: 'varchar', length: 50 })
+  created_at: string;
 
-  @ManyToOne(() => Admin, (admin) => admin.refreshTokens, {
-    onDelete: 'CASCADE',
-  })
-  admin: Admin;
+  @Column({ type: 'varchar', length: 50 })
+  expires_at: string;
+
+  @ManyToOne(() => AdminAccount, (adminAccount) => adminAccount.refreshTokens)
+  @JoinColumn({ name: 'token_id' })
+  adminAccount: AdminAccount;
 }

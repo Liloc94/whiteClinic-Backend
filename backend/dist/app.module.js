@@ -9,16 +9,15 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.AppModule = void 0;
 const common_1 = require("@nestjs/common");
 const app_controller_1 = require("./app/app.controller");
-const order_info_module_1 = require("./order-info/order-info.module");
 const typeorm_1 = require("@nestjs/typeorm");
-const engineer_info_module_1 = require("./engineer-info/engineer-info.module");
-const registration_module_1 = require("./engineer-registration/registration.module");
 const refresh_token_module_1 = require("./refresh_token/refresh_token.module");
 const admin_module_1 = require("./admin/admin.module");
 const config_1 = require("@nestjs/config");
 const auth_module_1 = require("./auth/auth.module");
-const customer_module_1 = require("./customer/customer.module");
 const jwt_1 = require("@nestjs/jwt");
+const order_info_module_1 = require("./order_info/order_info.module");
+const customer_module_1 = require("./customer/customer.module");
+const engineer_module_1 = require("./engineer/engineer.module");
 let AppModule = class AppModule {
 };
 exports.AppModule = AppModule;
@@ -42,15 +41,14 @@ exports.AppModule = AppModule = __decorate([
                 synchronize: false,
                 logging: true,
             }),
-            order_info_module_1.OrderInfoModule,
-            engineer_info_module_1.EngineerInfoModule,
-            registration_module_1.RegistrationModule,
             refresh_token_module_1.RefreshTokenModule,
             admin_module_1.AdminModule,
             auth_module_1.AuthModule,
-            registration_module_1.RegistrationModule,
-            customer_module_1.CustomerModule,
             jwt_1.JwtModule,
+            order_info_module_1.OrderInfoModule,
+            customer_module_1.CustomerModule,
+            engineer_module_1.EngineerModule,
+            refresh_token_module_1.RefreshTokenModule,
         ],
         controllers: [app_controller_1.AppController],
         providers: [],

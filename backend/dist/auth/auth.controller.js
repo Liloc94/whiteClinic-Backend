@@ -29,7 +29,7 @@ let AuthController = class AuthController {
     async register(registerDto) {
         const { adminID, adminPW, role } = registerDto;
         const admin = await this.authService.register(adminID, adminPW, role);
-        return { message: '회원가입 성공', id: admin.id };
+        return { message: '회원가입 성공', id: admin.idx };
     }
     async signIn(signInDto) {
         return this.authService.signIn(signInDto.adminID, signInDto.adminPW);
@@ -50,7 +50,7 @@ let AuthController = class AuthController {
     }
     getProfile(req) {
         const user = req.user;
-        return { id: user.id, username: user.adminId, role: user.role };
+        return { id: user.idx, username: user.admin_id, role: user.role };
     }
     getAdminData() {
         return { message: 'Admin Data' };

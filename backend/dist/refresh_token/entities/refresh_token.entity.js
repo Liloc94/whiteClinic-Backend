@@ -9,35 +9,38 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.RefreshToken = void 0;
+exports.AdminRefreshToken = void 0;
+const admin_account_entity_1 = require("../../admin/entities/admin_account.entity");
 const typeorm_1 = require("typeorm");
-const admin_entity_1 = require("../../admin/entities/admin.entity");
-let RefreshToken = class RefreshToken {
+let AdminRefreshToken = class AdminRefreshToken {
 };
-exports.RefreshToken = RefreshToken;
+exports.AdminRefreshToken = AdminRefreshToken;
 __decorate([
     (0, typeorm_1.PrimaryGeneratedColumn)(),
     __metadata("design:type", Number)
-], RefreshToken.prototype, "id", void 0);
+], AdminRefreshToken.prototype, "idx", void 0);
 __decorate([
-    (0, typeorm_1.Column)({ name: 'token', type: 'varchar', length: 100 }),
+    (0, typeorm_1.Column)({ type: 'int' }),
+    __metadata("design:type", Number)
+], AdminRefreshToken.prototype, "token_id", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ type: 'varchar', length: 255 }),
     __metadata("design:type", String)
-], RefreshToken.prototype, "token", void 0);
+], AdminRefreshToken.prototype, "refresh_token", void 0);
 __decorate([
-    (0, typeorm_1.CreateDateColumn)({ name: 'created_at', type: 'date' }),
-    __metadata("design:type", Date)
-], RefreshToken.prototype, "createdAt", void 0);
+    (0, typeorm_1.Column)({ type: 'varchar', length: 50 }),
+    __metadata("design:type", String)
+], AdminRefreshToken.prototype, "created_at", void 0);
 __decorate([
-    (0, typeorm_1.Column)({ name: 'expires_at', type: 'date' }),
-    __metadata("design:type", Date)
-], RefreshToken.prototype, "expiresAt", void 0);
+    (0, typeorm_1.Column)({ type: 'varchar', length: 50 }),
+    __metadata("design:type", String)
+], AdminRefreshToken.prototype, "expires_at", void 0);
 __decorate([
-    (0, typeorm_1.ManyToOne)(() => admin_entity_1.Admin, (admin) => admin.refreshTokens, {
-        onDelete: 'CASCADE',
-    }),
-    __metadata("design:type", admin_entity_1.Admin)
-], RefreshToken.prototype, "admin", void 0);
-exports.RefreshToken = RefreshToken = __decorate([
-    (0, typeorm_1.Entity)('refresh_token')
-], RefreshToken);
+    (0, typeorm_1.ManyToOne)(() => admin_account_entity_1.AdminAccount, (adminAccount) => adminAccount.refreshTokens),
+    (0, typeorm_1.JoinColumn)({ name: 'token_id' }),
+    __metadata("design:type", admin_account_entity_1.AdminAccount)
+], AdminRefreshToken.prototype, "adminAccount", void 0);
+exports.AdminRefreshToken = AdminRefreshToken = __decorate([
+    (0, typeorm_1.Entity)('admin_refresh_tokens')
+], AdminRefreshToken);
 //# sourceMappingURL=refresh_token.entity.js.map

@@ -22,17 +22,17 @@ let RefreshTokenService = class RefreshTokenService {
         this.refreshTokenRepository = refreshTokenRepository;
     }
     async saveRefreshToken(admin, token, expiresAt) {
-        await this.refreshTokenRepository.delete({ admin });
+        await this.refreshTokenRepository.delete({ adminAccount });
         const refreshToken = this.refreshTokenRepository.create({
-            token,
-            admin,
+            token: admin.token_version,
+            refresh_token: admin.refreshTokens,
             expiresAt,
         });
         return this.refreshTokenRepository.save(refreshToken);
     }
-    async findByToken(token) {
+    async findByToken(refresh_token) {
         const RefreshResult = this.refreshTokenRepository.findOne({
-            where: { token },
+            where: { refresh_token },
             relations: ['admin'],
         });
         console.log('RefreshResult Token 검증(로그아웃) : ', (await RefreshResult).token);
@@ -53,7 +53,7 @@ let RefreshTokenService = class RefreshTokenService {
 exports.RefreshTokenService = RefreshTokenService;
 exports.RefreshTokenService = RefreshTokenService = __decorate([
     (0, common_1.Injectable)(),
-    __param(0, (0, typeorm_1.InjectRepository)(refresh_token_entity_1.RefreshToken)),
+    __param(0, (0, typeorm_1.InjectRepository)(refresh_token_entity_1.AdminRefreshToken)),
     __metadata("design:paramtypes", [typeorm_2.Repository])
 ], RefreshTokenService);
 //# sourceMappingURL=refresh_token.service.js.map

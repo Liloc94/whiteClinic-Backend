@@ -1,33 +1,20 @@
-import { OrderTime } from 'src/order-info/entities/order_time.entity';
-import {
-  Entity,
-  PrimaryGeneratedColumn,
-  Column,
-  ManyToOne,
-  JoinColumn,
-} from 'typeorm';
+// customer.entity.ts
+import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
 
 @Entity('customer')
 export class Customer {
-  @PrimaryGeneratedColumn({ name: 'customer_id' })
-  customerId: number;
-
-  @Column({ name: 'customer_name', type: 'varchar', length: 100 })
-  customerName: string;
-
-  @Column({ name: 'phone_number', type: 'varchar', length: 100, unique: true })
-  phoneNumber: string;
+  @PrimaryGeneratedColumn()
+  customer_id: number;
 
   @Column({ type: 'varchar', length: 100 })
-  location: string;
+  customer_name: string;
 
-  @Column({ name: 'booking_date', type: 'date' })
-  bookingDate: Date;
+  @Column({ type: 'varchar', length: 100 })
+  customer_phone: string;
 
-  @ManyToOne(() => OrderTime)
-  @JoinColumn({ name: 'order_time_id' })
-  orderTime: OrderTime;
+  @Column({ type: 'varchar', length: 100 })
+  customer_addr: string;
 
   @Column({ type: 'varchar', length: 255, nullable: true })
-  remark: string;
+  customer_remark?: string;
 }

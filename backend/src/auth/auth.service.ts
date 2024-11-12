@@ -1,5 +1,4 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
-
 import { AdminService } from 'src/admin/admin.service';
 import { RefreshTokenService } from 'src/refresh_token/refresh_token.service';
 import { JwtService } from '@nestjs/jwt';
@@ -21,22 +20,22 @@ export class AuthService {
   ): Promise<{ access_token: string; refresh_token: string }> {
     const user = await this.adminService.findOne(adminID);
 
-    if (!user || !(await bcrypt.compare(adminPW, user.password))) {
+    if (!user || !(await bcrypt.compare(adminPW, user.admin_pw))) {
       throw new UnauthorizedException('인증되지 않은 사용자');
     }
 
     // 기존 세션 무효화
-    await this.logoutAll(user.id);
+    await this.logoutAll(user.idx);
 
     // 최신 tokenVersion 조회한 이후 포함하여 Access Token 발급
     const updateUser = await this.adminService.findOne(adminID);
 
     // Access Token에 들어갈 유저의 정보
     const payload = {
-      sub: updateUser.id,
-      username: updateUser.adminId,
+      sub: updateUser.idx,
+      username: updateUser.admin_id,
       role: updateUser.role,
-      tokenVersion: updateUser.tokenVersion,
+      tokenVersion: updateUser.token_version,
     };
 
     const accessToken = await this.jwtService.signAsync(payload, {
@@ -104,10 +103,10 @@ export class AuthService {
 
     // 새로운 Access Token 생성
     const payload = {
-      sub: updateUser.id,
-      username: updateUser.adminId,
+      sub: updateUser.idx,
+      username: updateUser.admin_id,
       role: updateUser.role,
-      tokenVersion: updateUser.tokenVersion,
+      tokenVersion: updateUser.token_version,
     };
 
     const accessToken = await this.jwtService.signAsync(payload, {

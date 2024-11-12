@@ -14,10 +14,10 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.AdminService = void 0;
 const common_1 = require("@nestjs/common");
-const admin_entity_1 = require("./entities/admin.entity");
 const typeorm_1 = require("typeorm");
 const typeorm_2 = require("@nestjs/typeorm");
 const bcrypt = require("bcrypt");
+const admin_account_entity_1 = require("./entities/admin_account.entity");
 let AdminService = class AdminService {
     constructor(adminRepository) {
         this.adminRepository = adminRepository;
@@ -25,8 +25,8 @@ let AdminService = class AdminService {
     async createAdmin(adminid, adminpw, role = 'admin') {
         const hashedPassword = await bcrypt.hash(adminpw, 10);
         const admin = this.adminRepository.create({
-            adminId: adminid,
-            password: hashedPassword,
+            admin_id: adminid,
+            admin_pw: hashedPassword,
             role,
         });
         return this.adminRepository.save(admin);
@@ -34,7 +34,7 @@ let AdminService = class AdminService {
     async findOne(adminid) {
         try {
             const admin = await this.adminRepository.findOne({
-                where: { adminId: adminid },
+                where: { admin_id: adminid },
                 relations: ['refreshTokens'],
             });
             if (!admin) {
@@ -47,14 +47,14 @@ let AdminService = class AdminService {
             throw error;
         }
     }
-    async incrementTokenVersion(id) {
-        await this.adminRepository.increment({ id }, 'tokenVersion', 1);
+    async incrementTokenVersion(token_version) {
+        await this.adminRepository.increment({ token_version }, 'tokenVersion', 1);
     }
 };
 exports.AdminService = AdminService;
 exports.AdminService = AdminService = __decorate([
     (0, common_1.Injectable)(),
-    __param(0, (0, typeorm_2.InjectRepository)(admin_entity_1.Admin)),
+    __param(0, (0, typeorm_2.InjectRepository)(admin_account_entity_1.AdminAccount)),
     __metadata("design:paramtypes", [typeorm_1.Repository])
 ], AdminService);
 //# sourceMappingURL=admin.service.js.map

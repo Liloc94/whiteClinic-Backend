@@ -24,16 +24,16 @@ let AuthService = class AuthService {
     }
     async signIn(adminID, adminPW) {
         const user = await this.adminService.findOne(adminID);
-        if (!user || !(await bcrypt.compare(adminPW, user.password))) {
+        if (!user || !(await bcrypt.compare(adminPW, user.admin_pw))) {
             throw new common_1.UnauthorizedException('인증되지 않은 사용자');
         }
-        await this.logoutAll(user.id);
+        await this.logoutAll(user.idx);
         const updateUser = await this.adminService.findOne(adminID);
         const payload = {
-            sub: updateUser.id,
-            username: updateUser.adminId,
+            sub: updateUser.idx,
+            username: updateUser.admin_id,
             role: updateUser.role,
-            tokenVersion: updateUser.tokenVersion,
+            tokenVersion: updateUser.token_version,
         };
         const accessToken = await this.jwtService.signAsync(payload, {
             expiresIn: '5m',
@@ -67,10 +67,10 @@ let AuthService = class AuthService {
         newExpiresAt.setDate(newExpiresAt.getDate() + 7);
         await this.refreshTokenService.saveRefreshToken(updateUser, newRefreshToken, newExpiresAt);
         const payload = {
-            sub: updateUser.id,
-            username: updateUser.adminId,
+            sub: updateUser.idx,
+            username: updateUser.admin_id,
             role: updateUser.role,
-            tokenVersion: updateUser.tokenVersion,
+            tokenVersion: updateUser.token_version,
         };
         const accessToken = await this.jwtService.signAsync(payload, {
             expiresIn: '5m',

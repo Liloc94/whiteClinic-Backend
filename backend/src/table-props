@@ -1,276 +1,78 @@
--- 주문정보 관련 API 정리중
--- 고객정보
-create table customer(
-customer_id serial primary key,
-customer_name varchar(100) not null,
-phone_number varchar(100) not null unique,
-location varchar(100) not null,
-booking_date date not null,
-order_time_id int not null,
-remark varchar(255),
-foreign key (order_time_id) references order_time(order_time_id)
+CREATE TABLE customer (
+    customer_id serial PRIMARY KEY,
+    customer_name VARCHAR(100) not null,
+    customer_phone VARCHAR(100) not null,
+    customer_addr VARCHAR(100) not null,
+    customer_remark VARCHAR(255)
 );
 
-CREATE TYPE payment_method_enum AS ENUM ('계좌이체', '카드결제', '숨고페이', '현금결제');
--- 결제방법(계좌이체, 카드결제, 숨고페이, 현장현금결제) 
-create table payment_type(
-payment_method_type_id serial primary key,
-name payment_method_enum not null unique
+CREATE TABLE engineer (
+    engineer_id INT PRIMARY KEY,
+    engineer_name VARCHAR(255) not null,
+    engineer_phone VARCHAR(20) not null,
+    engineer_addr VARCHAR(255) not null,
+    engineer_remark VARCHAR(255),
+    engineer_commission INT DEFAULT 0,
+    engineer_dayoff VARCHAR(20),
+    engineer_holiday VARCHAR(20),
+    engineer_payday VARCHAR(20) not null
 );
 
-
-CREATE TYPE receipt_type_enum AS ENUM ('간이영수증', '세금계산서', '현금영수증', '카드영수증', '필요없음');
--- 증빙서류(간이영수증, 세금계산서, 현금영수증, 카드영수증, 필요없음) 
-CREATE TABLE receipt_docs (
-    receipt_docs_id SERIAL PRIMARY KEY,
-    receipt_type_enum VARCHAR(100) UNIQUE NOT NULL
+CREATE TABLE "order" (
+    order_id INT PRIMARY KEY,
+    order_category VARCHAR(255) not null,
+    order_date VARCHAR(20) not null,
+    order_product VARCHAR(255) not null,
+    order_total_amount INT not null,
+    order_count INT not null DEFAULT 0,
+    order_isDiscount BOOLEAN DEFAULT FALSE,
+    order_discount_ratio INT,
+    order_remark VARCHAR(255),
+    order_deposit INT,
+    deposit_payed BOOLEAN DEFAULT FALSE,
+    order_payment VARCHAR(20) not null,
+    order_reciept_docs VARCHAR(50) not null,
+    reciept_docs_issued BOOLEAN
 );
 
-
--- 스케쥴 시간
-create table order_time(
-order_time_id serial primary key,
-time varchar(100) not null
+CREATE TABLE engineer_daily_earning (
+    idx INT PRIMARY KEY,
+    order_id INT REFERENCES "order"(order_id),
+    engineer_id INT REFERENCES engineer(engineer_id),
+    daily_income INT,
+    date varchar(255) not null
 );
 
--- 고객 기사님 시간 스케쥴 
-CREATE TABLE engineer_customer_time (
-engineer_customer_time_id SERIAL PRIMARY KEY,
-engineer_customer_id INT NOT NULL,    
-order_time_id INT NOT NULL,          
-FOREIGN KEY (engineer_customer_id) REFERENCES engineer_customer(engineer_customer_id),
-FOREIGN KEY (order_time_id) REFERENCES order_time(order_time_id)
+CREATE TABLE skills (
+    skill_id INT PRIMARY KEY,
+    skill_type VARCHAR(255) not null 
 );
 
--- 고객 기사님 예약 정보
-create table engineer_customer(
-engineer_customer_id serial primary key,
-engineer_id int,
-customer_id int,
-order_pay_id int,
-FOREIGN KEY (engineer_id) REFERENCES engineer(engineer_id),
-FOREIGN KEY (customer_id) REFERENCES customer(customer_id),
-FOREIGN KEY (order_pay_id) REFERENCES orders_pay(order_pay_id)
+CREATE TABLE engineer_skill (
+    engineer_id INT REFERENCES engineer(engineer_id),
+    skill_id INT REFERENCES skills(skill_id),
+    PRIMARY KEY (engineer_id, skill_id)
 );
 
-
--- 주문정보
-CREATE TABLE orders (
-    order_id SERIAL PRIMARY KEY,
-    customer_id INT,
-    product_detail_id INT, 
-    product_remark VARCHAR(255),
-    count INT,
-    discount_amount DECIMAL(20,2),
-    total_amount DECIMAL(20,2),
-    remark VARCHAR(255),
-    FOREIGN KEY (customer_id) REFERENCES customer(customer_id),
-    FOREIGN KEY (product_detail_id) REFERENCES product_details(product_detail_id)
+CREATE TABLE customer_engineer_order (
+    idx INT PRIMARY KEY,
+    customer_id INT REFERENCES customer(customer_id),
+    order_id INT REFERENCES "order"(order_id),
+    engineer_id INT REFERENCES engineer(engineer_id)
 );
 
-
--- 가격 지불 및 방법 
-CREATE TABLE orders_pay (
-    order_pay_id SERIAL PRIMARY KEY,
-    customer_id INT,
-    total_amount DECIMAL(20,2) CHECK (total_amount >= 0), -- 결제 총액
-    deposit_amount DECIMAL(20,2) CHECK (deposit_amount >= 0), -- 계약금
-    balance_amount DECIMAL(20,2) CHECK (balance_amount >= 0), -- 잔금
-    discount_amount DECIMAL(20,2) CHECK (discount_amount >= 0), -- 할인금액
-    deposit_method_type_id INT, -- 계약금 결제방식
-    balance_method_type_id INT, -- 잔금 결제방식
-    deposit_receipt_id INT, -- 계약금 영수증
-    balance_receipt_id INT, -- 잔금 영수증
-    receipt_issued BOOLEAN, -- 영수증 발급 여부
-    FOREIGN KEY (deposit_method_type_id) REFERENCES payment_type(payment_method_type_id),
-    FOREIGN KEY (balance_method_type_id) REFERENCES payment_type(payment_method_type_id),
-    FOREIGN KEY (deposit_receipt_id) REFERENCES receipt_docs(receipt_docs_id),
-    FOREIGN KEY (balance_receipt_id) REFERENCES receipt_docs(receipt_docs_id)
+CREATE TABLE admin_refresh_tokens (
+    idx INT PRIMARY KEY,
+    token_id INT not null,
+    refresh_token VARCHAR(255) not null,
+    created_at VARCHAR(50) not null,
+    expires_at VARCHAR(50) not null
 );
 
--- 세척품목 상세정보
-CREATE TABLE product_details (
-    product_detail_id SERIAL PRIMARY KEY,
-    product_type_id INT NOT NULL,
-    air_condition_id INT,
-    washing_machine_id INT,
-    FOREIGN KEY (product_type_id) REFERENCES product_type(product_type_id),
-    FOREIGN KEY (air_condition_id) REFERENCES air_condition(air_condition_id),
-    FOREIGN KEY (washing_machine_id) REFERENCES washing_machine(washing_machine_id),
-    CONSTRAINT check_product_type CHECK (
-        (product_type_id = 1 AND air_condition_id IS NOT NULL AND washing_machine_id IS NULL) OR
-        (product_type_id = 2 AND washing_machine_id IS NOT NULL AND air_condition_id IS NULL)
-    )
+CREATE TABLE admin_account (
+    idx INT PRIMARY KEY,
+    admin_id VARCHAR(50) not null,
+    admin_pw VARCHAR(255) not null,
+    role VARCHAR(50) not null,
+    token_version INT not null
 );
-
-
--- 관리자 계정
-create table admin(
-   id SERIAL primary key,
-   admin_user_id varchar(100) not null unique,
-   password varchar(100) not null,
-   role varchar(100) not null,
-   token_version int
-);
-
--- 토큰 관련 
-create table admin_auth_tokens(
- id serial primary key,
- admin_id int not null,
- token varchar(100) not null,
- created_at date,
- expires_at date,
- foreign key (admin_id) references admin(id)
-);
-
--- 기사님 정보
-create table engineer(
-engineer_id serial primary key,
-name varchar(100) not null,
-phone_number varchar(15) not null unique,
-location varchar(100) not null,
-remark varchar(255)
-);
-
-
--- 청소가능품목
-create table skills(
-skill_id serial primary key,
-skill varchar(100) not null unique
-);
-
--- 기사님 청소가능품목
-create table engineer_skill(
-engineer_id int,
-skill_id int,
-primary key (engineer_id, skill_id),  
-  FOREIGN KEY (engineer_id) REFERENCES engineer(engineer_id),
-  FOREIGN KEY (skill_id) REFERENCES skills(skill_id)
-);
-
--- 기사님 청소가능품목관련 특이사항
-create table engineer_skill_remark(
-engineer_skill_remark_id serial primary key,
-engineer_id int,
-skill_remark varchar(255),
-foreign key (engineer_id) references engineer(engineer_id)
-);
-
-
---  요일 ENUM 타입을 생성
-CREATE TYPE day_name_enum AS ENUM ('월요일', '화요일', '수요일', '목요일', '금요일', '토요일', '일요일');
-
---  요일 테이블
-CREATE TABLE weekdays (
-    weekday_id serial PRIMARY KEY,
-    day_name day_name_enum NOT null unique
-);
-
-
--- 기사님 휴무 
-create table dayoff(
-   engineer_id int,
-   weekday_id int,
-primary key (engineer_id, weekday_id),
-FOREIGN KEY (engineer_id) REFERENCES engineer(engineer_id),
-FOREIGN KEY (weekday_id) REFERENCES weekdays(weekday_id)
-);
-
--- 기사님 비정규 휴무
-create table holiday(
-   holiday_id serial primary key,
-   engineer_id int,
-   holiday date,
-   FOREIGN KEY (engineer_id) REFERENCES engineer(engineer_id)
-);
-
--- 기사님 주급 지급날짜 및 지급여부
-create table engineer_payday(
-   engineer_id int,
-   weekday_id int,
-   is_pay boolean not null,
-   primary key (engineer_id, weekday_id),
-   FOREIGN KEY (engineer_id) REFERENCES engineer(engineer_id),
-   FOREIGN KEY (weekday_id) REFERENCES weekdays(weekday_id)
-);
-
--- 기사님 일급 
-create table engineer_daily_earnings(
-engineer_dailyearning_id serial primary key,
-engineer_id int,
-date date not null,
-daily_amount decimal(20,2) CHECK (daily_amount >= 0),
-foreign key (engineer_id) references engineer(engineer_id)
-);
-
--- 달력(각 주 시작과 끝)
-create table calendar(
-calendar_id serial primary key,
-week_start_date date not null,
-week_end_date date not null
-);
-
--- 기사님 주급(여기는 일급 테이블 정보를 가지고 구성가능하게끔 함수 사용해야함)
-create table engineer_weekly_earnings(
-engineer_id int,
-calendar_id int,
-total_weekly_amount decimal(20,2) CHECK (total_weekly_amount >= 0),
-primary key(engineer_id, calendar_id),
-FOREIGN KEY (engineer_id) REFERENCES engineer(engineer_id),
-   FOREIGN KEY (calendar_id) REFERENCES calendar(calendar_id)
-);
-
--- 수당률 타입
-create type rate_enum as enum( '50%', '55%', '60%', '65%', '70%', '75%', '80%');
-
--- 수당률
-create table commission_rates(
-commission_rate_id serial primary key,
-rate rate_enum not null unique
-);
-
--- 기사님 수당률
-create table engineer_commission_rates(
-engineer_id int,
-commission_rate_id int,
-primary key (engineer_id, commission_rate_id),
-foreign key (engineer_id) references engineer(engineer_id),
-foreign key (commission_rate_id) references commission_rates(commission_rate_id)
-);
-
-
-
-------------------------------------
-
-
-
--- 예약총정보
-create table order_info(
-order_info_id serial primary key,
-order_id int,
-order_pay_id int,
-foreign key (order_id) references orders(order_id),
-foreign key (order_pay_id) references orders_pay(order_pay_id)
-);
-
-
-
--- 에어컨 세탁기 대분류
-create table product_type( 
-product_type_id serial primary key,
-product varchar(50) not null unique
-);
- 
-
--- 세탁기 소분류
-CREATE TABLE washing_machine (
-    washing_machine_id SERIAL PRIMARY KEY,
-    name VARCHAR(100) NOT NULL,
-);
-
--- 에어컨 소분류
-CREATE TABLE air_condition (
-    air_condition_id SERIAL PRIMARY KEY,
-    name VARCHAR(100) NOT NULL,
-);
-

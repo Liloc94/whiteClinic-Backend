@@ -1,15 +1,14 @@
 import { Module } from '@nestjs/common';
 import { AppController } from './app/app.controller';
-import { OrderInfoModule } from './order-info/order-info.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { EngineerInfoModule } from './engineer-info/engineer-info.module';
-import { RegistrationModule } from './engineer-registration/registration.module';
 import { RefreshTokenModule } from './refresh_token/refresh_token.module';
 import { AdminModule } from './admin/admin.module';
 import { ConfigModule } from '@nestjs/config';
 import { AuthModule } from './auth/auth.module';
-import { CustomerModule } from './customer/customer.module';
 import { JwtModule } from '@nestjs/jwt';
+import { OrderInfoModule } from './order_info/order_info.module';
+import { CustomerModule } from './customer/customer.module';
+import { EngineerModule } from './engineer/engineer.module';
 
 @Module({
   imports: [
@@ -30,15 +29,14 @@ import { JwtModule } from '@nestjs/jwt';
       synchronize: false,
       logging: true,
     }),
-    OrderInfoModule,
-    EngineerInfoModule,
-    RegistrationModule,
     RefreshTokenModule,
     AdminModule,
     AuthModule,
-    RegistrationModule,
-    CustomerModule,
     JwtModule,
+    OrderInfoModule,
+    CustomerModule,
+    EngineerModule,
+    RefreshTokenModule,
   ],
   controllers: [AppController],
   providers: [],

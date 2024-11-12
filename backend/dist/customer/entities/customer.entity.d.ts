@@ -1,10 +1,7 @@
-import { OrderTime } from 'src/order-info/entities/order_time.entity';
 export declare class Customer {
-    customerId: number;
-    customerName: string;
-    phoneNumber: string;
-    location: string;
-    bookingDate: Date;
-    orderTime: OrderTime;
-    remark: string;
+    customer_id: number;
+    customer_name: string;
+    customer_phone: string;
+    customer_addr: string;
+    customer_remark?: string;
 }

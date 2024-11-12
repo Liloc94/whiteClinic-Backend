@@ -14,7 +14,7 @@ import { JwtAuthGuard } from './guards/jwt_auth.guard';
 import { RolesGuard } from './guards/roles.guard';
 import { Roles } from './decorators/roles.decorator';
 import { Request } from 'express';
-import { Admin } from 'src/admin/entities/admin.entity';
+import { AdminAccount } from 'src/admin/entities/admin_account.entity';
 @Controller('auth')
 @ApiTags('토큰인증 API')
 export class AuthController {
@@ -32,7 +32,7 @@ export class AuthController {
     const { adminID, adminPW, role } = registerDto;
     const admin = await this.authService.register(adminID, adminPW, role);
 
-    return { message: '회원가입 성공', id: admin.id };
+    return { message: '회원가입 성공', id: admin.idx };
   }
 
   // 로그인
@@ -110,8 +110,8 @@ export class AuthController {
     description: 'User profile retrived successfully',
   })
   getProfile(@Req() req: Request) {
-    const user = req.user as Admin;
-    return { id: user.id, username: user.adminId, role: user.role };
+    const user = req.user as AdminAccount;
+    return { id: user.idx, username: user.admin_id, role: user.role };
   }
 
   // 관리자 전용

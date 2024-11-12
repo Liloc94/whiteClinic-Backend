@@ -2,8 +2,8 @@ import { PassportStrategy } from '@nestjs/passport';
 import { ExtractJwt, Strategy } from 'passport-jwt';
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { AdminService } from 'src/admin/admin.service';
-import { Admin } from 'src/admin/entities/admin.entity';
 import { ConfigService } from '@nestjs/config';
+import { AdminAccount } from 'src/admin/entities/admin_account.entity';
 
 interface JwtPayload {
   username: string;
@@ -31,13 +31,13 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
   }
 
   // 검증된 JWT payload 를 처리하는 함수
-  async validate(payload: JwtPayload): Promise<Admin> {
+  async validate(payload: JwtPayload): Promise<AdminAccount> {
     const user = await this.adminService.findOne(payload.username);
     if (!user) {
       throw new UnauthorizedException('유효하지 않은 토큰입니다.');
     }
 
-    if (user.tokenVersion !== payload.tokenVersion) {
+    if (user.token_version !== payload.tokenVersion) {
       throw new UnauthorizedException('토큰 버전이 맞지 않습니다.');
     }
 

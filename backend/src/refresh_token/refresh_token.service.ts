@@ -3,36 +3,38 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 
 import { LessThan, Repository } from 'typeorm';
-import { Admin } from 'src/admin/entities/admin.entity';
-import { RefreshToken } from './entities/refresh_token.entity';
+import { AdminAccount } from 'src/admin/entities/admin_account.entity';
+import { AdminRefreshToken } from './entities/refresh_token.entity';
 
 @Injectable()
 export class RefreshTokenService {
   constructor(
-    @InjectRepository(RefreshToken)
-    private readonly refreshTokenRepository: Repository<RefreshToken>,
+    @InjectRepository(AdminRefreshToken)
+    private readonly refreshTokenRepository: Repository<AdminRefreshToken>,
   ) {}
 
   // Refresh Token 저장
   async saveRefreshToken(
-    admin: Admin,
+    admin: AdminAccount,
     token: string,
     expiresAt: Date,
-  ): Promise<RefreshToken> {
+  ): Promise<AdminRefreshToken> {
     // 기존 Refresh Token 삭제
-    await this.refreshTokenRepository.delete({ admin });
+    await this.refreshTokenRepository.delete({ adminAccount });
     const refreshToken = this.refreshTokenRepository.create({
-      token,
-      admin,
+      token: admin.token_version,
+      refresh_token: admin.refreshTokens,
       expiresAt,
     });
     return this.refreshTokenRepository.save(refreshToken);
   }
 
   // Refresh Token 검증
-  async findByToken(token: string): Promise<RefreshToken | undefined> {
+  async findByToken(
+    refresh_token: string,
+  ): Promise<AdminRefreshToken | undefined> {
     const RefreshResult = this.refreshTokenRepository.findOne({
-      where: { token },
+      where: { refresh_token },
       relations: ['admin'],
     });
     console.log(
