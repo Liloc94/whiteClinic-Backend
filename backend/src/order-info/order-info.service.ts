@@ -37,11 +37,10 @@ export class OrderInfoService {
     const order = await this.orderDataRepository.findOneBy({ orderId });
     if (!order) {
       throw new NotFoundException(`Order with ID : ${orderId} not found`);
-    } else {
-      Object.assign(order, updateData);
-      const result = await this.orderDataRepository.save(order);
-      return result;
     }
+    Object.assign(order, updateData);
+    const result = await this.orderDataRepository.save(order);
+    return result;
   }
 
   async create(orderInfo: SubmitOrderDto) {

@@ -40,11 +40,9 @@ let OrderInfoService = class OrderInfoService {
         if (!order) {
             throw new common_1.NotFoundException(`Order with ID : ${orderId} not found`);
         }
-        else {
-            Object.assign(order, updateData);
-            const result = await this.orderDataRepository.save(order);
-            return result;
-        }
+        Object.assign(order, updateData);
+        const result = await this.orderDataRepository.save(order);
+        return result;
     }
     async create(orderInfo) {
         await this.submitOrderRepository.save({ ...orderInfo });

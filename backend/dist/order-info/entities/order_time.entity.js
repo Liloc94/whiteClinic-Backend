@@ -10,6 +10,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.OrderTime = void 0;
+const class_validator_1 = require("class-validator");
 const typeorm_1 = require("typeorm");
 let OrderTime = class OrderTime {
 };
@@ -19,9 +20,26 @@ __decorate([
     __metadata("design:type", Number)
 ], OrderTime.prototype, "orderTimeId", void 0);
 __decorate([
-    (0, typeorm_1.Column)({ type: 'varchar', length: 100 }),
+    (0, class_validator_1.IsString)(),
+    (0, typeorm_1.Column)({
+        enum: [
+            '8시 이전',
+            '08:00 ~ 09:00',
+            '09:00 ~ 10:00',
+            '10:00 ~ 11:00',
+            '11:00 ~ 12:00',
+            '12:00 ~ 13:00',
+            '13:00 ~ 14:00',
+            '14:00 ~ 15:00',
+            '15:00 ~ 16:00',
+            '16:00 ~ 17:00',
+            '17:00 ~ 18:00',
+            '18:00 ~ 19:00',
+            '19시 이후',
+        ],
+    }),
     __metadata("design:type", String)
-], OrderTime.prototype, "time", void 0);
+], OrderTime.prototype, "orderTimeSlot", void 0);
 exports.OrderTime = OrderTime = __decorate([
     (0, typeorm_1.Entity)('order_time')
 ], OrderTime);
