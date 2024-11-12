@@ -22,6 +22,7 @@ const receipt_type_Entity_1 = require("./entities/receipt_type.Entity");
 const product_type_entity_1 = require("./entities/product_type.entity");
 const air_condition_entity_1 = require("./entities/air_condition.entity");
 const washing_machine_entity_1 = require("./entities/washing_machine.entity");
+const submit_order_entity_1 = require("./entities/submit_order.entity");
 let OrderInfoModule = class OrderInfoModule {
 };
 exports.OrderInfoModule = OrderInfoModule;
@@ -30,6 +31,7 @@ exports.OrderInfoModule = OrderInfoModule = __decorate([
         imports: [
             typeorm_1.TypeOrmModule.forFeature([
                 order_info_entity_1.OrderInfo,
+                submit_order_entity_1.SubmitOrder,
                 orders_pay_entity_1.OrdersPay,
                 order_time_entity_1.OrderTime,
                 calendar_entity_1.Calendar,

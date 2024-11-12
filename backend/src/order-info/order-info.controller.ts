@@ -19,7 +19,7 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 import { Response } from 'express';
-import { CreateOrderDto } from './dto/create-order.dto';
+import { SubmitOrderDto } from './dto/submit_order.dto';
 
 @Controller('orderInfo')
 @ApiTags('주문정보 API')
@@ -55,7 +55,7 @@ export class OrderInfoController {
   @ApiResponse({ status: 200, description: '주문정보 불러오기 성공' })
   async updateOne(
     @Param('id', ParseIntPipe) id: number, // ParseIntPipe로 숫자로 변환
-    @Body() req: CreateOrderDto, // @Body로 요청 본문을 가져옴
+    @Body() req: SubmitOrderDto, // @Body로 요청 본문을 가져옴
   ): Promise<OrderInfo> {
     return this.orderService.update(id, req);
   }
@@ -63,14 +63,14 @@ export class OrderInfoController {
   @Post('createOrder')
   @ApiOperation({
     summary: '주문정보 등록 API',
-    description: '주문정보를 생성한다.',
+    description: '입력한 값을 기반으로 주문정보를 DB에 저장한다.',
   })
   @ApiCreatedResponse({
-    description: '주문정보를 생성한다.',
-    type: CreateOrderDto,
+    description: 'SubmitOrderDto.json.',
+    type: SubmitOrderDto,
   })
   @ApiResponse({ status: 200, description: '주문정보 불러오기 성공' })
-  async create(@Body() orderInfo: CreateOrderDto): Promise<void> {
+  async create(@Body() orderInfo: SubmitOrderDto): Promise<void> {
     return this.orderService.create(orderInfo);
   }
 

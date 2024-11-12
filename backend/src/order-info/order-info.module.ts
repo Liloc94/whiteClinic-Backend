@@ -13,11 +13,13 @@ import { ReceiptDocs } from './entities/receipt_type.Entity';
 import { ProductType } from './entities/product_type.entity';
 import { AirConditioner } from './entities/air_condition.entity';
 import { WashingMachine } from './entities/washing_machine.entity';
+import { SubmitOrder } from './entities/submit_order.entity';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([
       OrderInfo,
+      SubmitOrder,
       OrdersPay,
       OrderTime,
       Calendar,

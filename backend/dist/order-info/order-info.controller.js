@@ -16,7 +16,7 @@ exports.OrderInfoController = void 0;
 const common_1 = require("@nestjs/common");
 const order_info_service_1 = require("./order-info.service");
 const swagger_1 = require("@nestjs/swagger");
-const create_order_dto_1 = require("./dto/create-order.dto");
+const submit_order_dto_1 = require("./dto/submit_order.dto");
 let OrderInfoController = class OrderInfoController {
     constructor(orderService) {
         this.orderService = orderService;
@@ -74,23 +74,23 @@ __decorate([
     __param(0, (0, common_1.Param)('id', common_1.ParseIntPipe)),
     __param(1, (0, common_1.Body)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Number, create_order_dto_1.CreateOrderDto]),
+    __metadata("design:paramtypes", [Number, submit_order_dto_1.SubmitOrderDto]),
     __metadata("design:returntype", Promise)
 ], OrderInfoController.prototype, "updateOne", null);
 __decorate([
     (0, common_1.Post)('createOrder'),
     (0, swagger_1.ApiOperation)({
         summary: '주문정보 등록 API',
-        description: '주문정보를 생성한다.',
+        description: '입력한 값을 기반으로 주문정보를 DB에 저장한다.',
     }),
     (0, swagger_1.ApiCreatedResponse)({
-        description: '주문정보를 생성한다.',
-        type: create_order_dto_1.CreateOrderDto,
+        description: 'SubmitOrderDto.json.',
+        type: submit_order_dto_1.SubmitOrderDto,
     }),
     (0, swagger_1.ApiResponse)({ status: 200, description: '주문정보 불러오기 성공' }),
     __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [create_order_dto_1.CreateOrderDto]),
+    __metadata("design:paramtypes", [submit_order_dto_1.SubmitOrderDto]),
     __metadata("design:returntype", Promise)
 ], OrderInfoController.prototype, "create", null);
 __decorate([

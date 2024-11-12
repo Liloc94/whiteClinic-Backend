@@ -26,20 +26,6 @@ __decorate([
     __metadata("design:type", customer_entity_1.Customer)
 ], OrderInfo.prototype, "customer", void 0);
 __decorate([
-    (0, typeorm_1.ManyToOne)(() => product_detail_entity_1.ProductDetail),
-    (0, typeorm_1.JoinColumn)({ name: 'product_detail_id' }),
-    __metadata("design:type", product_detail_entity_1.ProductDetail)
-], OrderInfo.prototype, "productDetail", void 0);
-__decorate([
-    (0, typeorm_1.Column)({
-        name: 'product_remark',
-        type: 'varchar',
-        length: 255,
-        nullable: true,
-    }),
-    __metadata("design:type", String)
-], OrderInfo.prototype, "productRemark", void 0);
-__decorate([
     (0, typeorm_1.Column)({ type: 'int' }),
     __metadata("design:type", Number)
 ], OrderInfo.prototype, "count", void 0);
@@ -55,6 +41,20 @@ __decorate([
     (0, typeorm_1.Column)({ type: 'varchar', length: 255, nullable: true }),
     __metadata("design:type", String)
 ], OrderInfo.prototype, "remark", void 0);
+__decorate([
+    (0, typeorm_1.ManyToOne)(() => product_detail_entity_1.ProductDetail),
+    (0, typeorm_1.JoinColumn)({ name: 'product_detail_id' }),
+    __metadata("design:type", product_detail_entity_1.ProductDetail)
+], OrderInfo.prototype, "productDetail", void 0);
+__decorate([
+    (0, typeorm_1.Column)({
+        name: 'product_remark',
+        type: 'varchar',
+        length: 255,
+        nullable: true,
+    }),
+    __metadata("design:type", String)
+], OrderInfo.prototype, "productRemark", void 0);
 exports.OrderInfo = OrderInfo = __decorate([
     (0, typeorm_1.Entity)('orders')
 ], OrderInfo);

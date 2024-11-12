@@ -17,9 +17,11 @@ const common_1 = require("@nestjs/common");
 const order_info_entity_1 = require("./entities/order_info.entity");
 const typeorm_1 = require("@nestjs/typeorm");
 const typeorm_2 = require("typeorm");
+const submit_order_entity_1 = require("./entities/submit_order.entity");
 let OrderInfoService = class OrderInfoService {
-    constructor(orderDataRepository) {
+    constructor(orderDataRepository, submitOrderRepository) {
         this.orderDataRepository = orderDataRepository;
+        this.submitOrderRepository = submitOrderRepository;
     }
     async getAll() {
         return this.orderDataRepository.find();
@@ -31,9 +33,7 @@ let OrderInfoService = class OrderInfoService {
         if (!order) {
             throw new common_1.NotFoundException(`Order with ID: ${orderId} not found`);
         }
-        else {
-            return order;
-        }
+        return order;
     }
     async update(orderId, updateData) {
         const order = await this.orderDataRepository.findOneBy({ orderId });
@@ -47,7 +47,7 @@ let OrderInfoService = class OrderInfoService {
         }
     }
     async create(orderInfo) {
-        await this.orderDataRepository.save({ ...orderInfo });
+        await this.submitOrderRepository.save({ ...orderInfo });
     }
     async remove(orderId) {
         const order = await this.orderDataRepository.findOneBy({ orderId });
@@ -63,6 +63,8 @@ exports.OrderInfoService = OrderInfoService;
 exports.OrderInfoService = OrderInfoService = __decorate([
     (0, common_1.Injectable)(),
     __param(0, (0, typeorm_1.InjectRepository)(order_info_entity_1.OrderInfo)),
-    __metadata("design:paramtypes", [typeorm_2.Repository])
+    __param(1, (0, typeorm_1.InjectRepository)(submit_order_entity_1.SubmitOrder)),
+    __metadata("design:paramtypes", [typeorm_2.Repository,
+        typeorm_2.Repository])
 ], OrderInfoService);
 //# sourceMappingURL=order-info.service.js.map

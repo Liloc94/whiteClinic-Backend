@@ -17,18 +17,6 @@ export class OrderInfo {
   @JoinColumn({ name: 'customer_id' })
   customer: Customer;
 
-  @ManyToOne(() => ProductDetail)
-  @JoinColumn({ name: 'product_detail_id' })
-  productDetail: ProductDetail;
-
-  @Column({
-    name: 'product_remark',
-    type: 'varchar',
-    length: 255,
-    nullable: true,
-  })
-  productRemark: string;
-
   @Column({ type: 'int' })
   count: number;
 
@@ -40,4 +28,16 @@ export class OrderInfo {
 
   @Column({ type: 'varchar', length: 255, nullable: true })
   remark: string;
+
+  @ManyToOne(() => ProductDetail)
+  @JoinColumn({ name: 'product_detail_id' })
+  productDetail: ProductDetail;
+
+  @Column({
+    name: 'product_remark',
+    type: 'varchar',
+    length: 255,
+    nullable: true,
+  })
+  productRemark: string;
 }

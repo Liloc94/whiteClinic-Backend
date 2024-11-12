@@ -39,7 +39,7 @@ exports.AppModule = AppModule = __decorate([
                 schema: 'white_clinic',
                 entities: [],
                 autoLoadEntities: true,
-                synchronize: false,
+                synchronize: true,
                 logging: true,
             }),
             order_info_module_1.OrderInfoModule,

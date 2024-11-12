@@ -2,13 +2,17 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { OrderInfo } from './entities/order_info.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { CreateOrderDto } from './dto/create-order.dto';
+import { SubmitOrder } from './entities/submit_order.entity';
+import { SubmitOrderDto } from './dto/submit_order.dto';
 
 @Injectable()
 export class OrderInfoService {
   constructor(
     @InjectRepository(OrderInfo)
     private readonly orderDataRepository: Repository<OrderInfo>,
+
+    @InjectRepository(SubmitOrder)
+    private readonly submitOrderRepository: Repository<SubmitOrder>,
   ) {}
 
   async getAll(): Promise<OrderInfo[]> {
@@ -23,13 +27,13 @@ export class OrderInfoService {
     });
     if (!order) {
       throw new NotFoundException(`Order with ID: ${orderId} not found`);
-    } else {
-      return order;
     }
+
+    return order;
   }
 
   // TODO: 차후 DB에서 ID 조회 후 내용 수정하는 SQL 문 작성 필요
-  async update(orderId: number, updateData: CreateOrderDto) {
+  async update(orderId: number, updateData: SubmitOrderDto) {
     const order = await this.orderDataRepository.findOneBy({ orderId });
     if (!order) {
       throw new NotFoundException(`Order with ID : ${orderId} not found`);
@@ -40,8 +44,8 @@ export class OrderInfoService {
     }
   }
 
-  async create(orderInfo: CreateOrderDto) {
-    await this.orderDataRepository.save({ ...orderInfo });
+  async create(orderInfo: SubmitOrderDto) {
+    await this.submitOrderRepository.save({ ...orderInfo });
   }
 
   // TODO : 주문정보 임시저장 테이블로 옮기기
