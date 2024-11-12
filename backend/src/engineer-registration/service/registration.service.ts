@@ -5,11 +5,11 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Engineer } from 'src/engineer-info/entities/engineer.entity';
 import { Repository, DataSource } from 'typeorm';
 import { EngineerCommissionRates } from 'src/engineer-info/entities/engineer_commission.rate.entity';
-import { CommissionRates } from '../entities/commissionRates.entity';
-import { RegularHolidays } from '../entities/RegularHolidays.entity';
-import { WeekDays } from '../entities/WeekDays.entity';
-import { EngineerSkill } from '../entities/EngineerSkill.entity';
-import { Skills } from '../entities/Skills.entity';
+import { CommissionRates } from '../entities/commission_rate.entity';
+import { RegularHolidays } from '../entities/regular_holiday.entity';
+import { WeekDays } from '../entities/weekdays.entity';
+import { EngineerSkill } from '../entities/enginner_skill.entity';
+import { Skills } from '../entities/skills.entity';
 import { EngineerPayday } from 'src/engineer-info/entities/engineer_payday.entity';
 import { SpecialHolidays } from '../entities/special_holidays.entity';
 

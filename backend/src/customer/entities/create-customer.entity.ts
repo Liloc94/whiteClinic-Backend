@@ -15,7 +15,7 @@ export class CustomerData {
   @Column({ length: 100, nullable: false })
   customerName: string;
 
-  @Column({ length: 100, unique: true })
+  @Column({ unique: true })
   customerPhoneNum: number;
 
   @Column({ length: 100 })

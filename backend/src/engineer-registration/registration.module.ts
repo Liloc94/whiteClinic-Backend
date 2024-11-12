@@ -3,12 +3,12 @@ import { RegistrationService } from './service/registration.service';
 import { RegistrationController } from './controller/registration.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Engineer } from 'src/engineer-info/entities/engineer.entity';
-import { Skills } from './entities/Skills.entity';
-import { EngineerSkill } from './entities/EngineerSkill.entity';
+import { Skills } from './entities/skills.entity';
+import { EngineerSkill } from './entities/enginner_skill.entity';
 import { SpecialHolidays } from './entities/special_holidays.entity';
-import { WeekDays } from './entities/WeekDays.entity';
-import { RegularHolidays } from './entities/RegularHolidays.entity';
-import { CommissionRates } from './entities/commissionRates.entity';
+import { WeekDays } from './entities/weekdays.entity';
+import { RegularHolidays } from './entities/regular_holiday.entity';
+import { CommissionRates } from './entities/commission_rate.entity';
 
 @Module({
   imports: [

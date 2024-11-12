@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsBoolean, IsDate, IsNumber, IsString } from 'class-validator';
+import { IsBoolean, IsNumber, IsString } from 'class-validator';
 
 export class SubmitOrderDto {
   @ApiProperty({ description: '고유 아이디' })
@@ -7,8 +7,8 @@ export class SubmitOrderDto {
   order_id: number;
 
   @ApiProperty({ description: '예약일자' })
-  @IsDate()
-  order_date: Date;
+  @IsString()
+  order_date: string;
 
   @ApiProperty({ description: '고객성함' })
   @IsString()

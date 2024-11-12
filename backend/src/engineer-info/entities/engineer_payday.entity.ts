@@ -6,7 +6,7 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { Engineer } from './engineer.entity';
-import { WeekDays } from 'src/engineer-registration/entities/WeekDays.entity';
+import { WeekDays } from 'src/engineer-registration/entities/weekdays.entity';
 
 @Entity('engineer_payday')
 export class EngineerPayday {

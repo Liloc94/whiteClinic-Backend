@@ -1,6 +1,6 @@
 import { Entity, ManyToOne, JoinColumn, PrimaryColumn } from 'typeorm';
 import { Engineer } from './engineer.entity';
-import { WeekDays } from 'src/engineer-registration/entities/WeekDays.entity';
+import { WeekDays } from 'src/engineer-registration/entities/weekdays.entity';
 
 @Entity('EngineerDayoff')
 export class EngineerDayoff {
