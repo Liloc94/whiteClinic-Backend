@@ -5,7 +5,6 @@ import {
   Column,
   ManyToOne,
   JoinColumn,
-  CreateDateColumn,
 } from 'typeorm';
 import { ProductDetail } from './product_detail.entity';
 
