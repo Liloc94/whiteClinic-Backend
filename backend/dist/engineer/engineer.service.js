@@ -62,7 +62,7 @@ let EngineerService = class EngineerService {
         return `This action updates a #${id} engineer with ${updateEngineerDto}`;
     }
     remove(id) {
-        return `This action removes a #${id} engineer`;
+        return `This action removes a id : #${id} engineer`;
     }
     async findSkillIdsByNames(skillNames) {
         const skills = await this.skillRepository.find({

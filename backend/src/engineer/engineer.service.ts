@@ -77,7 +77,7 @@ export class EngineerService {
   }
 
   remove(id: number) {
-    return `This action removes a #${id} engineer`;
+    return `This action removes a id : #${id} engineer`;
   }
 
   // 스킬 이름 배열을 받아서 해당하는 스킬 ID를 반환
