@@ -64,8 +64,8 @@ export class EngineerService {
     }
   }
 
-  findAll() {
-    return `This action returns all engineer`;
+  async findAll() {
+    return await this.engineerRepository.find();
   }
 
   findOne(id: number) {

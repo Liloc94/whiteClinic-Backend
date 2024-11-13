@@ -10,7 +10,7 @@ import {
 import { EngineerService } from './engineer.service';
 import { CreateEngineerDto } from './dto/create-engineer.dto';
 import { UpdateEngineerDto } from './dto/update-engineer.dto';
-import { ApiBody, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiBody, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 
 @ApiTags('기사정보 API')
 @Controller('engineer')
@@ -23,21 +23,7 @@ export class EngineerController {
     description: '기사 정보 저장완료',
     schema: {
       example: {
-        engineer_valid_skill: [
-          '하위 카테고리중 택',
-          '벽걸이',
-          '원웨이',
-          '포웨이',
-          '원형',
-          '스탠드',
-          '실외기',
-          '덕트',
-          '창문형',
-          '통돌이',
-          '드럼',
-          '빌트인',
-          '건조기',
-        ],
+        engineer_valid_skill: ['벽걸이', '원웨이', '포웨이'],
         engineer_dayoff: [
           'dayoff & payday 동일',
           '월요일',
@@ -51,6 +37,10 @@ export class EngineerController {
         engineer_commission_rate: ['다음 중 택 1', 50, 55, 60, 65, 70, 75, 80],
       },
     },
+  })
+  @ApiOperation({
+    summary: '기사정보 저장 API',
+    description: 'Body 에 담긴 정보를 기반으로 DB에 새로운 기사정보를 저장한다',
   })
   @ApiBody({
     description: '기사 정보 생성 요청',
@@ -66,9 +56,14 @@ export class EngineerController {
     }
   }
 
-  @Get()
-  findAll() {
-    return this.engineerService.findAll();
+  @ApiOperation({
+    summary: '전체 기사정보 일괄조회 API',
+    description: '모든 기사정보 조회 요청',
+  })
+  @ApiResponse({ status: 200, description: '기사정보 조회 완료' })
+  @Get('searchAllEngineer')
+  async indAll() {
+    return await this.engineerService.findAll();
   }
 
   @Get(':id')

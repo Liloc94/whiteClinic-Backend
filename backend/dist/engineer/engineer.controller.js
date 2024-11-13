@@ -31,8 +31,8 @@ let EngineerController = class EngineerController {
             console.log(error);
         }
     }
-    findAll() {
-        return this.engineerService.findAll();
+    async indAll() {
+        return await this.engineerService.findAll();
     }
     findOne(id) {
         return this.engineerService.findOne(+id);
@@ -51,21 +51,7 @@ __decorate([
         description: '기사 정보 저장완료',
         schema: {
             example: {
-                engineer_valid_skill: [
-                    '하위 카테고리중 택',
-                    '벽걸이',
-                    '원웨이',
-                    '포웨이',
-                    '원형',
-                    '스탠드',
-                    '실외기',
-                    '덕트',
-                    '창문형',
-                    '통돌이',
-                    '드럼',
-                    '빌트인',
-                    '건조기',
-                ],
+                engineer_valid_skill: ['벽걸이', '원웨이', '포웨이'],
                 engineer_dayoff: [
                     'dayoff & payday 동일',
                     '월요일',
@@ -80,6 +66,10 @@ __decorate([
             },
         },
     }),
+    (0, swagger_1.ApiOperation)({
+        summary: '기사정보 저장 API',
+        description: 'Body 에 담긴 정보를 기반으로 DB에 새로운 기사정보를 저장한다',
+    }),
     (0, swagger_1.ApiBody)({
         description: '기사 정보 생성 요청',
         type: create_engineer_dto_1.CreateEngineerDto,
@@ -91,11 +81,16 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], EngineerController.prototype, "create", null);
 __decorate([
-    (0, common_1.Get)(),
+    (0, swagger_1.ApiOperation)({
+        summary: '전체 기사정보 일괄조회 API',
+        description: '모든 기사정보 조회 요청',
+    }),
+    (0, swagger_1.ApiResponse)({ status: 200, description: '기사정보 조회 완료' }),
+    (0, common_1.Get)('searchAllEngineer'),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", []),
-    __metadata("design:returntype", void 0)
-], EngineerController.prototype, "findAll", null);
+    __metadata("design:returntype", Promise)
+], EngineerController.prototype, "indAll", null);
 __decorate([
     (0, common_1.Get)(':id'),
     __param(0, (0, common_1.Param)('id')),
