@@ -10,14 +10,19 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Order = void 0;
+const engineer_daily_earning_entity_1 = require("../../engineer/entities/engineer_daily_earning.entity");
 const typeorm_1 = require("typeorm");
 let Order = class Order {
 };
 exports.Order = Order;
 __decorate([
-    (0, typeorm_1.PrimaryColumn)(),
+    (0, typeorm_1.PrimaryGeneratedColumn)(),
     __metadata("design:type", Number)
 ], Order.prototype, "order_id", void 0);
+__decorate([
+    (0, typeorm_1.OneToMany)(() => engineer_daily_earning_entity_1.EngineerDailyEarning, (engineerDailyEarning) => engineerDailyEarning.order),
+    __metadata("design:type", Array)
+], Order.prototype, "engineerDailyEarnings", void 0);
 __decorate([
     (0, typeorm_1.Column)({ type: 'varchar', length: 255 }),
     __metadata("design:type", String)

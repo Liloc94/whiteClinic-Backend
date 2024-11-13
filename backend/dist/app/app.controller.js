@@ -11,6 +11,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.AppController = void 0;
 const common_1 = require("@nestjs/common");
+const swagger_1 = require("@nestjs/swagger");
 let AppController = class AppController {
     getHello() {
         return `
@@ -21,12 +22,17 @@ let AppController = class AppController {
 };
 exports.AppController = AppController;
 __decorate([
+    (0, swagger_1.ApiOperation)({
+        summary: '서버 메인페이지 HTML을 반환한다',
+        description: 'It returns AppController HTML',
+    }),
     (0, common_1.Get)(),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", String)
 ], AppController.prototype, "getHello", null);
 exports.AppController = AppController = __decorate([
+    (0, swagger_1.ApiTags)('Main App Controller'),
     (0, common_1.Controller)()
 ], AppController);
 //# sourceMappingURL=app.controller.js.map

@@ -20,7 +20,7 @@ __decorate([
     __metadata("design:type", Number)
 ], AdminAccount.prototype, "idx", void 0);
 __decorate([
-    (0, typeorm_1.Column)({ type: 'varchar', length: 50 }),
+    (0, typeorm_1.Column)({ type: 'varchar', length: 50, unique: true }),
     __metadata("design:type", String)
 ], AdminAccount.prototype, "admin_id", void 0);
 __decorate([
@@ -32,11 +32,12 @@ __decorate([
     __metadata("design:type", String)
 ], AdminAccount.prototype, "role", void 0);
 __decorate([
-    (0, typeorm_1.Column)({ type: 'int' }),
+    (0, typeorm_1.Column)({ type: 'int', default: 0 }),
     __metadata("design:type", Number)
 ], AdminAccount.prototype, "token_version", void 0);
 __decorate([
-    (0, typeorm_1.OneToMany)(() => refresh_token_entity_1.AdminRefreshToken, (refreshToken) => refreshToken.adminAccount),
+    (0, typeorm_1.OneToMany)(() => refresh_token_entity_1.AdminRefreshToken, (refreshToken) => refreshToken.admin),
+    (0, typeorm_1.JoinColumn)(),
     __metadata("design:type", Array)
 ], AdminAccount.prototype, "refreshTokens", void 0);
 exports.AdminAccount = AdminAccount = __decorate([

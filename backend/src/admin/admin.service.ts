@@ -48,6 +48,6 @@ export class AdminService {
   // tokenVersion 증가 함수
   // accessToken 에 version 을 추가하여 2중으로 체크하여 유효성 검사 실시
   async incrementTokenVersion(token_version: number): Promise<void> {
-    await this.adminRepository.increment({ token_version }, 'tokenVersion', 1);
+    await this.adminRepository.increment({ token_version }, 'token_version', 1);
   }
 }

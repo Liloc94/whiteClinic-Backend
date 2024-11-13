@@ -54,14 +54,14 @@ let AuthService = class AuthService {
             throw new common_1.UnauthorizedException('refresh Token does not exist');
         }
         const now = new Date();
-        if (storedRefreshToken.expiresAt < now) {
+        if (storedRefreshToken.expires_at < now) {
             await this.refreshTokenService.removeRefreshToken(refreshToken);
             throw new common_1.UnauthorizedException('Refresh Token has been expired');
         }
-        const user = storedRefreshToken.admin;
+        const user = storedRefreshToken;
         await this.refreshTokenService.removeRefreshToken(refreshToken);
-        await this.adminService.incrementTokenVersion(user.id);
-        const updateUser = await this.adminService.findOne(user.adminId);
+        await this.adminService.incrementTokenVersion(user.idx);
+        const updateUser = await this.adminService.findOne(user.admin.admin_id);
         const newRefreshToken = this.generateRefreshToken();
         const newExpiresAt = new Date();
         newExpiresAt.setDate(newExpiresAt.getDate() + 7);
@@ -83,7 +83,7 @@ let AuthService = class AuthService {
         if (storedRefreshToken) {
             const admin = storedRefreshToken.admin;
             await this.refreshTokenService.removeRefreshToken(refreshToken);
-            await this.adminService.incrementTokenVersion(admin.id);
+            await this.adminService.incrementTokenVersion(admin.idx);
         }
     }
     async logoutAll(id) {

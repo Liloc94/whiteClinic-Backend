@@ -17,6 +17,7 @@ const common_1 = require("@nestjs/common");
 const customer_service_1 = require("./customer.service");
 const create_customer_dto_1 = require("./dto/create-customer.dto");
 const update_customer_dto_1 = require("./dto/update-customer.dto");
+const swagger_1 = require("@nestjs/swagger");
 let CustomerController = class CustomerController {
     constructor(customerService) {
         this.customerService = customerService;
@@ -74,6 +75,7 @@ __decorate([
     __metadata("design:returntype", void 0)
 ], CustomerController.prototype, "remove", null);
 exports.CustomerController = CustomerController = __decorate([
+    (0, swagger_1.ApiTags)('고객정보 API'),
     (0, common_1.Controller)('customer'),
     __metadata("design:paramtypes", [customer_service_1.CustomerService])
 ], CustomerController);

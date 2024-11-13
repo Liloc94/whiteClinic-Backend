@@ -72,22 +72,22 @@ export class AuthService {
     }
 
     const now = new Date();
-    if (storedRefreshToken.expiresAt < now) {
+    if (storedRefreshToken.expires_at < now) {
       // Refresh Token 만료 시, 제거 후 exception 발생
       await this.refreshTokenService.removeRefreshToken(refreshToken);
       throw new UnauthorizedException('Refresh Token has been expired');
     }
 
-    const user = storedRefreshToken.admin;
+    const user = storedRefreshToken;
 
     // 기존 Refresh Token 제거
     await this.refreshTokenService.removeRefreshToken(refreshToken);
 
     // tokenVersion 증가
-    await this.adminService.incrementTokenVersion(user.id);
+    await this.adminService.incrementTokenVersion(user.idx);
 
     // 최신 tokenVersion 조회
-    const updateUser = await this.adminService.findOne(user.adminId);
+    const updateUser = await this.adminService.findOne(user.admin.admin_id);
 
     // 새로운 Refresh Token 생성
     const newRefreshToken = this.generateRefreshToken();
@@ -126,7 +126,7 @@ export class AuthService {
 
       await this.refreshTokenService.removeRefreshToken(refreshToken);
       // tokenVersion 증가하여 기존 Access Token 무효화
-      await this.adminService.incrementTokenVersion(admin.id);
+      await this.adminService.incrementTokenVersion(admin.idx);
     }
     // 유효하지 않은 토큰도 성공적으로 로그아웃 처리
   }

@@ -48,7 +48,7 @@ let AdminService = class AdminService {
         }
     }
     async incrementTokenVersion(token_version) {
-        await this.adminRepository.increment({ token_version }, 'tokenVersion', 1);
+        await this.adminRepository.increment({ token_version }, 'token_version', 1);
     }
 };
 exports.AdminService = AdminService;

@@ -4,7 +4,7 @@ import { UpdateEngineerDto } from './dto/update-engineer.dto';
 export declare class EngineerController {
     private readonly engineerService;
     constructor(engineerService: EngineerService);
-    create(createEngineerDto: CreateEngineerDto): string;
+    create(createEngineerDto: CreateEngineerDto): Promise<void>;
     findAll(): string;
     findOne(id: string): string;
     update(id: string, updateEngineerDto: UpdateEngineerDto): string;

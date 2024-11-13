@@ -4,8 +4,8 @@ export declare class Engineer {
     engineer_phone: string;
     engineer_addr: string;
     engineer_remark?: string;
-    engineer_commission: number;
+    engineer_commission_rate: number;
     engineer_dayoff?: string;
-    engineer_holiday?: string;
+    engineer_holiday?: string[];
     engineer_payday: string;
 }

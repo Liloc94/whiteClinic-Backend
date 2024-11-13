@@ -1,5 +1,7 @@
+import { EngineerDailyEarning } from 'src/engineer/entities/engineer_daily_earning.entity';
 export declare class Order {
     order_id: number;
+    engineerDailyEarnings: EngineerDailyEarning[];
     order_category: string;
     order_date: string;
     order_product: string;

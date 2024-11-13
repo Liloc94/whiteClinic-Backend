@@ -10,12 +10,16 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Engineer = void 0;
+const class_validator_1 = require("class-validator");
 const typeorm_1 = require("typeorm");
 let Engineer = class Engineer {
 };
 exports.Engineer = Engineer;
 __decorate([
-    (0, typeorm_1.PrimaryColumn)(),
+    (0, typeorm_1.PrimaryGeneratedColumn)({
+        type: 'integer',
+        name: 'engineer_id',
+    }),
     __metadata("design:type", Number)
 ], Engineer.prototype, "engineer_id", void 0);
 __decorate([
@@ -35,22 +39,23 @@ __decorate([
     __metadata("design:type", String)
 ], Engineer.prototype, "engineer_remark", void 0);
 __decorate([
-    (0, typeorm_1.Column)({ type: 'int', default: 0 }),
+    (0, typeorm_1.Column)({ type: 'integer' }),
     __metadata("design:type", Number)
-], Engineer.prototype, "engineer_commission", void 0);
+], Engineer.prototype, "engineer_commission_rate", void 0);
 __decorate([
     (0, typeorm_1.Column)({ type: 'varchar', length: 20, nullable: true }),
     __metadata("design:type", String)
 ], Engineer.prototype, "engineer_dayoff", void 0);
 __decorate([
-    (0, typeorm_1.Column)({ type: 'varchar', length: 20, nullable: true }),
-    __metadata("design:type", String)
+    (0, typeorm_1.Column)('simple-array', { nullable: true }),
+    (0, class_validator_1.IsOptional)(),
+    __metadata("design:type", Array)
 ], Engineer.prototype, "engineer_holiday", void 0);
 __decorate([
     (0, typeorm_1.Column)({ type: 'varchar', length: 20 }),
     __metadata("design:type", String)
 ], Engineer.prototype, "engineer_payday", void 0);
 exports.Engineer = Engineer = __decorate([
-    (0, typeorm_1.Entity)('engineer')
+    (0, typeorm_1.Entity)('engineer', { schema: 'white_clinic' })
 ], Engineer);
 //# sourceMappingURL=engineer.entity.js.map

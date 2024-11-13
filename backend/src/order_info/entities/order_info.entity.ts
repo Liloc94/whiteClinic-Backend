@@ -1,10 +1,17 @@
 // order.entity.ts
-import { Entity, PrimaryColumn, Column } from 'typeorm';
+import { EngineerDailyEarning } from 'src/engineer/entities/engineer_daily_earning.entity';
+import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
 
 @Entity('order')
 export class Order {
-  @PrimaryColumn()
+  @PrimaryGeneratedColumn()
   order_id: number;
+
+  @OneToMany(
+    () => EngineerDailyEarning,
+    (engineerDailyEarning) => engineerDailyEarning.order,
+  )
+  engineerDailyEarnings: EngineerDailyEarning[];
 
   @Column({ type: 'varchar', length: 255 })
   order_category: string;

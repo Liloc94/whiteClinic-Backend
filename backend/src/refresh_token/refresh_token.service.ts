@@ -1,10 +1,8 @@
 import { Injectable } from '@nestjs/common';
-
 import { InjectRepository } from '@nestjs/typeorm';
-
 import { LessThan, Repository } from 'typeorm';
-import { AdminAccount } from 'src/admin/entities/admin_account.entity';
 import { AdminRefreshToken } from './entities/refresh_token.entity';
+import { AdminAccount } from 'src/admin/entities/admin_account.entity';
 
 @Injectable()
 export class RefreshTokenService {
@@ -16,17 +14,17 @@ export class RefreshTokenService {
   // Refresh Token 저장
   async saveRefreshToken(
     admin: AdminAccount,
-    token: string,
-    expiresAt: Date,
+    refresh_token: string,
+    expires_at: Date,
   ): Promise<AdminRefreshToken> {
     // 기존 Refresh Token 삭제
-    await this.refreshTokenRepository.delete({ adminAccount });
+    await this.refreshTokenRepository.delete({ refresh_token });
     const refreshToken = this.refreshTokenRepository.create({
-      token: admin.token_version,
-      refresh_token: admin.refreshTokens,
-      expiresAt,
+      admin,
+      refresh_token,
+      expires_at,
     });
-    return this.refreshTokenRepository.save(refreshToken);
+    return this.refreshTokenRepository.save({ ...refreshToken });
   }
 
   // Refresh Token 검증
@@ -39,25 +37,25 @@ export class RefreshTokenService {
     });
     console.log(
       'RefreshResult Token 검증(로그아웃) : ',
-      (await RefreshResult).token,
+      (await RefreshResult).refresh_token,
     );
-    console.log((await RefreshResult).admin);
+    console.log((await RefreshResult).refresh_token);
     return RefreshResult;
   }
 
   // Refresh Token 제거 (로그아웃)
-  async removeRefreshToken(token: string): Promise<void> {
-    await this.refreshTokenRepository.delete({ token });
+  async removeRefreshToken(refresh_token: string): Promise<void> {
+    await this.refreshTokenRepository.delete({ refresh_token });
   }
 
   // 특정 사용자에 대한 모든 Refresh Token 제거 ( 전체 로그아웃 )
-  async removeAllRefreshToken(id: number): Promise<void> {
-    await this.refreshTokenRepository.delete({ admin: { id } });
+  async removeAllRefreshToken(idx: number): Promise<void> {
+    await this.refreshTokenRepository.delete({ idx });
   }
 
   // 만료된 Refresh Token 제거
   async removeExpiredRefreshTokens(): Promise<void> {
     const now = new Date();
-    await this.refreshTokenRepository.delete({ expiresAt: LessThan(now) });
+    await this.refreshTokenRepository.delete({ expires_at: LessThan(now) });
   }
 }

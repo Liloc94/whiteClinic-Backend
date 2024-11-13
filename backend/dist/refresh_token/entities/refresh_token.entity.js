@@ -20,26 +20,22 @@ __decorate([
     __metadata("design:type", Number)
 ], AdminRefreshToken.prototype, "idx", void 0);
 __decorate([
-    (0, typeorm_1.Column)({ type: 'int' }),
-    __metadata("design:type", Number)
-], AdminRefreshToken.prototype, "token_id", void 0);
-__decorate([
     (0, typeorm_1.Column)({ type: 'varchar', length: 255 }),
     __metadata("design:type", String)
 ], AdminRefreshToken.prototype, "refresh_token", void 0);
 __decorate([
-    (0, typeorm_1.Column)({ type: 'varchar', length: 50 }),
+    (0, typeorm_1.CreateDateColumn)({ type: 'varchar', length: 50 }),
     __metadata("design:type", String)
 ], AdminRefreshToken.prototype, "created_at", void 0);
 __decorate([
-    (0, typeorm_1.Column)({ type: 'varchar', length: 50 }),
-    __metadata("design:type", String)
+    (0, typeorm_1.Column)({ type: 'varchar' }),
+    __metadata("design:type", Date)
 ], AdminRefreshToken.prototype, "expires_at", void 0);
 __decorate([
-    (0, typeorm_1.ManyToOne)(() => admin_account_entity_1.AdminAccount, (adminAccount) => adminAccount.refreshTokens),
-    (0, typeorm_1.JoinColumn)({ name: 'token_id' }),
+    (0, typeorm_1.ManyToOne)(() => admin_account_entity_1.AdminAccount),
+    (0, typeorm_1.JoinColumn)({ name: 'admin_id' }),
     __metadata("design:type", admin_account_entity_1.AdminAccount)
-], AdminRefreshToken.prototype, "adminAccount", void 0);
+], AdminRefreshToken.prototype, "admin", void 0);
 exports.AdminRefreshToken = AdminRefreshToken = __decorate([
     (0, typeorm_1.Entity)('admin_refresh_tokens')
 ], AdminRefreshToken);

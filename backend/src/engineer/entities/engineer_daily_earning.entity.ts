@@ -1,6 +1,5 @@
 // engineer_daily_earning.entity.ts
 import { Entity, PrimaryColumn, Column, ManyToOne, JoinColumn } from 'typeorm';
-
 import { Engineer } from './engineer.entity';
 import { Order } from 'src/order_info/entities/order_info.entity';
 
@@ -9,7 +8,7 @@ export class EngineerDailyEarning {
   @PrimaryColumn()
   idx: number;
 
-  @ManyToOne(() => Order)
+  @ManyToOne(() => Order, (order) => order.order_id)
   @JoinColumn({ name: 'order_id' })
   order: Order;
 

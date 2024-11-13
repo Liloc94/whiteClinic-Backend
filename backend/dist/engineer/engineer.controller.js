@@ -17,12 +17,19 @@ const common_1 = require("@nestjs/common");
 const engineer_service_1 = require("./engineer.service");
 const create_engineer_dto_1 = require("./dto/create-engineer.dto");
 const update_engineer_dto_1 = require("./dto/update-engineer.dto");
+const swagger_1 = require("@nestjs/swagger");
 let EngineerController = class EngineerController {
     constructor(engineerService) {
         this.engineerService = engineerService;
     }
-    create(createEngineerDto) {
-        return this.engineerService.create(createEngineerDto);
+    async create(createEngineerDto) {
+        try {
+            console.log('Request received:', createEngineerDto);
+            return await this.engineerService.create(createEngineerDto);
+        }
+        catch (error) {
+            console.log(error);
+        }
     }
     findAll() {
         return this.engineerService.findAll();
@@ -39,11 +46,49 @@ let EngineerController = class EngineerController {
 };
 exports.EngineerController = EngineerController;
 __decorate([
-    (0, common_1.Post)(),
+    (0, swagger_1.ApiResponse)({
+        status: 201,
+        description: '기사 정보 저장완료',
+        schema: {
+            example: {
+                engineer_valid_skill: [
+                    '하위 카테고리중 택',
+                    '벽걸이',
+                    '원웨이',
+                    '포웨이',
+                    '원형',
+                    '스탠드',
+                    '실외기',
+                    '덕트',
+                    '창문형',
+                    '통돌이',
+                    '드럼',
+                    '빌트인',
+                    '건조기',
+                ],
+                engineer_dayoff: [
+                    'dayoff & payday 동일',
+                    '월요일',
+                    '화요일',
+                    '수요일',
+                    '목요일',
+                    '금요일',
+                    '토요일',
+                    '일요일',
+                ],
+                engineer_commission_rate: ['다음 중 택 1', 50, 55, 60, 65, 70, 75, 80],
+            },
+        },
+    }),
+    (0, swagger_1.ApiBody)({
+        description: '기사 정보 생성 요청',
+        type: create_engineer_dto_1.CreateEngineerDto,
+    }),
+    (0, common_1.Post)('createEngineer'),
     __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [create_engineer_dto_1.CreateEngineerDto]),
-    __metadata("design:returntype", void 0)
+    __metadata("design:returntype", Promise)
 ], EngineerController.prototype, "create", null);
 __decorate([
     (0, common_1.Get)(),
@@ -74,6 +119,7 @@ __decorate([
     __metadata("design:returntype", void 0)
 ], EngineerController.prototype, "remove", null);
 exports.EngineerController = EngineerController = __decorate([
+    (0, swagger_1.ApiTags)('기사정보 API'),
     (0, common_1.Controller)('engineer'),
     __metadata("design:paramtypes", [engineer_service_1.EngineerService])
 ], EngineerController);

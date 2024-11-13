@@ -6,6 +6,7 @@ import {
   Column,
   ManyToOne,
   JoinColumn,
+  CreateDateColumn,
 } from 'typeorm';
 
 @Entity('admin_refresh_tokens')
@@ -13,19 +14,16 @@ export class AdminRefreshToken {
   @PrimaryGeneratedColumn()
   idx: number;
 
-  @Column({ type: 'int' })
-  token_id: number;
-
   @Column({ type: 'varchar', length: 255 })
   refresh_token: string;
 
-  @Column({ type: 'varchar', length: 50 })
+  @CreateDateColumn({ type: 'varchar', length: 50 })
   created_at: string;
 
-  @Column({ type: 'varchar', length: 50 })
-  expires_at: string;
+  @Column({ type: 'varchar' })
+  expires_at: Date | null;
 
-  @ManyToOne(() => AdminAccount, (adminAccount) => adminAccount.refreshTokens)
-  @JoinColumn({ name: 'token_id' })
-  adminAccount: AdminAccount;
+  @ManyToOne(() => AdminAccount)
+  @JoinColumn({ name: 'admin_id' })
+  admin: AdminAccount;
 }

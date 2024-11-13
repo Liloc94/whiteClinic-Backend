@@ -1,5 +1,11 @@
 // engineer_skill.entity.ts
-import { Entity, ManyToOne, JoinColumn, PrimaryColumn } from 'typeorm';
+import {
+  Entity,
+  ManyToOne,
+  JoinColumn,
+  PrimaryColumn,
+  ManyToMany,
+} from 'typeorm';
 import { Engineer } from './engineer.entity';
 import { Skill } from './skills.entity';
 
@@ -15,7 +21,7 @@ export class EngineerSkill {
   @JoinColumn({ name: 'engineer_id' })
   engineer: Engineer;
 
-  @ManyToOne(() => Skill)
+  @ManyToMany(() => Skill)
   @JoinColumn({ name: 'skill_id' })
   skill: Skill;
 }

@@ -7,14 +7,27 @@ const HttpErrorFilter_1 = require("./util/HttpErrorFilter");
 const dotenv_1 = require("dotenv");
 const common_1 = require("@nestjs/common");
 const URLS_1 = require("./util/URLS");
+const ValidationExceptionFilter_1 = require("./util/ValidationExceptionFilter");
 async function bootstrap() {
     (0, dotenv_1.config)();
-    const app = await core_1.NestFactory.create(app_module_1.AppModule);
+    const app = await core_1.NestFactory.create(app_module_1.AppModule, {
+        logger: ['error', 'warn', 'log', 'debug', 'verbose'],
+    });
     const port = URLS_1.SERVER_PORT;
+    app.useGlobalFilters(new ValidationExceptionFilter_1.ValidationExceptionFilter());
     app.useGlobalPipes(new common_1.ValidationPipe({
         whitelist: true,
         forbidNonWhitelisted: true,
         transform: true,
+        enableDebugMessages: true,
+        validationError: {
+            target: false,
+            value: true,
+        },
+        exceptionFactory: (errors) => {
+            console.error('Validation errors:', errors);
+            return new common_1.BadRequestException('Validation failed');
+        },
     }));
     app.enableCors({
         origin: URLS_1.SERVER_URL || URLS_1.LOCAL_URL,

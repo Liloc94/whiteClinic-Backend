@@ -1,9 +1,13 @@
 // engineer.entity.ts
-import { Entity, PrimaryColumn, Column } from 'typeorm';
+import { IsOptional } from 'class-validator';
+import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
 
-@Entity('engineer')
+@Entity('engineer', { schema: 'white_clinic' })
 export class Engineer {
-  @PrimaryColumn()
+  @PrimaryGeneratedColumn({
+    type: 'integer',
+    name: 'engineer_id',
+  })
   engineer_id: number;
 
   @Column({ type: 'varchar', length: 255 })
@@ -18,14 +22,15 @@ export class Engineer {
   @Column({ type: 'varchar', length: 255, nullable: true })
   engineer_remark?: string;
 
-  @Column({ type: 'int', default: 0 })
-  engineer_commission: number;
+  @Column({ type: 'integer' })
+  engineer_commission_rate: number;
 
   @Column({ type: 'varchar', length: 20, nullable: true })
   engineer_dayoff?: string;
 
-  @Column({ type: 'varchar', length: 20, nullable: true })
-  engineer_holiday?: string;
+  @Column('simple-array', { nullable: true })
+  @IsOptional()
+  engineer_holiday?: string[];
 
   @Column({ type: 'varchar', length: 20 })
   engineer_payday: string;

@@ -21,33 +21,33 @@ let RefreshTokenService = class RefreshTokenService {
     constructor(refreshTokenRepository) {
         this.refreshTokenRepository = refreshTokenRepository;
     }
-    async saveRefreshToken(admin, token, expiresAt) {
-        await this.refreshTokenRepository.delete({ adminAccount });
+    async saveRefreshToken(admin, refresh_token, expires_at) {
+        await this.refreshTokenRepository.delete({ refresh_token });
         const refreshToken = this.refreshTokenRepository.create({
-            token: admin.token_version,
-            refresh_token: admin.refreshTokens,
-            expiresAt,
+            admin,
+            refresh_token,
+            expires_at,
         });
-        return this.refreshTokenRepository.save(refreshToken);
+        return this.refreshTokenRepository.save({ ...refreshToken });
     }
     async findByToken(refresh_token) {
         const RefreshResult = this.refreshTokenRepository.findOne({
             where: { refresh_token },
             relations: ['admin'],
         });
-        console.log('RefreshResult Token 검증(로그아웃) : ', (await RefreshResult).token);
-        console.log((await RefreshResult).admin);
+        console.log('RefreshResult Token 검증(로그아웃) : ', (await RefreshResult).refresh_token);
+        console.log((await RefreshResult).refresh_token);
         return RefreshResult;
     }
-    async removeRefreshToken(token) {
-        await this.refreshTokenRepository.delete({ token });
+    async removeRefreshToken(refresh_token) {
+        await this.refreshTokenRepository.delete({ refresh_token });
     }
-    async removeAllRefreshToken(id) {
-        await this.refreshTokenRepository.delete({ admin: { id } });
+    async removeAllRefreshToken(idx) {
+        await this.refreshTokenRepository.delete({ idx });
     }
     async removeExpiredRefreshTokens() {
         const now = new Date();
-        await this.refreshTokenRepository.delete({ expiresAt: (0, typeorm_2.LessThan)(now) });
+        await this.refreshTokenRepository.delete({ expires_at: (0, typeorm_2.LessThan)(now) });
     }
 };
 exports.RefreshTokenService = RefreshTokenService;
