@@ -67,9 +67,9 @@ __decorate([
         enum: ['간이영수증', '세금계산서', '현금영수증', '카드영수증', '필요없음'],
     }),
     __metadata("design:type", String)
-], CreateOrderInfoDto.prototype, "order_reciept_docs", void 0);
+], CreateOrderInfoDto.prototype, "order_receipt_docs", void 0);
 __decorate([
     (0, swagger_1.ApiProperty)({ description: '증빙서류 발행여부', default: false }),
     __metadata("design:type", Boolean)
-], CreateOrderInfoDto.prototype, "reciept_docs_issued", void 0);
+], CreateOrderInfoDto.prototype, "receipt_docs_issued", void 0);
 //# sourceMappingURL=create-order_info.dto.js.map

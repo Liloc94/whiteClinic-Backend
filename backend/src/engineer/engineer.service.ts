@@ -10,6 +10,8 @@ import { Engineer } from './entities/engineer.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Skill } from './entities/skills.entity';
 import { EngineerSkill } from './entities/engineer_skill.entity';
+import { CustomerEngineerOrder } from 'src/order_info/entities/customer_engineer_order.entity';
+import { EngineerScheduleDto } from './dto/search-engineer-schedule.dto';
 
 @Injectable()
 export class EngineerService {
@@ -25,6 +27,9 @@ export class EngineerService {
     // 기사와 가능품목 매핑테이블
     @InjectRepository(EngineerSkill)
     private readonly engineerSkillRepository: Repository<EngineerSkill>,
+
+    @InjectRepository(CustomerEngineerOrder)
+    private readonly orderDetailRepository: Repository<CustomerEngineerOrder>,
   ) {}
 
   async create(engineerData: CreateEngineerDto) {
@@ -91,6 +96,46 @@ export class EngineerService {
     });
 
     return Array.from(engineerMap.values());
+  }
+
+  async getAllSchedule() {
+    const engineerSchedule = await this.orderDetailRepository
+      .createQueryBuilder('customerEngineerOrder')
+      .leftJoinAndSelect('customerEngineerOrder.customer', 'customer')
+      .leftJoinAndSelect('customerEngineerOrder.engineer', 'engineer')
+      .leftJoinAndSelect('customerEngineerOrder.order', 'order')
+      .getMany();
+
+    async function handleOrderDetails(
+      orderDetails: any[],
+    ): Promise<EngineerScheduleDto[]> {
+      const scheduleList: EngineerScheduleDto[] = orderDetails.map((detail) => {
+        const { customer, engineer, order } = detail; // 각 엔티티를 구조 분해
+
+        return {
+          order_id: order.order_id,
+          engineer_id: engineer.engineer_id,
+          customer_id: customer.customer_id,
+          order_date: order.order_date,
+          order_timeslot: '', // 여기에 예약 시간을 어떻게 할지 처리해줘야 함. 예시로 빈 문자열 처리
+          //TODO : 화면설계 완료 이후 추가할지 버릴지 정하기
+          engineer_name: engineer.engineer_name,
+          customer_name: customer.customer_name,
+          customer_addr: customer.customer_addr,
+          customer_phone: customer.customer_phone,
+          order_product: order.order_category,
+          order_product_detail: order.order_product,
+          order_count: order.order_count,
+          order_total_amount: order.order_total_amount,
+          order_remarks: order.order_remark,
+          customer_remarks: customer.customer_remark,
+        };
+      });
+
+      return scheduleList;
+    }
+
+    return await handleOrderDetails(engineerSchedule);
   }
 
   findOne(id: number) {

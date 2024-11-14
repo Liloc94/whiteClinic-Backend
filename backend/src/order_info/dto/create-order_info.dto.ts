@@ -41,8 +41,8 @@ export class CreateOrderInfoDto {
     description: '증빙서류',
     enum: ['간이영수증', '세금계산서', '현금영수증', '카드영수증', '필요없음'],
   })
-  order_reciept_docs: string;
+  order_receipt_docs: string;
 
   @ApiProperty({ description: '증빙서류 발행여부', default: false })
-  reciept_docs_issued: boolean;
+  receipt_docs_issued: boolean;
 }

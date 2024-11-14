@@ -1,6 +1,7 @@
 import { OrderInfoService } from './order_info.service';
 import { CreateOrderInfoDto } from './dto/create-order_info.dto';
 import { UpdateOrderInfoDto } from './dto/update-order_info.dto';
+import { OrderListDto } from './dto/search-order-list.dto';
 export declare class OrderInfoController {
     private readonly orderInfoService;
     constructor(orderInfoService: OrderInfoService);
@@ -16,10 +17,10 @@ export declare class OrderInfoController {
         order_deposit: number;
         deposit_payed: boolean;
         order_payment: string;
-        order_reciept_docs: string;
-        reciept_docs_issued: boolean;
+        order_receipt_docs: string;
+        receipt_docs_issued: boolean;
     } & import("./entities/order_info.entity").Order>;
-    findAll(): Promise<import("./dto/search-order-list.dto").OrderListDto[]>;
+    findAll(): Promise<OrderListDto[]>;
     update(id: string, updateOrderInfoDto: UpdateOrderInfoDto): Promise<import("typeorm").UpdateResult>;
     remove(id: string): Promise<import("typeorm").DeleteResult>;
 }

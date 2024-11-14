@@ -11,6 +11,6 @@ export declare class Order {
     order_deposit?: number;
     deposit_payed: boolean;
     order_payment: string;
-    order_reciept_docs: string;
+    order_receipt_docs: string;
     reciept_docs_issued?: boolean;
 }

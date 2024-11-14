@@ -55,7 +55,7 @@ __decorate([
         enum: ['간이영수증', '세금계산서', '현금영수증', '카드영수증', '필요없음'],
     }),
     __metadata("design:type", String)
-], OrderListDto.prototype, "order_reciept_docs", void 0);
+], OrderListDto.prototype, "order_receipt_docs", void 0);
 __decorate([
     (0, swagger_1.ApiProperty)({ description: '발행여부' }),
     __metadata("design:type", Boolean)

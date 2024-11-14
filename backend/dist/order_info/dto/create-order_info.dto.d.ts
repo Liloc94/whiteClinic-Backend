@@ -10,6 +10,6 @@ export declare class CreateOrderInfoDto {
     order_deposit: number;
     deposit_payed: boolean;
     order_payment: string;
-    order_reciept_docs: string;
-    reciept_docs_issued: boolean;
+    order_receipt_docs: string;
+    receipt_docs_issued: boolean;
 }

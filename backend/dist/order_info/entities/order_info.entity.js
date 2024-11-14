@@ -23,7 +23,7 @@ __decorate([
     __metadata("design:type", String)
 ], Order.prototype, "order_category", void 0);
 __decorate([
-    (0, typeorm_1.Column)({ type: 'varchar', length: 20 }),
+    (0, typeorm_1.Column)({ type: 'varchar', length: 100 }),
     __metadata("design:type", String)
 ], Order.prototype, "order_date", void 0);
 __decorate([
@@ -65,7 +65,7 @@ __decorate([
 __decorate([
     (0, typeorm_1.Column)({ type: 'varchar', length: 50 }),
     __metadata("design:type", String)
-], Order.prototype, "order_reciept_docs", void 0);
+], Order.prototype, "order_receipt_docs", void 0);
 __decorate([
     (0, typeorm_1.Column)({ type: 'boolean', nullable: true }),
     __metadata("design:type", Boolean)

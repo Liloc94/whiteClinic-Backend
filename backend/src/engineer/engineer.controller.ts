@@ -62,8 +62,17 @@ export class EngineerController {
   })
   @ApiResponse({ status: 200, description: '기사정보 조회 완료' })
   @Get('searchAllEngineer')
-  async indAll() {
+  async findAll() {
     return await this.engineerService.findAll();
+  }
+
+  @ApiOperation({
+    summary: '전체 기사 스케쥴 일괄조회 API',
+    description: '모든 기사들의 스케쥴 정보의 일괄조회를 요청',
+  })
+  @Get('getAllEngineerSchedule')
+  async getAllSchedule() {
+    return await this.engineerService.getAllSchedule();
   }
 
   @Get(':id')

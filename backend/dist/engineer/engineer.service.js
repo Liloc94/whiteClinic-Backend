@@ -19,11 +19,13 @@ const engineer_entity_1 = require("./entities/engineer.entity");
 const typeorm_2 = require("@nestjs/typeorm");
 const skills_entity_1 = require("./entities/skills.entity");
 const engineer_skill_entity_1 = require("./entities/engineer_skill.entity");
+const customer_engineer_order_entity_1 = require("../order_info/entities/customer_engineer_order.entity");
 let EngineerService = class EngineerService {
-    constructor(engineerRepository, skillRepository, engineerSkillRepository) {
+    constructor(engineerRepository, skillRepository, engineerSkillRepository, orderDetailRepository) {
         this.engineerRepository = engineerRepository;
         this.skillRepository = skillRepository;
         this.engineerSkillRepository = engineerSkillRepository;
+        this.orderDetailRepository = orderDetailRepository;
     }
     async create(engineerData) {
         try {
@@ -75,6 +77,38 @@ let EngineerService = class EngineerService {
         });
         return Array.from(engineerMap.values());
     }
+    async getAllSchedule() {
+        const engineerSchedule = await this.orderDetailRepository
+            .createQueryBuilder('customerEngineerOrder')
+            .leftJoinAndSelect('customerEngineerOrder.customer', 'customer')
+            .leftJoinAndSelect('customerEngineerOrder.engineer', 'engineer')
+            .leftJoinAndSelect('customerEngineerOrder.order', 'order')
+            .getMany();
+        async function handleOrderDetails(orderDetails) {
+            const scheduleList = orderDetails.map((detail) => {
+                const { customer, engineer, order } = detail;
+                return {
+                    order_id: order.order_id,
+                    engineer_id: engineer.engineer_id,
+                    customer_id: customer.customer_id,
+                    order_date: order.order_date,
+                    order_timeslot: '',
+                    engineer_name: engineer.engineer_name,
+                    customer_name: customer.customer_name,
+                    customer_addr: customer.customer_addr,
+                    customer_phone: customer.customer_phone,
+                    order_product: order.order_category,
+                    order_product_detail: order.order_product,
+                    order_count: order.order_count,
+                    order_total_amount: order.order_total_amount,
+                    order_remarks: order.order_remark,
+                    customer_remarks: customer.customer_remark,
+                };
+            });
+            return scheduleList;
+        }
+        return await handleOrderDetails(engineerSchedule);
+    }
     findOne(id) {
         return `This action returns a #${id} engineer`;
     }
@@ -100,7 +134,9 @@ exports.EngineerService = EngineerService = __decorate([
     __param(0, (0, typeorm_2.InjectRepository)(engineer_entity_1.Engineer)),
     __param(1, (0, typeorm_2.InjectRepository)(skills_entity_1.Skill)),
     __param(2, (0, typeorm_2.InjectRepository)(engineer_skill_entity_1.EngineerSkill)),
+    __param(3, (0, typeorm_2.InjectRepository)(customer_engineer_order_entity_1.CustomerEngineerOrder)),
     __metadata("design:paramtypes", [typeorm_1.Repository,
+        typeorm_1.Repository,
         typeorm_1.Repository,
         typeorm_1.Repository])
 ], EngineerService);

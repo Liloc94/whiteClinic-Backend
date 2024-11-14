@@ -9,7 +9,7 @@ export class Order {
   @Column({ type: 'varchar', length: 255 })
   order_category: string;
 
-  @Column({ type: 'varchar', length: 20 })
+  @Column({ type: 'varchar', length: 100 })
   order_date: string;
 
   @Column({ type: 'varchar', length: 255 })
@@ -40,7 +40,7 @@ export class Order {
   order_payment: string;
 
   @Column({ type: 'varchar', length: 50 })
-  order_reciept_docs: string;
+  order_receipt_docs: string;
 
   @Column({ type: 'boolean', nullable: true })
   reciept_docs_issued?: boolean;

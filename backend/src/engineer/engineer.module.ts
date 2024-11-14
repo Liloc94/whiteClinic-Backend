@@ -7,10 +7,12 @@ import { Engineer } from './entities/engineer.entity';
 import { EngineerSkill } from './entities/engineer_skill.entity';
 import { Skill } from './entities/skills.entity';
 import { Order } from 'src/order_info/entities/order_info.entity';
+import { CustomerEngineerOrder } from 'src/order_info/entities/customer_engineer_order.entity';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([
+      CustomerEngineerOrder,
       EngineerDailyEarning,
       Engineer,
       EngineerSkill,

@@ -49,7 +49,7 @@ let OrderInfoService = class OrderInfoService {
                 engineer_name: infos.engineer.engineer_name,
                 order_product: infos.order.order_product,
                 order_payment: infos.order.order_payment,
-                order_reciept_docs: infos.order.order_reciept_docs,
+                order_receipt_docs: infos.order.order_receipt_docs,
                 receipt_docs_issued: infos.order.reciept_docs_issued,
             };
         });

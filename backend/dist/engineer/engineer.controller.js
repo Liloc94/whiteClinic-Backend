@@ -31,8 +31,11 @@ let EngineerController = class EngineerController {
             console.log(error);
         }
     }
-    async indAll() {
+    async findAll() {
         return await this.engineerService.findAll();
+    }
+    async getAllSchedule() {
+        return await this.engineerService.getAllSchedule();
     }
     findOne(id) {
         return this.engineerService.findOne(+id);
@@ -90,7 +93,17 @@ __decorate([
     __metadata("design:type", Function),
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", Promise)
-], EngineerController.prototype, "indAll", null);
+], EngineerController.prototype, "findAll", null);
+__decorate([
+    (0, swagger_1.ApiOperation)({
+        summary: '전체 기사 스케쥴 일괄조회 API',
+        description: '모든 기사들의 스케쥴 정보의 일괄조회를 요청',
+    }),
+    (0, common_1.Get)('getAllEngineerSchedule'),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", []),
+    __metadata("design:returntype", Promise)
+], EngineerController.prototype, "getAllSchedule", null);
 __decorate([
     (0, common_1.Get)(':id'),
     __param(0, (0, common_1.Param)('id')),

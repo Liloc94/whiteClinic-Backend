@@ -10,7 +10,8 @@ import {
 import { OrderInfoService } from './order_info.service';
 import { CreateOrderInfoDto } from './dto/create-order_info.dto';
 import { UpdateOrderInfoDto } from './dto/update-order_info.dto';
-import { ApiBody, ApiOperation, ApiTags } from '@nestjs/swagger';
+import { ApiBody, ApiOperation, ApiProperty, ApiTags } from '@nestjs/swagger';
+import { OrderListDto } from './dto/search-order-list.dto';
 
 @ApiTags('주문정보 관련 API')
 @Controller('order-info')
@@ -32,6 +33,7 @@ export class OrderInfoController {
     summary: '모든 상세 주문 정보를 호출한다',
     description: '주문정보',
   })
+  @ApiProperty({ type: typeof OrderListDto })
   findAll() {
     return this.orderInfoService.findOrderDetails();
   }

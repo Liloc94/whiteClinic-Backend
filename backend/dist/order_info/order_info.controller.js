@@ -18,6 +18,7 @@ const order_info_service_1 = require("./order_info.service");
 const create_order_info_dto_1 = require("./dto/create-order_info.dto");
 const update_order_info_dto_1 = require("./dto/update-order_info.dto");
 const swagger_1 = require("@nestjs/swagger");
+const search_order_list_dto_1 = require("./dto/search-order-list.dto");
 let OrderInfoController = class OrderInfoController {
     constructor(orderInfoService) {
         this.orderInfoService = orderInfoService;
@@ -54,6 +55,7 @@ __decorate([
         summary: '모든 상세 주문 정보를 호출한다',
         description: '주문정보',
     }),
+    (0, swagger_1.ApiProperty)({ type: typeof search_order_list_dto_1.OrderListDto }),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", void 0)

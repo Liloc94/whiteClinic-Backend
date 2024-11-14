@@ -7,6 +7,6 @@ export declare class OrderListDto {
     engineer_name: string;
     order_product: string;
     order_payment: string;
-    order_reciept_docs: string;
+    order_receipt_docs: string;
     receipt_docs_issued: boolean;
 }

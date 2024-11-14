@@ -24,8 +24,8 @@ export declare class OrderInfoService {
         order_deposit: number;
         deposit_payed: boolean;
         order_payment: string;
-        order_reciept_docs: string;
-        reciept_docs_issued: boolean;
+        order_receipt_docs: string;
+        receipt_docs_issued: boolean;
     } & Order>;
     findAll(): Promise<Order[]>;
     findOrderDetails(): Promise<OrderListDto[]>;
