@@ -1,20 +1,26 @@
 // engineer_daily_earning.entity.ts
-import { Entity, PrimaryColumn, Column, ManyToOne, JoinColumn } from 'typeorm';
+import {
+  Entity,
+  Column,
+  ManyToOne,
+  JoinColumn,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 import { Engineer } from './engineer.entity';
 import { Order } from 'src/order_info/entities/order_info.entity';
 
 @Entity('engineer_daily_earning')
 export class EngineerDailyEarning {
-  @PrimaryColumn()
+  @PrimaryGeneratedColumn()
   idx: number;
 
   @ManyToOne(() => Order, (order) => order.order_id)
   @JoinColumn({ name: 'order_id' })
-  order: Order;
+  order_id: Order;
 
   @ManyToOne(() => Engineer)
   @JoinColumn({ name: 'engineer_id' })
-  engineer: Engineer;
+  engineer_id: Engineer;
 
   @Column({ type: 'int' })
   daily_income: number;

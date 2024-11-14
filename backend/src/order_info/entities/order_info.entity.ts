@@ -1,15 +1,15 @@
 // order.entity.ts
 import { EngineerDailyEarning } from 'src/engineer/entities/engineer_daily_earning.entity';
-import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from 'typeorm';
 
 @Entity('order')
 export class Order {
   @PrimaryGeneratedColumn()
   order_id: number;
 
-  @OneToMany(
+  @ManyToOne(
     () => EngineerDailyEarning,
-    (engineerDailyEarning) => engineerDailyEarning.order,
+    (engineerDailyEarning) => engineerDailyEarning.engineer_id,
   )
   engineerDailyEarnings: EngineerDailyEarning[];
 
