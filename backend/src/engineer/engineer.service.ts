@@ -89,7 +89,6 @@ export class EngineerService {
       .leftJoinAndSelect('customerEngineerOrder.engineer', 'engineer')
       .leftJoinAndSelect('customerEngineerOrder.order', 'order')
       .getMany();
-
     return await handleEngineerScheduleData(engineerSchedule);
   }
 

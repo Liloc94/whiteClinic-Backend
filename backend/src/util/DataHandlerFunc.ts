@@ -9,6 +9,7 @@ export async function handleEngineerScheduleData(
 ): Promise<EngineerScheduleDto[]> {
   const scheduleList: EngineerScheduleDto[] = orderDetails.map((detail) => {
     const { customer, engineer, order } = detail;
+    const order_timeslot = order.order_timeslot || '08:00 ~ 09:00'; // 예시 기본값
 
     return {
       order_id: order.order_id,
@@ -16,7 +17,7 @@ export async function handleEngineerScheduleData(
       customer_id: customer.customer_id,
       order_date: order.order_date,
       //TODO : 화면설계 완료 이후 timeslot 추가할지 버릴지 정하기
-      order_timeslot: '08:00 ~ 09:00', // 여기에 예약 시간을 어떻게 할지 처리해줘야 함. 예시로 빈 문자열 처리
+      order_timeslot: order_timeslot, // 없으면 고정문자열 동적으로 출력
       engineer_name: engineer.engineer_name,
       customer_name: customer.customer_name,
       customer_addr: customer.customer_addr,
