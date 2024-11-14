@@ -1,11 +1,11 @@
 import { ApiProperty } from '@nestjs/swagger';
 
 export class CreateOrderInfoDto {
-  @ApiProperty({ description: '제품 카테고리' })
-  order_category: string;
-
   @ApiProperty({ description: '주문일자' })
   order_date: string;
+
+  @ApiProperty({ description: '제품 카테고리' })
+  order_category: string;
 
   @ApiProperty({ description: '의뢰제품' })
   order_product: string;
