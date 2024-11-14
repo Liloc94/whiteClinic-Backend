@@ -19,17 +19,41 @@ const order_info_entity_1 = require("./entities/order_info.entity");
 const typeorm_2 = require("typeorm");
 const engineer_entity_1 = require("../engineer/entities/engineer.entity");
 const customer_entity_1 = require("../customer/entities/customer.entity");
+const customer_engineer_order_entity_1 = require("./entities/customer_engineer_order.entity");
 let OrderInfoService = class OrderInfoService {
-    constructor(orderInfoRepository, engineerRepository, customerRepository) {
+    constructor(orderInfoRepository, engineerRepository, customerRepository, OrderDetailRepository) {
         this.orderInfoRepository = orderInfoRepository;
         this.engineerRepository = engineerRepository;
         this.customerRepository = customerRepository;
+        this.OrderDetailRepository = OrderDetailRepository;
     }
     async create(createOrderInfoDto) {
         return await this.orderInfoRepository.save({ ...createOrderInfoDto });
     }
     async findAll() {
         return await this.orderInfoRepository.find();
+    }
+    async findOrderDetails() {
+        const orderDetails = await this.OrderDetailRepository.createQueryBuilder('CustomerEngineerOrder')
+            .leftJoinAndSelect('CustomerEngineerOrder.customer', 'customer')
+            .leftJoinAndSelect('CustomerEngineerOrder.order', 'order')
+            .leftJoinAndSelect('CustomerEngineerOrder.engineer', 'engineer')
+            .getMany();
+        const orderList = orderDetails.map((infos) => {
+            return {
+                date: infos.order.order_date,
+                customer_name: infos.customer.customer_name,
+                customer_phone: infos.customer.customer_phone,
+                customer_addr: infos.customer.customer_addr,
+                customer_remark: infos.customer.customer_remark,
+                engineer_name: infos.engineer.engineer_name,
+                order_product: infos.order.order_product,
+                payment_type: infos.order.order_payment,
+                reciept_docs: infos.order.order_reciept_docs,
+                receipt_docs_issued: infos.order.reciept_docs_issued,
+            };
+        });
+        return orderList;
     }
     async findWithId(id) {
         return await this.orderInfoRepository.find({ where: { order_id: id } });
@@ -47,7 +71,9 @@ exports.OrderInfoService = OrderInfoService = __decorate([
     __param(0, (0, typeorm_1.InjectRepository)(order_info_entity_1.Order)),
     __param(1, (0, typeorm_1.InjectRepository)(engineer_entity_1.Engineer)),
     __param(2, (0, typeorm_1.InjectRepository)(customer_entity_1.Customer)),
+    __param(3, (0, typeorm_1.InjectRepository)(customer_engineer_order_entity_1.CustomerEngineerOrder)),
     __metadata("design:paramtypes", [typeorm_2.Repository,
+        typeorm_2.Repository,
         typeorm_2.Repository,
         typeorm_2.Repository])
 ], OrderInfoService);

@@ -27,10 +27,10 @@ export class OrderInfoController {
     return this.orderInfoService.create(createOrderInfoDto);
   }
 
-  @Get('getAllOrder')
-  @ApiOperation({ summary: '모든 주문정보를 호출한다' })
+  @Get('getAllOrderDetails')
+  @ApiOperation({ summary: '모든 상세 주문 정보를 호출한다' })
   findAll() {
-    return this.orderInfoService.findAll();
+    return this.orderInfoService.findOrderDetails();
   }
 
   // @Get(':id')

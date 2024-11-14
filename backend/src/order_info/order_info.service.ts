@@ -6,6 +6,8 @@ import { Order } from './entities/order_info.entity';
 import { Repository } from 'typeorm';
 import { Engineer } from 'src/engineer/entities/engineer.entity';
 import { Customer } from 'src/customer/entities/customer.entity';
+import { CustomerEngineerOrder } from './entities/customer_engineer_order.entity';
+import { OrderListDto } from './dto/search-order-list.dto';
 
 @Injectable()
 export class OrderInfoService {
@@ -21,6 +23,9 @@ export class OrderInfoService {
     // 고객정보 DB 연결
     @InjectRepository(Customer)
     private readonly customerRepository: Repository<Customer>,
+
+    @InjectRepository(CustomerEngineerOrder)
+    private readonly OrderDetailRepository: Repository<CustomerEngineerOrder>,
   ) {}
 
   async create(createOrderInfoDto: CreateOrderInfoDto) {
@@ -29,6 +34,34 @@ export class OrderInfoService {
 
   async findAll() {
     return await this.orderInfoRepository.find();
+  }
+
+  // 상세 주문정보 리스트 반환 API
+  async findOrderDetails() {
+    const orderDetails = await this.OrderDetailRepository.createQueryBuilder(
+      'CustomerEngineerOrder',
+    )
+      .leftJoinAndSelect('CustomerEngineerOrder.customer', 'customer')
+      .leftJoinAndSelect('CustomerEngineerOrder.order', 'order')
+      .leftJoinAndSelect('CustomerEngineerOrder.engineer', 'engineer')
+      .getMany();
+
+    const orderList: OrderListDto[] = orderDetails.map((infos) => {
+      return {
+        date: infos.order.order_date,
+        customer_name: infos.customer.customer_name,
+        customer_phone: infos.customer.customer_phone,
+        customer_addr: infos.customer.customer_addr,
+        customer_remark: infos.customer.customer_remark,
+        engineer_name: infos.engineer.engineer_name,
+        order_product: infos.order.order_product,
+        payment_type: infos.order.order_payment,
+        reciept_docs: infos.order.order_reciept_docs,
+        receipt_docs_issued: infos.order.reciept_docs_issued,
+      };
+    });
+
+    return orderList;
   }
 
   async findWithId(id: number) {

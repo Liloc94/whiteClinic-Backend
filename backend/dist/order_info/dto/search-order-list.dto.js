@@ -33,9 +33,9 @@ __decorate([
 __decorate([
     (0, swagger_1.ApiProperty)({ description: '특이사항' }),
     __metadata("design:type", String)
-], OrderListDto.prototype, "remark", void 0);
+], OrderListDto.prototype, "customer_remark", void 0);
 __decorate([
-    (0, swagger_1.ApiProperty)({ description: '기사성함' }),
+    (0, swagger_1.ApiProperty)({ description: '담당 기사성함' }),
     __metadata("design:type", String)
 ], OrderListDto.prototype, "engineer_name", void 0);
 __decorate([

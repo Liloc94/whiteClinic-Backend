@@ -3,7 +3,7 @@ export declare class OrderListDto {
     customer_name: string;
     customer_phone: string;
     customer_addr: string;
-    remark: string | null;
+    customer_remark: string | null;
     engineer_name: string;
     order_product: string;
     payment_type: string;

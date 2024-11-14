@@ -19,7 +19,7 @@ export declare class OrderInfoController {
         order_reciept_docs: string;
         reciept_docs_issued: boolean;
     } & import("./entities/order_info.entity").Order>;
-    findAll(): Promise<import("./entities/order_info.entity").Order[]>;
+    findAll(): Promise<import("./dto/search-order-list.dto").OrderListDto[]>;
     update(id: string, updateOrderInfoDto: UpdateOrderInfoDto): Promise<import("typeorm").UpdateResult>;
     remove(id: string): Promise<import("typeorm").DeleteResult>;
 }

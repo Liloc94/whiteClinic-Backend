@@ -26,7 +26,7 @@ let OrderInfoController = class OrderInfoController {
         return this.orderInfoService.create(createOrderInfoDto);
     }
     findAll() {
-        return this.orderInfoService.findAll();
+        return this.orderInfoService.findOrderDetails();
     }
     update(id, updateOrderInfoDto) {
         return this.orderInfoService.update(+id, updateOrderInfoDto);
@@ -49,8 +49,8 @@ __decorate([
     __metadata("design:returntype", void 0)
 ], OrderInfoController.prototype, "create", null);
 __decorate([
-    (0, common_1.Get)('getAllOrder'),
-    (0, swagger_1.ApiOperation)({ summary: '모든 주문정보를 호출한다' }),
+    (0, common_1.Get)('getAllOrderDetails'),
+    (0, swagger_1.ApiOperation)({ summary: '모든 상세 주문 정보를 호출한다' }),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", void 0)
