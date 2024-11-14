@@ -9,36 +9,34 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.EngineerDailyEarning = void 0;
+exports.CustomerEngineerOrder = void 0;
 const typeorm_1 = require("typeorm");
-const engineer_entity_1 = require("./engineer.entity");
+const customer_entity_1 = require("./customer.entity");
 const order_info_entity_1 = require("../../order_info/entities/order_info.entity");
-let EngineerDailyEarning = class EngineerDailyEarning {
+const engineer_entity_1 = require("../../engineer/entities/engineer.entity");
+let CustomerEngineerOrder = class CustomerEngineerOrder {
 };
-exports.EngineerDailyEarning = EngineerDailyEarning;
+exports.CustomerEngineerOrder = CustomerEngineerOrder;
 __decorate([
     (0, typeorm_1.PrimaryGeneratedColumn)(),
     __metadata("design:type", Number)
-], EngineerDailyEarning.prototype, "idx", void 0);
+], CustomerEngineerOrder.prototype, "idx", void 0);
+__decorate([
+    (0, typeorm_1.ManyToOne)(() => customer_entity_1.Customer, (customer) => customer.customer_id),
+    (0, typeorm_1.JoinColumn)({ name: 'customer_id' }),
+    __metadata("design:type", Array)
+], CustomerEngineerOrder.prototype, "customer", void 0);
 __decorate([
     (0, typeorm_1.ManyToOne)(() => order_info_entity_1.Order, (order) => order.order_id),
     (0, typeorm_1.JoinColumn)({ name: 'order_id' }),
-    __metadata("design:type", order_info_entity_1.Order)
-], EngineerDailyEarning.prototype, "order_id", void 0);
+    __metadata("design:type", Array)
+], CustomerEngineerOrder.prototype, "order", void 0);
 __decorate([
-    (0, typeorm_1.ManyToOne)(() => engineer_entity_1.Engineer),
+    (0, typeorm_1.ManyToOne)(() => engineer_entity_1.Engineer, (engineer) => engineer.engineer_id),
     (0, typeorm_1.JoinColumn)({ name: 'engineer_id' }),
-    __metadata("design:type", engineer_entity_1.Engineer)
-], EngineerDailyEarning.prototype, "engineer_id", void 0);
-__decorate([
-    (0, typeorm_1.Column)({ type: 'int' }),
-    __metadata("design:type", Number)
-], EngineerDailyEarning.prototype, "daily_income", void 0);
-__decorate([
-    (0, typeorm_1.Column)({ type: 'varchar', length: 255 }),
-    __metadata("design:type", String)
-], EngineerDailyEarning.prototype, "date", void 0);
-exports.EngineerDailyEarning = EngineerDailyEarning = __decorate([
-    (0, typeorm_1.Entity)('engineer_daily_earning')
-], EngineerDailyEarning);
-//# sourceMappingURL=engineer_daily_earning.entity.js.map
+    __metadata("design:type", Array)
+], CustomerEngineerOrder.prototype, "engineer", void 0);
+exports.CustomerEngineerOrder = CustomerEngineerOrder = __decorate([
+    (0, typeorm_1.Entity)('customer_engineer_order')
+], CustomerEngineerOrder);
+//# sourceMappingURL=customer_engineer_order.entity.js.map

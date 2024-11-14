@@ -28,9 +28,6 @@ let OrderInfoController = class OrderInfoController {
     findAll() {
         return this.orderInfoService.findAll();
     }
-    findOne(id) {
-        return this.orderInfoService.findOne(+id);
-    }
     update(id, updateOrderInfoDto) {
         return this.orderInfoService.update(+id, updateOrderInfoDto);
     }
@@ -58,17 +55,6 @@ __decorate([
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", void 0)
 ], OrderInfoController.prototype, "findAll", null);
-__decorate([
-    (0, common_1.Get)(':id'),
-    (0, swagger_1.ApiOperation)({
-        summary: '파라미터로 전달받은 id 를 기반으로 매치되는 주문정보를 호출한다.',
-    }),
-    (0, swagger_1.ApiParam)({ name: '아이디', example: '1 , 2 , 3' }),
-    __param(0, (0, common_1.Param)('id')),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String]),
-    __metadata("design:returntype", void 0)
-], OrderInfoController.prototype, "findOne", null);
 __decorate([
     (0, common_1.Patch)(':id'),
     __param(0, (0, common_1.Param)('id')),

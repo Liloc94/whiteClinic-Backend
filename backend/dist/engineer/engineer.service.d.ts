@@ -10,7 +10,7 @@ export declare class EngineerService {
     private readonly engineerSkillRepository;
     constructor(engineerRepository: Repository<Engineer>, skillRepository: Repository<Skill>, engineerSkillRepository: Repository<EngineerSkill>);
     create(engineerData: CreateEngineerDto): Promise<void>;
-    findAll(): Promise<Engineer[]>;
+    findAll(): Promise<any[]>;
     findOne(id: number): string;
     update(id: number, updateEngineerDto: UpdateEngineerDto): string;
     remove(id: number): string;

@@ -30,7 +30,7 @@ __decorate([
     __metadata("design:type", engineer_entity_1.Engineer)
 ], EngineerSkill.prototype, "engineer", void 0);
 __decorate([
-    (0, typeorm_1.ManyToMany)(() => skills_entity_1.Skill),
+    (0, typeorm_1.ManyToOne)(() => skills_entity_1.Skill),
     (0, typeorm_1.JoinColumn)({ name: 'skill_id' }),
     __metadata("design:type", skills_entity_1.Skill)
 ], EngineerSkill.prototype, "skill", void 0);

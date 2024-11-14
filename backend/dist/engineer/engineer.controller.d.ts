@@ -5,7 +5,7 @@ export declare class EngineerController {
     private readonly engineerService;
     constructor(engineerService: EngineerService);
     create(createEngineerDto: CreateEngineerDto): Promise<void>;
-    indAll(): Promise<import("./entities/engineer.entity").Engineer[]>;
+    indAll(): Promise<any[]>;
     findOne(id: string): string;
     update(id: string, updateEngineerDto: UpdateEngineerDto): string;
     remove(id: string): string;

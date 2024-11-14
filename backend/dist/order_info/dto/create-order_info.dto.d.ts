@@ -1,6 +1,6 @@
 export declare class CreateOrderInfoDto {
-    order_category: string;
     order_date: string;
+    order_category: string;
     order_product: string;
     order_total_amount: number;
     order_count: number;

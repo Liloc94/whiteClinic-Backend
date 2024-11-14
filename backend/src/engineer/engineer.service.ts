@@ -65,7 +65,32 @@ export class EngineerService {
   }
 
   async findAll() {
-    return await this.engineerRepository.find();
+    const engineerWithSkills = await this.engineerSkillRepository
+      .createQueryBuilder('engineerSkill')
+      .leftJoinAndSelect('engineerSkill.engineer', 'engineer') // 엔지니어 정보 조인
+      .leftJoinAndSelect('engineerSkill.skill', 'skill') // 스킬 정보 조인
+      .getMany();
+
+    const engineerMap = new Map<number, any>();
+
+    engineerWithSkills.forEach((engineerSkill) => {
+      const { engineer, skill } = engineerSkill;
+
+      // 엔지니어가 이미 map에 있다면 스킬만 추가
+      if (engineerMap.has(engineer.engineer_id)) {
+        engineerMap
+          .get(engineer.engineer_id)
+          .engineer_skills.push(skill.skill_type);
+      } else {
+        // 엔지니어가 처음 등장하는 경우, 엔지니어 정보와 스킬을 함께 추가
+        engineerMap.set(engineer.engineer_id, {
+          ...engineer,
+          engineer_skills: [skill.skill_type],
+        });
+      }
+    });
+
+    return Array.from(engineerMap.values());
   }
 
   findOne(id: number) {

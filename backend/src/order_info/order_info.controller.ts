@@ -10,7 +10,7 @@ import {
 import { OrderInfoService } from './order_info.service';
 import { CreateOrderInfoDto } from './dto/create-order_info.dto';
 import { UpdateOrderInfoDto } from './dto/update-order_info.dto';
-import { ApiBody, ApiOperation, ApiParam, ApiTags } from '@nestjs/swagger';
+import { ApiBody, ApiOperation, ApiTags } from '@nestjs/swagger';
 
 @ApiTags('주문정보 관련 API')
 @Controller('order-info')
@@ -33,14 +33,14 @@ export class OrderInfoController {
     return this.orderInfoService.findAll();
   }
 
-  @Get(':id')
-  @ApiOperation({
-    summary: '파라미터로 전달받은 id 를 기반으로 매치되는 주문정보를 호출한다.',
-  })
-  @ApiParam({ name: '아이디', example: '1 , 2 , 3' })
-  findOne(@Param('id') id: string) {
-    return this.orderInfoService.findOne(+id);
-  }
+  // @Get(':id')
+  // @ApiOperation({
+  //   summary: '파라미터로 전달받은 id 를 기반으로 매치되는 주문정보를 호출한다.',
+  // })
+  // @ApiParam({ name: '아이디', example: '1 , 2 , 3' })
+  // findOne(@Param('id') id: string) {
+  //   return this.orderInfoService.findOne(+id);
+  // }
 
   @Patch(':id')
   update(

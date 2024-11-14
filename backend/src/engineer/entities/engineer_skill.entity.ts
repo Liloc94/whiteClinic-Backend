@@ -21,7 +21,7 @@ export class EngineerSkill {
   @JoinColumn({ name: 'engineer_id' })
   engineer: Engineer;
 
-  @ManyToMany(() => Skill)
+  @ManyToOne(() => Skill)
   @JoinColumn({ name: 'skill_id' })
   skill: Skill;
 }

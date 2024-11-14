@@ -29,12 +29,4 @@ export declare class AuthController {
     getAdminData(): {
         message: string;
     };
-    testPrivateKey(): {
-        keyExists: boolean;
-        keyLength: number;
-    };
-    testPublicKey(): {
-        keyExists: boolean;
-        keyLength: number;
-    };
 }

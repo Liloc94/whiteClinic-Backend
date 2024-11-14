@@ -15,13 +15,13 @@ class CreateOrderInfoDto {
 }
 exports.CreateOrderInfoDto = CreateOrderInfoDto;
 __decorate([
-    (0, swagger_1.ApiProperty)({ description: '제품 카테고리' }),
-    __metadata("design:type", String)
-], CreateOrderInfoDto.prototype, "order_category", void 0);
-__decorate([
     (0, swagger_1.ApiProperty)({ description: '주문일자' }),
     __metadata("design:type", String)
 ], CreateOrderInfoDto.prototype, "order_date", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ description: '제품 카테고리' }),
+    __metadata("design:type", String)
+], CreateOrderInfoDto.prototype, "order_category", void 0);
 __decorate([
     (0, swagger_1.ApiProperty)({ description: '의뢰제품' }),
     __metadata("design:type", String)

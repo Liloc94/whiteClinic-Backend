@@ -53,7 +53,27 @@ let EngineerService = class EngineerService {
         }
     }
     async findAll() {
-        return await this.engineerRepository.find();
+        const engineerWithSkills = await this.engineerSkillRepository
+            .createQueryBuilder('engineerSkill')
+            .leftJoinAndSelect('engineerSkill.engineer', 'engineer')
+            .leftJoinAndSelect('engineerSkill.skill', 'skill')
+            .getMany();
+        const engineerMap = new Map();
+        engineerWithSkills.forEach((engineerSkill) => {
+            const { engineer, skill } = engineerSkill;
+            if (engineerMap.has(engineer.engineer_id)) {
+                engineerMap
+                    .get(engineer.engineer_id)
+                    .engineer_skills.push(skill.skill_type);
+            }
+            else {
+                engineerMap.set(engineer.engineer_id, {
+                    ...engineer,
+                    engineer_skills: [skill.skill_type],
+                });
+            }
+        });
+        return Array.from(engineerMap.values());
     }
     findOne(id) {
         return `This action returns a #${id} engineer`;
