@@ -17,7 +17,7 @@ exports.OrderListDto = OrderListDto;
 __decorate([
     (0, swagger_1.ApiProperty)({ description: '예약일자' }),
     __metadata("design:type", String)
-], OrderListDto.prototype, "date", void 0);
+], OrderListDto.prototype, "order_date", void 0);
 __decorate([
     (0, swagger_1.ApiProperty)({ description: '고객성함' }),
     __metadata("design:type", String)
@@ -48,14 +48,14 @@ __decorate([
         enum: ['계좌이체', '카드결제', '숨고페이', '현장현금결제'],
     }),
     __metadata("design:type", String)
-], OrderListDto.prototype, "payment_type", void 0);
+], OrderListDto.prototype, "order_payment", void 0);
 __decorate([
     (0, swagger_1.ApiProperty)({
         description: '증빙서류',
         enum: ['간이영수증', '세금계산서', '현금영수증', '카드영수증', '필요없음'],
     }),
     __metadata("design:type", String)
-], OrderListDto.prototype, "reciept_docs", void 0);
+], OrderListDto.prototype, "order_reciept_docs", void 0);
 __decorate([
     (0, swagger_1.ApiProperty)({ description: '발행여부' }),
     __metadata("design:type", Boolean)

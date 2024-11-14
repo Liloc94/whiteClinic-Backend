@@ -48,15 +48,15 @@ export class OrderInfoService {
 
     const orderList: OrderListDto[] = orderDetails.map((infos) => {
       return {
-        date: infos.order.order_date,
+        order_date: infos.order.order_date,
         customer_name: infos.customer.customer_name,
         customer_phone: infos.customer.customer_phone,
         customer_addr: infos.customer.customer_addr,
         customer_remark: infos.customer.customer_remark,
         engineer_name: infos.engineer.engineer_name,
         order_product: infos.order.order_product,
-        payment_type: infos.order.order_payment,
-        reciept_docs: infos.order.order_reciept_docs,
+        order_payment: infos.order.order_payment,
+        order_reciept_docs: infos.order.order_reciept_docs,
         receipt_docs_issued: infos.order.reciept_docs_issued,
       };
     });
@@ -68,8 +68,8 @@ export class OrderInfoService {
     return await this.orderInfoRepository.find({ where: { order_id: id } });
   }
 
-  update(id: number, updateOrderInfoDto: UpdateOrderInfoDto) {
-    return this.orderInfoRepository.update(
+  async update(id: number, updateOrderInfoDto: UpdateOrderInfoDto) {
+    return await this.orderInfoRepository.update(
       { ...updateOrderInfoDto }, // 업데이트 정보 파라미터
       { order_id: id }, // 업데이트할 타겟 컬럼
     );

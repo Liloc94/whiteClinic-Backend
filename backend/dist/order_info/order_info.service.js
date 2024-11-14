@@ -41,15 +41,15 @@ let OrderInfoService = class OrderInfoService {
             .getMany();
         const orderList = orderDetails.map((infos) => {
             return {
-                date: infos.order.order_date,
+                order_date: infos.order.order_date,
                 customer_name: infos.customer.customer_name,
                 customer_phone: infos.customer.customer_phone,
                 customer_addr: infos.customer.customer_addr,
                 customer_remark: infos.customer.customer_remark,
                 engineer_name: infos.engineer.engineer_name,
                 order_product: infos.order.order_product,
-                payment_type: infos.order.order_payment,
-                reciept_docs: infos.order.order_reciept_docs,
+                order_payment: infos.order.order_payment,
+                order_reciept_docs: infos.order.order_reciept_docs,
                 receipt_docs_issued: infos.order.reciept_docs_issued,
             };
         });
@@ -58,8 +58,8 @@ let OrderInfoService = class OrderInfoService {
     async findWithId(id) {
         return await this.orderInfoRepository.find({ where: { order_id: id } });
     }
-    update(id, updateOrderInfoDto) {
-        return this.orderInfoRepository.update({ ...updateOrderInfoDto }, { order_id: id });
+    async update(id, updateOrderInfoDto) {
+        return await this.orderInfoRepository.update({ ...updateOrderInfoDto }, { order_id: id });
     }
     async remove(id) {
         return await this.orderInfoRepository.delete({ order_id: id });

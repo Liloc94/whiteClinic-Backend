@@ -28,7 +28,10 @@ export class OrderInfoController {
   }
 
   @Get('getAllOrderDetails')
-  @ApiOperation({ summary: '모든 상세 주문 정보를 호출한다' })
+  @ApiOperation({
+    summary: '모든 상세 주문 정보를 호출한다',
+    description: '주문정보',
+  })
   findAll() {
     return this.orderInfoService.findOrderDetails();
   }

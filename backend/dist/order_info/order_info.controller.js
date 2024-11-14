@@ -50,7 +50,10 @@ __decorate([
 ], OrderInfoController.prototype, "create", null);
 __decorate([
     (0, common_1.Get)('getAllOrderDetails'),
-    (0, swagger_1.ApiOperation)({ summary: '모든 상세 주문 정보를 호출한다' }),
+    (0, swagger_1.ApiOperation)({
+        summary: '모든 상세 주문 정보를 호출한다',
+        description: '주문정보',
+    }),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", void 0)
