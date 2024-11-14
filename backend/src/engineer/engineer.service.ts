@@ -1,4 +1,4 @@
-import { In, Repository } from 'typeorm';
+import { Repository } from 'typeorm';
 import {
   BadRequestException,
   ConflictException,
@@ -11,7 +11,11 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Skill } from './entities/skills.entity';
 import { EngineerSkill } from './entities/engineer_skill.entity';
 import { CustomerEngineerOrder } from 'src/order_info/entities/customer_engineer_order.entity';
-import { EngineerScheduleDto } from './dto/search-engineer-schedule.dto';
+import {
+  findSkillIdsByNames,
+  handleEngineerData,
+  handleEngineerScheduleData,
+} from 'src/util/DataHandlerFunc';
 
 @Injectable()
 export class EngineerService {
@@ -46,8 +50,7 @@ export class EngineerService {
       await this.engineerRepository.save({ ...savedEngineer });
 
       // 입력 데이터로부터 받아온 가능품목배열의 문자열을 검색 후 skill id 를 다시 배열로 반환받는다.
-      const mappedSkillId =
-        await this.findSkillIdsByNames(engineer_valid_skill);
+      const mappedSkillId = await findSkillIdsByNames(engineer_valid_skill);
 
       // 기사 테이블에서 가장 마지막에 생성된 기사의 아이디 추출
       await this.engineerRepository.find({
@@ -76,26 +79,7 @@ export class EngineerService {
       .leftJoinAndSelect('engineerSkill.skill', 'skill') // 스킬 정보 조인
       .getMany();
 
-    const engineerMap = new Map<number, any>();
-
-    engineerWithSkills.forEach((engineerSkill) => {
-      const { engineer, skill } = engineerSkill;
-
-      // 엔지니어가 이미 map에 있다면 스킬만 추가
-      if (engineerMap.has(engineer.engineer_id)) {
-        engineerMap
-          .get(engineer.engineer_id)
-          .engineer_skills.push(skill.skill_type);
-      } else {
-        // 엔지니어가 처음 등장하는 경우, 엔지니어 정보와 스킬을 함께 추가
-        engineerMap.set(engineer.engineer_id, {
-          ...engineer,
-          engineer_skills: [skill.skill_type],
-        });
-      }
-    });
-
-    return Array.from(engineerMap.values());
+    return await handleEngineerData(engineerWithSkills);
   }
 
   async getAllSchedule() {
@@ -106,36 +90,7 @@ export class EngineerService {
       .leftJoinAndSelect('customerEngineerOrder.order', 'order')
       .getMany();
 
-    async function handleOrderDetails(
-      orderDetails: any[],
-    ): Promise<EngineerScheduleDto[]> {
-      const scheduleList: EngineerScheduleDto[] = orderDetails.map((detail) => {
-        const { customer, engineer, order } = detail; // 각 엔티티를 구조 분해
-
-        return {
-          order_id: order.order_id,
-          engineer_id: engineer.engineer_id,
-          customer_id: customer.customer_id,
-          order_date: order.order_date,
-          order_timeslot: '', // 여기에 예약 시간을 어떻게 할지 처리해줘야 함. 예시로 빈 문자열 처리
-          //TODO : 화면설계 완료 이후 추가할지 버릴지 정하기
-          engineer_name: engineer.engineer_name,
-          customer_name: customer.customer_name,
-          customer_addr: customer.customer_addr,
-          customer_phone: customer.customer_phone,
-          order_product: order.order_category,
-          order_product_detail: order.order_product,
-          order_count: order.order_count,
-          order_total_amount: order.order_total_amount,
-          order_remarks: order.order_remark,
-          customer_remarks: customer.customer_remark,
-        };
-      });
-
-      return scheduleList;
-    }
-
-    return await handleOrderDetails(engineerSchedule);
+    return await handleEngineerScheduleData(engineerSchedule);
   }
 
   findOne(id: number) {
@@ -148,19 +103,5 @@ export class EngineerService {
 
   remove(id: number) {
     return `This action removes a id : #${id} engineer`;
-  }
-
-  // 스킬 이름 배열을 받아서 해당하는 스킬 ID를 반환
-  async findSkillIdsByNames(skillNames: string[]): Promise<number[]> {
-    const skills = await this.skillRepository.find({
-      where: { skill_type: In(skillNames) }, // skillNames 배열에 포함된 이름으로 스킬 검색
-    });
-
-    if (skills.length === 0) {
-      throw new Error('입력값과 일치하는 품목이 존재하지 않습니다.');
-    }
-
-    // 매칭되는 스킬의 ID만 추출하여 배열로 반환
-    return skills.map((skill) => skill.skill_id);
   }
 }

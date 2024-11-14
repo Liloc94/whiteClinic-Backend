@@ -20,6 +20,7 @@ const typeorm_2 = require("@nestjs/typeorm");
 const skills_entity_1 = require("./entities/skills.entity");
 const engineer_skill_entity_1 = require("./entities/engineer_skill.entity");
 const customer_engineer_order_entity_1 = require("../order_info/entities/customer_engineer_order.entity");
+const DataHandlerFunc_1 = require("../util/DataHandlerFunc");
 let EngineerService = class EngineerService {
     constructor(engineerRepository, skillRepository, engineerSkillRepository, orderDetailRepository) {
         this.engineerRepository = engineerRepository;
@@ -37,7 +38,7 @@ let EngineerService = class EngineerService {
                 ...engineerWithoutSkill,
             });
             await this.engineerRepository.save({ ...savedEngineer });
-            const mappedSkillId = await this.findSkillIdsByNames(engineer_valid_skill);
+            const mappedSkillId = await (0, DataHandlerFunc_1.findSkillIdsByNames)(engineer_valid_skill);
             await this.engineerRepository.find({
                 select: ['engineer_id'],
                 order: { engineer_id: 'DESC' },
@@ -84,30 +85,7 @@ let EngineerService = class EngineerService {
             .leftJoinAndSelect('customerEngineerOrder.engineer', 'engineer')
             .leftJoinAndSelect('customerEngineerOrder.order', 'order')
             .getMany();
-        async function handleOrderDetails(orderDetails) {
-            const scheduleList = orderDetails.map((detail) => {
-                const { customer, engineer, order } = detail;
-                return {
-                    order_id: order.order_id,
-                    engineer_id: engineer.engineer_id,
-                    customer_id: customer.customer_id,
-                    order_date: order.order_date,
-                    order_timeslot: '',
-                    engineer_name: engineer.engineer_name,
-                    customer_name: customer.customer_name,
-                    customer_addr: customer.customer_addr,
-                    customer_phone: customer.customer_phone,
-                    order_product: order.order_category,
-                    order_product_detail: order.order_product,
-                    order_count: order.order_count,
-                    order_total_amount: order.order_total_amount,
-                    order_remarks: order.order_remark,
-                    customer_remarks: customer.customer_remark,
-                };
-            });
-            return scheduleList;
-        }
-        return await handleOrderDetails(engineerSchedule);
+        return await (0, DataHandlerFunc_1.handleOrderDetails)(engineerSchedule);
     }
     findOne(id) {
         return `This action returns a #${id} engineer`;
@@ -117,15 +95,6 @@ let EngineerService = class EngineerService {
     }
     remove(id) {
         return `This action removes a id : #${id} engineer`;
-    }
-    async findSkillIdsByNames(skillNames) {
-        const skills = await this.skillRepository.find({
-            where: { skill_type: (0, typeorm_1.In)(skillNames) },
-        });
-        if (skills.length === 0) {
-            throw new Error('입력값과 일치하는 품목이 존재하지 않습니다.');
-        }
-        return skills.map((skill) => skill.skill_id);
     }
 };
 exports.EngineerService = EngineerService;

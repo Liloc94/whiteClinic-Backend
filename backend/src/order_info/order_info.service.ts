@@ -7,7 +7,7 @@ import { Repository } from 'typeorm';
 import { Engineer } from 'src/engineer/entities/engineer.entity';
 import { Customer } from 'src/customer/entities/customer.entity';
 import { CustomerEngineerOrder } from './entities/customer_engineer_order.entity';
-import { OrderListDto } from './dto/search-order-list.dto';
+import { handleOrderDetailsData } from 'src/util/DataHandlerFunc';
 
 @Injectable()
 export class OrderInfoService {
@@ -46,22 +46,7 @@ export class OrderInfoService {
       .leftJoinAndSelect('CustomerEngineerOrder.engineer', 'engineer')
       .getMany();
 
-    const orderList: OrderListDto[] = orderDetails.map((infos) => {
-      return {
-        order_date: infos.order.order_date,
-        customer_name: infos.customer.customer_name,
-        customer_phone: infos.customer.customer_phone,
-        customer_addr: infos.customer.customer_addr,
-        customer_remark: infos.customer.customer_remark,
-        engineer_name: infos.engineer.engineer_name,
-        order_product: infos.order.order_product,
-        order_payment: infos.order.order_payment,
-        order_receipt_docs: infos.order.order_receipt_docs,
-        receipt_docs_issued: infos.order.reciept_docs_issued,
-      };
-    });
-
-    return orderList;
+    return await handleOrderDetailsData(orderDetails);
   }
 
   async findWithId(id: number) {
