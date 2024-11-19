@@ -139,7 +139,13 @@ export class EngineerService {
     await this.engineerRepository.update({ engineer_id: id }, updateInfo);
   }
 
-  async remove(id: number) {
-    return `This action removes a id : #${id} engineer`;
+  async removeEngineerInfo(id: number) {
+    const targetEngineer = await this.engineerRepository.findOne({
+      where: { engineer_id: id },
+    });
+    await this.engineerRepository.delete({ engineer_id: id });
+
+    // 기사정보 임시저장 테이블
+    // this.tempEngineerRepository.save({ ...targetEngineer });
   }
 }
