@@ -7,6 +7,7 @@ import {
   Param,
   Delete,
   BadRequestException,
+  NotFoundException,
 } from '@nestjs/common';
 import { EngineerService } from './engineer.service';
 import { CreateEngineerDto } from './dto/create-engineer.dto';
@@ -50,7 +51,7 @@ export class EngineerController {
   @Post('createEngineer')
   async create(@Body() createEngineerDto: CreateEngineerDto): Promise<void> {
     try {
-      return await this.engineerService.create(createEngineerDto);
+      return await this.engineerService.createEngineerInfo(createEngineerDto);
     } catch (error) {
       throw new BadRequestException(`${error} 잘못된 요청입니다.`);
     }
@@ -63,7 +64,11 @@ export class EngineerController {
   @ApiResponse({ status: 200, description: '기사정보 조회 완료' })
   @Get('searchAllEngineer')
   async findAll() {
-    return await this.engineerService.findAll();
+    try {
+      return await this.engineerService.findAll();
+    } catch (error) {
+      throw new NotFoundException(error);
+    }
   }
 
   @ApiOperation({
@@ -72,7 +77,11 @@ export class EngineerController {
   })
   @Get('getAllEngineerSchedule')
   async getAllSchedule() {
-    return await this.engineerService.getAllSchedule();
+    try {
+      return await this.engineerService.getAllSchedule();
+    } catch (error) {
+      throw new NotFoundException(error);
+    }
   }
 
   @Get('getEngineerdailySalary')
@@ -81,7 +90,11 @@ export class EngineerController {
     summary: '모든 기사의 날짜별 일당을 호출한다',
   })
   async getEngineerSalary() {
-    return await this.engineerService.getDailySalary();
+    try {
+      return await this.engineerService.getDailySalary();
+    } catch (error) {
+      throw new NotFoundException(error);
+    }
   }
 
   @Get(':id')
@@ -90,15 +103,23 @@ export class EngineerController {
     summary: '특정 기사의 정보를 조회한다',
   })
   findOne(@Param('id') id: string) {
-    return this.engineerService.findOne(+id);
+    try {
+      return this.engineerService.findOne(+id);
+    } catch (error) {
+      throw new NotFoundException(error);
+    }
   }
 
-  @Patch(':id')
+  @Patch('updateEngineerInfo:id')
+  @ApiOperation({
+    description: '전달받은 id의 기사정보를 파라미터 값으로 수정한다',
+    summary: '특정 기사의 정보를 업데이트한다.',
+  })
   update(
     @Param('id') id: string,
     @Body() updateEngineerDto: UpdateEngineerDto,
   ) {
-    return this.engineerService.update(+id, updateEngineerDto);
+    return this.engineerService.updateEngineerInfo(+id, updateEngineerDto);
   }
 
   @Delete(':id')

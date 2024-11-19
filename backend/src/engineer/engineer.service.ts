@@ -41,7 +41,7 @@ export class EngineerService {
     private readonly engineerDailyEarningRepository: Repository<EngineerDailyEarning>,
   ) {}
 
-  async create(engineerData: CreateEngineerDto) {
+  async createEngineerInfo(engineerData: CreateEngineerDto) {
     try {
       if (!engineerData) {
         throw new BadRequestException('저장할 기사 정보가 존재하지 않습니다');
@@ -124,8 +124,19 @@ export class EngineerService {
     return exactEngineer;
   }
 
-  async update(id: number, updateEngineerDto: UpdateEngineerDto) {
-    return `This action updates a #${id} engineer with ${{ ...updateEngineerDto }}`;
+  async updateEngineerInfo(id: number, updateInfo: UpdateEngineerDto) {
+    // 엔지니어 정보 조회
+    const targetInfo = await this.engineerRepository.findOne({
+      where: { engineer_id: id },
+    });
+
+    // 대상 엔지니어가 존재하지 않는 경우 처리
+    if (!targetInfo) {
+      throw new NotFoundException(`Engineer with ID ${id} not found`);
+    }
+
+    // 엔지니어 정보 업데이트
+    await this.engineerRepository.update({ engineer_id: id }, updateInfo);
   }
 
   async remove(id: number) {

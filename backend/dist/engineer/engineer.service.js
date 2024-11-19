@@ -30,7 +30,7 @@ let EngineerService = class EngineerService {
         this.orderDetailRepository = orderDetailRepository;
         this.engineerDailyEarningRepository = engineerDailyEarningRepository;
     }
-    async create(engineerData) {
+    async createEngineerInfo(engineerData) {
         try {
             if (!engineerData) {
                 throw new common_1.BadRequestException('저장할 기사 정보가 존재하지 않습니다');
@@ -96,7 +96,13 @@ let EngineerService = class EngineerService {
         return exactEngineer;
     }
     async update(id, updateEngineerDto) {
-        return `This action updates a #${id} engineer with ${{ ...updateEngineerDto }}`;
+        const engineerSchedule = await this.orderDetailRepository
+            .createQueryBuilder('customerEngineerOrder')
+            .leftJoinAndSelect('customerEngineerOrder.customer', 'customer')
+            .leftJoinAndSelect('customerEngineerOrder.engineer', 'engineer')
+            .leftJoinAndSelect('customerEngineerOrder.order', 'order')
+            .where({ id: id })
+            .getOne();
     }
     async remove(id) {
         return `This action removes a id : #${id} engineer`;

@@ -9,6 +9,6 @@ export declare class EngineerController {
     getAllSchedule(): Promise<import("./dto/search-engineer-schedule.dto").EngineerScheduleDto[]>;
     getEngineerSalary(): Promise<import("./entities/engineer_daily_earning.entity").EngineerDailyEarning[]>;
     findOne(id: string): Promise<import("./entities/engineer.entity").Engineer[]>;
-    update(id: string, updateEngineerDto: UpdateEngineerDto): Promise<string>;
+    update(id: string, updateEngineerDto: UpdateEngineerDto): Promise<void>;
     remove(id: string): Promise<string>;
 }

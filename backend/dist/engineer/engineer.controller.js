@@ -24,23 +24,43 @@ let EngineerController = class EngineerController {
     }
     async create(createEngineerDto) {
         try {
-            return await this.engineerService.create(createEngineerDto);
+            return await this.engineerService.createEngineerInfo(createEngineerDto);
         }
         catch (error) {
             throw new common_1.BadRequestException(`${error} 잘못된 요청입니다.`);
         }
     }
     async findAll() {
-        return await this.engineerService.findAll();
+        try {
+            return await this.engineerService.findAll();
+        }
+        catch (error) {
+            throw new common_1.NotFoundException(error);
+        }
     }
     async getAllSchedule() {
-        return await this.engineerService.getAllSchedule();
+        try {
+            return await this.engineerService.getAllSchedule();
+        }
+        catch (error) {
+            throw new common_1.NotFoundException(error);
+        }
     }
     async getEngineerSalary() {
-        return await this.engineerService.getDailySalary();
+        try {
+            return await this.engineerService.getDailySalary();
+        }
+        catch (error) {
+            throw new common_1.NotFoundException(error);
+        }
     }
     findOne(id) {
-        return this.engineerService.findOne(+id);
+        try {
+            return this.engineerService.findOne(+id);
+        }
+        catch (error) {
+            throw new common_1.NotFoundException(error);
+        }
     }
     update(id, updateEngineerDto) {
         return this.engineerService.update(+id, updateEngineerDto);
@@ -128,7 +148,7 @@ __decorate([
     __metadata("design:returntype", void 0)
 ], EngineerController.prototype, "findOne", null);
 __decorate([
-    (0, common_1.Patch)(':id'),
+    (0, common_1.Patch)('updateEngineerSchedule:id'),
     __param(0, (0, common_1.Param)('id')),
     __param(1, (0, common_1.Body)()),
     __metadata("design:type", Function),

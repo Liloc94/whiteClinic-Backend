@@ -13,11 +13,11 @@ export declare class EngineerService {
     private readonly orderDetailRepository;
     private readonly engineerDailyEarningRepository;
     constructor(engineerRepository: Repository<Engineer>, skillRepository: Repository<Skill>, engineerSkillRepository: Repository<EngineerSkill>, orderDetailRepository: Repository<CustomerEngineerOrder>, engineerDailyEarningRepository: Repository<EngineerDailyEarning>);
-    create(engineerData: CreateEngineerDto): Promise<void>;
+    createEngineerInfo(engineerData: CreateEngineerDto): Promise<void>;
     findAll(): Promise<any[]>;
     getAllSchedule(): Promise<import("./dto/search-engineer-schedule.dto").EngineerScheduleDto[]>;
     getDailySalary(): Promise<EngineerDailyEarning[]>;
     findOne(id: number): Promise<Engineer[]>;
-    update(id: number, updateEngineerDto: UpdateEngineerDto): Promise<string>;
+    update(id: number, updateEngineerDto: UpdateEngineerDto): Promise<void>;
     remove(id: number): Promise<string>;
 }
