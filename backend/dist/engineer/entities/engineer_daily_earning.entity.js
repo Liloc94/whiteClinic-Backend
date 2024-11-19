@@ -21,12 +21,18 @@ __decorate([
     __metadata("design:type", Number)
 ], EngineerDailyEarning.prototype, "idx", void 0);
 __decorate([
-    (0, typeorm_1.ManyToOne)(() => order_info_entity_1.Order, (order) => order.dailyEarnings),
+    (0, typeorm_1.ManyToOne)(() => order_info_entity_1.Order, (order) => order.dailyEarnings, {
+        onDelete: 'CASCADE',
+        onUpdate: 'CASCADE',
+    }),
     (0, typeorm_1.JoinColumn)({ name: 'order_id' }),
     __metadata("design:type", order_info_entity_1.Order)
 ], EngineerDailyEarning.prototype, "order", void 0);
 __decorate([
-    (0, typeorm_1.ManyToOne)(() => engineer_entity_1.Engineer, (engineer) => engineer.dailyEarnings),
+    (0, typeorm_1.ManyToOne)(() => engineer_entity_1.Engineer, (engineer) => engineer.dailyEarnings, {
+        onDelete: 'CASCADE',
+        onUpdate: 'CASCADE',
+    }),
     (0, typeorm_1.JoinColumn)({ name: 'engineer_id' }),
     __metadata("design:type", engineer_entity_1.Engineer)
 ], EngineerDailyEarning.prototype, "engineer", void 0);

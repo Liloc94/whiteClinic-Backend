@@ -11,7 +11,10 @@ export class EngineerSkill {
   @PrimaryColumn()
   skill_id: number;
 
-  @ManyToOne(() => Engineer)
+  @ManyToOne(() => Engineer, {
+    onDelete: 'CASCADE',
+    onUpdate: 'CASCADE',
+  })
   @JoinColumn({ name: 'engineer_id' })
   engineer: Engineer;
 

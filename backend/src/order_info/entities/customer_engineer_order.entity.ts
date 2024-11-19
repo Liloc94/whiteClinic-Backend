@@ -9,15 +9,24 @@ export class CustomerEngineerOrder {
   @PrimaryColumn()
   idx: number;
 
-  @ManyToOne(() => Customer)
+  @ManyToOne(() => Customer, {
+    onDelete: 'CASCADE',
+    onUpdate: 'CASCADE',
+  })
   @JoinColumn({ name: 'customer_id' })
   customer: Customer;
 
-  @ManyToOne(() => Order)
+  @ManyToOne(() => Order, {
+    onDelete: 'CASCADE',
+    onUpdate: 'CASCADE',
+  })
   @JoinColumn({ name: 'order_id' })
   order: Order;
 
-  @ManyToOne(() => Engineer)
+  @ManyToOne(() => Engineer, {
+    onDelete: 'CASCADE',
+    onUpdate: 'CASCADE',
+  })
   @JoinColumn({ name: 'engineer_id' })
   engineer: Engineer;
 }

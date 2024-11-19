@@ -13,22 +13,24 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.EngineerService = void 0;
+const engineer_skill_entity_1 = require("./entities/engineer_skill.entity");
 const typeorm_1 = require("typeorm");
 const common_1 = require("@nestjs/common");
 const engineer_entity_1 = require("./entities/engineer.entity");
 const typeorm_2 = require("@nestjs/typeorm");
 const skills_entity_1 = require("./entities/skills.entity");
-const engineer_skill_entity_1 = require("./entities/engineer_skill.entity");
 const customer_engineer_order_entity_1 = require("../order_info/entities/customer_engineer_order.entity");
 const DataHandlerFunc_1 = require("../util/DataHandlerFunc");
 const engineer_daily_earning_entity_1 = require("./entities/engineer_daily_earning.entity");
+const skillUtil_service_1 = require("../skillUtil.service");
 let EngineerService = class EngineerService {
-    constructor(engineerRepository, skillRepository, engineerSkillRepository, orderDetailRepository, engineerDailyEarningRepository) {
+    constructor(engineerRepository, skillRepository, engineerSkillRepository, orderDetailRepository, engineerDailyEarningRepository, skillService) {
         this.engineerRepository = engineerRepository;
         this.skillRepository = skillRepository;
         this.engineerSkillRepository = engineerSkillRepository;
         this.orderDetailRepository = orderDetailRepository;
         this.engineerDailyEarningRepository = engineerDailyEarningRepository;
+        this.skillService = skillService;
     }
     async createEngineerInfo(engineerData) {
         try {
@@ -40,7 +42,7 @@ let EngineerService = class EngineerService {
                 ...engineerWithoutSkill,
             });
             await this.engineerRepository.save({ ...savedEngineer });
-            const mappedSkillId = await (0, DataHandlerFunc_1.findSkillIdsByNames)(engineer_valid_skill);
+            const mappedSkillId = await this.skillService.findSkillIdsByNames(engineer_valid_skill);
             await this.engineerRepository.find({
                 select: ['engineer_id'],
                 order: { engineer_id: 'DESC' },
@@ -102,12 +104,18 @@ let EngineerService = class EngineerService {
         if (!targetInfo) {
             throw new common_1.NotFoundException(`Engineer with ID ${id} not found`);
         }
-        await this.engineerRepository.update({ engineer_id: id }, updateInfo);
+        const { engineer_valid_skill, ...rest } = updateInfo;
+        const engineerSkill = await this.skillService.findSkillIdsByNames(engineer_valid_skill);
+        await this.engineerSkillRepository.delete({ engineer_id: id });
+        (await engineerSkill).map((skillNumber) => {
+            this.engineerSkillRepository.delete({
+                skill_id: skillNumber,
+            });
+            this.engineerSkillRepository.save({ skill_id: skillNumber });
+        });
+        await this.engineerRepository.update({ engineer_id: id }, rest);
     }
     async removeEngineerInfo(id) {
-        const targetEngineer = await this.engineerRepository.findOne({
-            where: { engineer_id: id },
-        });
         await this.engineerRepository.delete({ engineer_id: id });
     }
 };
@@ -123,6 +131,7 @@ exports.EngineerService = EngineerService = __decorate([
         typeorm_1.Repository,
         typeorm_1.Repository,
         typeorm_1.Repository,
-        typeorm_1.Repository])
+        typeorm_1.Repository,
+        skillUtil_service_1.SkillService])
 ], EngineerService);
 //# sourceMappingURL=engineer.service.js.map

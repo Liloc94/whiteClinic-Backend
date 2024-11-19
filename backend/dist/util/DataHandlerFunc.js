@@ -2,10 +2,8 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.handleEngineerScheduleData = handleEngineerScheduleData;
 exports.handleMappedData = handleMappedData;
-exports.findSkillIdsByNames = findSkillIdsByNames;
 exports.handleEngineerData = handleEngineerData;
 exports.handleOrderDetailsData = handleOrderDetailsData;
-const typeorm_1 = require("typeorm");
 async function handleEngineerScheduleData(orderDetails) {
     const scheduleList = orderDetails.map((detail) => {
         const { customer, engineer, order } = detail;
@@ -29,15 +27,6 @@ async function handleEngineerScheduleData(orderDetails) {
     return scheduleList;
 }
 async function handleMappedData() { }
-async function findSkillIdsByNames(skillNames) {
-    const skills = await this.skillRepository.find({
-        where: { skill_type: (0, typeorm_1.In)(skillNames) },
-    });
-    if (skills.length === 0) {
-        throw new Error('입력값과 일치하는 품목이 존재하지 않습니다.');
-    }
-    return skills.map((skill) => skill.skill_id);
-}
 async function handleEngineerData(engineerWithSkill) {
     const engineerMap = new Map();
     engineerWithSkill.forEach((engineerSkill) => {

@@ -4,5 +4,6 @@ export declare class AdminRefreshToken {
     refresh_token: string;
     created_at: string;
     expires_at: Date | null;
+    parent: AdminAccount;
     admin: AdminAccount;
 }

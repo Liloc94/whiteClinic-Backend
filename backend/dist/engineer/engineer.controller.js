@@ -63,7 +63,12 @@ let EngineerController = class EngineerController {
         }
     }
     update(id, updateEngineerDto) {
-        return this.engineerService.updateEngineerInfo(+id, updateEngineerDto);
+        try {
+            return this.engineerService.updateEngineerInfo(+id, updateEngineerDto);
+        }
+        catch (error) {
+            throw new Error(error);
+        }
     }
     remove(id) {
         return this.engineerService.removeEngineerInfo(+id);

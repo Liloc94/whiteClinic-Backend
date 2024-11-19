@@ -23,7 +23,12 @@ export class AdminRefreshToken {
   @Column({ type: 'varchar' })
   expires_at: Date | null;
 
-  @ManyToOne(() => AdminAccount)
+  @ManyToOne(() => AdminAccount, {
+    onDelete: 'CASCADE',
+    onUpdate: 'CASCADE',
+  })
+  parent: AdminAccount;
+
   @JoinColumn({ name: 'admin_id' })
   admin: AdminAccount;
 }

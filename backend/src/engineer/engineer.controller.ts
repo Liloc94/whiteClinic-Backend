@@ -119,7 +119,11 @@ export class EngineerController {
     @Param('id') id: string,
     @Body() updateEngineerDto: UpdateEngineerDto,
   ) {
-    return this.engineerService.updateEngineerInfo(+id, updateEngineerDto);
+    try {
+      return this.engineerService.updateEngineerInfo(+id, updateEngineerDto);
+    } catch (error) {
+      throw new Error(error);
+    }
   }
 
   @Delete(':id')

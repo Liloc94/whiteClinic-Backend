@@ -22,17 +22,26 @@ __decorate([
     __metadata("design:type", Number)
 ], CustomerEngineerOrder.prototype, "idx", void 0);
 __decorate([
-    (0, typeorm_1.ManyToOne)(() => customer_entity_1.Customer),
+    (0, typeorm_1.ManyToOne)(() => customer_entity_1.Customer, {
+        onDelete: 'CASCADE',
+        onUpdate: 'CASCADE',
+    }),
     (0, typeorm_1.JoinColumn)({ name: 'customer_id' }),
     __metadata("design:type", customer_entity_1.Customer)
 ], CustomerEngineerOrder.prototype, "customer", void 0);
 __decorate([
-    (0, typeorm_1.ManyToOne)(() => order_info_entity_1.Order),
+    (0, typeorm_1.ManyToOne)(() => order_info_entity_1.Order, {
+        onDelete: 'CASCADE',
+        onUpdate: 'CASCADE',
+    }),
     (0, typeorm_1.JoinColumn)({ name: 'order_id' }),
     __metadata("design:type", order_info_entity_1.Order)
 ], CustomerEngineerOrder.prototype, "order", void 0);
 __decorate([
-    (0, typeorm_1.ManyToOne)(() => engineer_entity_1.Engineer),
+    (0, typeorm_1.ManyToOne)(() => engineer_entity_1.Engineer, {
+        onDelete: 'CASCADE',
+        onUpdate: 'CASCADE',
+    }),
     (0, typeorm_1.JoinColumn)({ name: 'engineer_id' }),
     __metadata("design:type", engineer_entity_1.Engineer)
 ], CustomerEngineerOrder.prototype, "engineer", void 0);

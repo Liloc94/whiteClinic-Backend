@@ -14,11 +14,17 @@ export class EngineerDailyEarning {
   @PrimaryGeneratedColumn()
   idx: number;
 
-  @ManyToOne(() => Order, (order) => order.dailyEarnings)
+  @ManyToOne(() => Order, (order) => order.dailyEarnings, {
+    onDelete: 'CASCADE',
+    onUpdate: 'CASCADE',
+  })
   @JoinColumn({ name: 'order_id' })
   order: Order;
 
-  @ManyToOne(() => Engineer, (engineer) => engineer.dailyEarnings)
+  @ManyToOne(() => Engineer, (engineer) => engineer.dailyEarnings, {
+    onDelete: 'CASCADE',
+    onUpdate: 'CASCADE',
+  })
   @JoinColumn({ name: 'engineer_id' })
   engineer: Engineer;
 

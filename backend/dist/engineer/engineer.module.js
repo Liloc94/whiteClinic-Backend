@@ -17,6 +17,7 @@ const engineer_skill_entity_1 = require("./entities/engineer_skill.entity");
 const skills_entity_1 = require("./entities/skills.entity");
 const order_info_entity_1 = require("../order_info/entities/order_info.entity");
 const customer_engineer_order_entity_1 = require("../order_info/entities/customer_engineer_order.entity");
+const skillUtil_service_1 = require("../skillUtil.service");
 let EngineerModule = class EngineerModule {
 };
 exports.EngineerModule = EngineerModule;
@@ -34,7 +35,7 @@ exports.EngineerModule = EngineerModule = __decorate([
         ],
         exports: [typeorm_1.TypeOrmModule],
         controllers: [engineer_controller_1.EngineerController],
-        providers: [engineer_service_1.EngineerService],
+        providers: [engineer_service_1.EngineerService, skillUtil_service_1.SkillService],
     })
 ], EngineerModule);
 //# sourceMappingURL=engineer.module.js.map

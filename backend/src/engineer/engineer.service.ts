@@ -1,3 +1,4 @@
+import { EngineerSkill } from 'src/engineer/entities/engineer_skill.entity';
 import { Repository } from 'typeorm';
 import {
   BadRequestException,
@@ -10,14 +11,13 @@ import { UpdateEngineerDto } from './dto/update-engineer.dto';
 import { Engineer } from './entities/engineer.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Skill } from './entities/skills.entity';
-import { EngineerSkill } from './entities/engineer_skill.entity';
 import { CustomerEngineerOrder } from 'src/order_info/entities/customer_engineer_order.entity';
 import {
-  findSkillIdsByNames,
   handleEngineerData,
   handleEngineerScheduleData,
 } from 'src/util/DataHandlerFunc';
 import { EngineerDailyEarning } from './entities/engineer_daily_earning.entity';
+import { SkillService } from 'src/skillUtil.service';
 
 @Injectable()
 export class EngineerService {
@@ -39,6 +39,8 @@ export class EngineerService {
 
     @InjectRepository(EngineerDailyEarning)
     private readonly engineerDailyEarningRepository: Repository<EngineerDailyEarning>,
+
+    private readonly skillService: SkillService, // 다른 서비스 의존성 주입
   ) {}
 
   async createEngineerInfo(engineerData: CreateEngineerDto) {
@@ -55,7 +57,8 @@ export class EngineerService {
       await this.engineerRepository.save({ ...savedEngineer });
 
       // 입력 데이터로부터 받아온 가능품목배열의 문자열을 검색 후 skill id 를 다시 배열로 반환받는다.
-      const mappedSkillId = await findSkillIdsByNames(engineer_valid_skill);
+      const mappedSkillId =
+        await this.skillService.findSkillIdsByNames(engineer_valid_skill);
 
       // 기사 테이블에서 가장 마지막에 생성된 기사의 아이디 추출
       await this.engineerRepository.find({
@@ -63,7 +66,7 @@ export class EngineerService {
         order: { engineer_id: 'DESC' },
       });
 
-      // 3. 새로 생성된 엔지니어의 ID는 savedEngineer에서 직접 사용
+      // 3. 새로 생성된 기사의 ID는 savedEngineer에서 직접 사용
       const engineerSkills = mappedSkillId.map((skillId) => ({
         engineer_id: savedEngineer.engineer_id, // 또는 savedEngineer.engineer_id
         skill_id: skillId,
@@ -125,27 +128,39 @@ export class EngineerService {
   }
 
   async updateEngineerInfo(id: number, updateInfo: UpdateEngineerDto) {
-    // 엔지니어 정보 조회
+    // 기사 정보 조회
     const targetInfo = await this.engineerRepository.findOne({
       where: { engineer_id: id },
     });
 
-    // 대상 엔지니어가 존재하지 않는 경우 처리
+    // 대상 기사가 존재하지 않는 경우 처리
     if (!targetInfo) {
       throw new NotFoundException(`Engineer with ID ${id} not found`);
     }
 
-    // 엔지니어 정보 업데이트
-    await this.engineerRepository.update({ engineer_id: id }, updateInfo);
+    // 기사 가능품목만 구조분해 이후 따로 저장
+    const { engineer_valid_skill, ...rest } = updateInfo;
+    const engineerSkill =
+      await this.skillService.findSkillIdsByNames(engineer_valid_skill);
+
+    await this.engineerSkillRepository.delete({ engineer_id: id });
+    (await engineerSkill).map((skillNumber) => {
+      this.engineerSkillRepository.delete({
+        skill_id: skillNumber,
+      });
+      this.engineerSkillRepository.save({ skill_id: skillNumber });
+    });
+    // 기사 정보 업데이트
+    await this.engineerRepository.update({ engineer_id: id }, rest);
   }
 
   async removeEngineerInfo(id: number) {
-    const targetEngineer = await this.engineerRepository.findOne({
-      where: { engineer_id: id },
-    });
-    await this.engineerRepository.delete({ engineer_id: id });
+    // const targetEngineer = await this.engineerRepository.findOne({
+    //   where: { engineer_id: id },
+    // });
 
     // 기사정보 임시저장 테이블
     // this.tempEngineerRepository.save({ ...targetEngineer });
+    await this.engineerRepository.delete({ engineer_id: id });
   }
 }

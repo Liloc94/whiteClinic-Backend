@@ -2,7 +2,6 @@ import { EngineerScheduleDto } from 'src/engineer/dto/search-engineer-schedule.d
 import { EngineerSkill } from 'src/engineer/entities/engineer_skill.entity';
 import { OrderListDto } from 'src/order_info/dto/search-order-list.dto';
 import { CustomerEngineerOrder } from 'src/order_info/entities/customer_engineer_order.entity';
-import { In } from 'typeorm';
 
 export async function handleEngineerScheduleData(
   orderDetails: any[],
@@ -31,22 +30,6 @@ export async function handleEngineerScheduleData(
 }
 
 export async function handleMappedData() {}
-
-// 스킬 이름 배열을 받아서 해당하는 스킬 ID를 반환
-export async function findSkillIdsByNames(
-  skillNames: string[],
-): Promise<number[]> {
-  const skills = await this.skillRepository.find({
-    where: { skill_type: In(skillNames) }, // skillNames 배열에 포함된 이름으로 스킬 검색
-  });
-
-  if (skills.length === 0) {
-    throw new Error('입력값과 일치하는 품목이 존재하지 않습니다.');
-  }
-
-  // 매칭되는 스킬의 ID만 추출하여 배열로 반환
-  return skills.map((skill) => skill.skill_id);
-}
 
 /**
  *
