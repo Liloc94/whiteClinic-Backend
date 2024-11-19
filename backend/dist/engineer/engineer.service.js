@@ -95,17 +95,20 @@ let EngineerService = class EngineerService {
         }
         return exactEngineer;
     }
-    async update(id, updateEngineerDto) {
-        const engineerSchedule = await this.orderDetailRepository
-            .createQueryBuilder('customerEngineerOrder')
-            .leftJoinAndSelect('customerEngineerOrder.customer', 'customer')
-            .leftJoinAndSelect('customerEngineerOrder.engineer', 'engineer')
-            .leftJoinAndSelect('customerEngineerOrder.order', 'order')
-            .where({ id: id })
-            .getOne();
+    async updateEngineerInfo(id, updateInfo) {
+        const targetInfo = await this.engineerRepository.findOne({
+            where: { engineer_id: id },
+        });
+        if (!targetInfo) {
+            throw new common_1.NotFoundException(`Engineer with ID ${id} not found`);
+        }
+        await this.engineerRepository.update({ engineer_id: id }, updateInfo);
     }
-    async remove(id) {
-        return `This action removes a id : #${id} engineer`;
+    async removeEngineerInfo(id) {
+        const targetEngineer = await this.engineerRepository.findOne({
+            where: { engineer_id: id },
+        });
+        await this.engineerRepository.delete({ engineer_id: id });
     }
 };
 exports.EngineerService = EngineerService;

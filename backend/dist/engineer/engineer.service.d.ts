@@ -18,6 +18,6 @@ export declare class EngineerService {
     getAllSchedule(): Promise<import("./dto/search-engineer-schedule.dto").EngineerScheduleDto[]>;
     getDailySalary(): Promise<EngineerDailyEarning[]>;
     findOne(id: number): Promise<Engineer[]>;
-    update(id: number, updateEngineerDto: UpdateEngineerDto): Promise<void>;
-    remove(id: number): Promise<string>;
+    updateEngineerInfo(id: number, updateInfo: UpdateEngineerDto): Promise<void>;
+    removeEngineerInfo(id: number): Promise<void>;
 }

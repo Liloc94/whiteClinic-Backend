@@ -31,27 +31,6 @@ __decorate([
     __metadata("design:type", String)
 ], EngineerScheduleDto.prototype, "order_date", void 0);
 __decorate([
-    (0, swagger_1.ApiProperty)({
-        description: '예약시간',
-        enum: [
-            '8시 이전',
-            '08:00 ~ 09:00',
-            '09:00 ~ 10:00',
-            '10:00 ~ 11:00',
-            '11:00 ~ 12:00',
-            '12:00 ~ 13:00',
-            '13:00 ~ 14:00',
-            '14:00 ~ 15:00',
-            '15:00 ~ 16:00',
-            '16:00 ~ 17:00',
-            '17:00 ~ 18:00',
-            '18:00 ~ 19:00',
-            '19시 이후',
-        ],
-    }),
-    __metadata("design:type", String)
-], EngineerScheduleDto.prototype, "order_timeslot", void 0);
-__decorate([
     (0, swagger_1.ApiProperty)({ description: '기사성함' }),
     __metadata("design:type", String)
 ], EngineerScheduleDto.prototype, "engineer_name", void 0);

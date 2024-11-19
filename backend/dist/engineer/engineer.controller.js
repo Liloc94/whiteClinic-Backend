@@ -63,10 +63,10 @@ let EngineerController = class EngineerController {
         }
     }
     update(id, updateEngineerDto) {
-        return this.engineerService.update(+id, updateEngineerDto);
+        return this.engineerService.updateEngineerInfo(+id, updateEngineerDto);
     }
     remove(id) {
-        return this.engineerService.remove(+id);
+        return this.engineerService.removeEngineerInfo(+id);
     }
 };
 exports.EngineerController = EngineerController;
@@ -148,7 +148,11 @@ __decorate([
     __metadata("design:returntype", void 0)
 ], EngineerController.prototype, "findOne", null);
 __decorate([
-    (0, common_1.Patch)('updateEngineerSchedule:id'),
+    (0, common_1.Patch)('updateEngineerInfo:id'),
+    (0, swagger_1.ApiOperation)({
+        description: '전달받은 id의 기사정보를 파라미터 값으로 수정한다',
+        summary: '특정 기사의 정보를 업데이트한다.',
+    }),
     __param(0, (0, common_1.Param)('id')),
     __param(1, (0, common_1.Body)()),
     __metadata("design:type", Function),

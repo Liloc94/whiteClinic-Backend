@@ -128,6 +128,6 @@ export class EngineerController {
     summary: '특정 기사의 정보를 삭제한다',
   })
   remove(@Param('id') id: string) {
-    return this.engineerService.remove(+id);
+    return this.engineerService.removeEngineerInfo(+id);
   }
 }

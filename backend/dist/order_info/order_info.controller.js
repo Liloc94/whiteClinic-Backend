@@ -66,7 +66,6 @@ __decorate([
     (0, swagger_1.ApiOperation)({
         summary: '파라미터로 전달받은 id 를 기반으로 매치되는 주문정보를 호출한다.',
     }),
-    (0, swagger_1.ApiParam)({ name: '아이디' }),
     __param(0, (0, common_1.Param)('id')),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String]),

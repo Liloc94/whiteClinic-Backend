@@ -10,5 +10,5 @@ export declare class EngineerController {
     getEngineerSalary(): Promise<import("./entities/engineer_daily_earning.entity").EngineerDailyEarning[]>;
     findOne(id: string): Promise<import("./entities/engineer.entity").Engineer[]>;
     update(id: string, updateEngineerDto: UpdateEngineerDto): Promise<void>;
-    remove(id: string): Promise<string>;
+    remove(id: string): Promise<void>;
 }
