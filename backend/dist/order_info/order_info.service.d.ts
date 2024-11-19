@@ -11,21 +11,7 @@ export declare class OrderInfoService {
     private readonly customerRepository;
     private readonly OrderDetailRepository;
     constructor(orderInfoRepository: Repository<Order>, engineerRepository: Repository<Engineer>, customerRepository: Repository<Customer>, OrderDetailRepository: Repository<CustomerEngineerOrder>);
-    create(createOrderInfoDto: CreateOrderInfoDto): Promise<{
-        order_date: string;
-        order_category: string;
-        order_product: string;
-        order_total_amount: number;
-        order_count: number;
-        order_isdiscount: boolean;
-        order_discount_ratio: number;
-        order_remark: string;
-        order_deposit: number;
-        deposit_payed: boolean;
-        order_payment: string;
-        order_receipt_docs: string;
-        receipt_docs_issued: boolean;
-    } & Order>;
+    create(createOrderInfoDto: CreateOrderInfoDto): Promise<CreateOrderInfoDto>;
     findAll(): Promise<Order[]>;
     findOrderDetails(): Promise<import("./dto/search-order-list.dto").OrderListDto[]>;
     findWithId(id: number): Promise<Order[]>;

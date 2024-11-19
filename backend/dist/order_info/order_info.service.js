@@ -29,7 +29,16 @@ let OrderInfoService = class OrderInfoService {
         this.OrderDetailRepository = OrderDetailRepository;
     }
     async create(createOrderInfoDto) {
-        return await this.orderInfoRepository.save({ ...createOrderInfoDto });
+        const { order_customer_address, order_customer_name, order_customer_phone, order_remark, ...rest } = createOrderInfoDto;
+        const customerInfo = {
+            customer_name: order_customer_name,
+            customer_phone: order_customer_phone,
+            customer_address: order_customer_address,
+            customer_remark: order_remark,
+        };
+        this.orderInfoRepository.save({ ...rest });
+        this.customerRepository.save({ ...customerInfo });
+        return createOrderInfoDto;
     }
     async findAll() {
         return await this.orderInfoRepository.find();

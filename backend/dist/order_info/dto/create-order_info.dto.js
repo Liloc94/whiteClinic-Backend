@@ -19,41 +19,29 @@ __decorate([
     __metadata("design:type", String)
 ], CreateOrderInfoDto.prototype, "order_date", void 0);
 __decorate([
-    (0, swagger_1.ApiProperty)({ description: '제품 카테고리' }),
+    (0, swagger_1.ApiProperty)({ description: '고객 성함' }),
     __metadata("design:type", String)
-], CreateOrderInfoDto.prototype, "order_category", void 0);
+], CreateOrderInfoDto.prototype, "order_customer_name", void 0);
 __decorate([
-    (0, swagger_1.ApiProperty)({ description: '의뢰제품' }),
+    (0, swagger_1.ApiProperty)({ description: '고객 연락처' }),
     __metadata("design:type", String)
-], CreateOrderInfoDto.prototype, "order_product", void 0);
+], CreateOrderInfoDto.prototype, "order_customer_phone", void 0);
 __decorate([
-    (0, swagger_1.ApiProperty)({ description: '주문 총 금액' }),
-    __metadata("design:type", Number)
-], CreateOrderInfoDto.prototype, "order_total_amount", void 0);
+    (0, swagger_1.ApiProperty)({ description: '고객 주소' }),
+    __metadata("design:type", String)
+], CreateOrderInfoDto.prototype, "order_customer_address", void 0);
 __decorate([
-    (0, swagger_1.ApiProperty)({ description: '주문대수' }),
-    __metadata("design:type", Number)
-], CreateOrderInfoDto.prototype, "order_count", void 0);
-__decorate([
-    (0, swagger_1.ApiProperty)({ description: '할인여부', default: false }),
-    __metadata("design:type", Boolean)
-], CreateOrderInfoDto.prototype, "order_isdiscount", void 0);
-__decorate([
-    (0, swagger_1.ApiProperty)({ description: '할인율' }),
-    __metadata("design:type", Number)
-], CreateOrderInfoDto.prototype, "order_discount_ratio", void 0);
-__decorate([
-    (0, swagger_1.ApiProperty)({ description: '특이사항' }),
+    (0, swagger_1.ApiProperty)({ description: '주문 특이사항' }),
     __metadata("design:type", String)
 ], CreateOrderInfoDto.prototype, "order_remark", void 0);
-__decorate([
-    (0, swagger_1.ApiProperty)({ description: '예약금' }),
-    __metadata("design:type", Number)
-], CreateOrderInfoDto.prototype, "order_deposit", void 0);
 __decorate([
     (0, swagger_1.ApiProperty)({ description: '예약금여부', default: false }),
     __metadata("design:type", Boolean)
 ], CreateOrderInfoDto.prototype, "deposit_payed", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ description: '예약금' }),
+    __metadata("design:type", Number)
+], CreateOrderInfoDto.prototype, "order_deposit", void 0);
 __decorate([
     (0, swagger_1.ApiProperty)({
         description: '지불방식',
@@ -72,4 +60,28 @@ __decorate([
     (0, swagger_1.ApiProperty)({ description: '증빙서류 발행여부', default: false }),
     __metadata("design:type", Boolean)
 ], CreateOrderInfoDto.prototype, "receipt_docs_issued", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ description: '제품 카테고리' }),
+    __metadata("design:type", String)
+], CreateOrderInfoDto.prototype, "order_category", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ description: '의뢰제품' }),
+    __metadata("design:type", String)
+], CreateOrderInfoDto.prototype, "order_product", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ description: '주문대수' }),
+    __metadata("design:type", Number)
+], CreateOrderInfoDto.prototype, "order_count", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ description: '주문 총 금액' }),
+    __metadata("design:type", Number)
+], CreateOrderInfoDto.prototype, "order_total_amount", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ description: '할인여부', default: false }),
+    __metadata("design:type", Boolean)
+], CreateOrderInfoDto.prototype, "order_isdiscount", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ description: '할인율' }),
+    __metadata("design:type", Number)
+], CreateOrderInfoDto.prototype, "order_discount_ratio", void 0);
 //# sourceMappingURL=create-order_info.dto.js.map
