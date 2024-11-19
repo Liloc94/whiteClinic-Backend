@@ -1,18 +1,21 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.handleOrderDetails = handleOrderDetails;
+exports.handleEngineerScheduleData = handleEngineerScheduleData;
 exports.handleMappedData = handleMappedData;
 exports.findSkillIdsByNames = findSkillIdsByNames;
+exports.handleEngineerData = handleEngineerData;
+exports.handleOrderDetailsData = handleOrderDetailsData;
 const typeorm_1 = require("typeorm");
-async function handleOrderDetails(orderDetails) {
+async function handleEngineerScheduleData(orderDetails) {
     const scheduleList = orderDetails.map((detail) => {
         const { customer, engineer, order } = detail;
+        const order_timeslot = order.order_timeslot || '08:00 ~ 09:00';
         return {
             order_id: order.order_id,
             engineer_id: engineer.engineer_id,
             customer_id: customer.customer_id,
             order_date: order.order_date,
-            order_timeslot: '',
+            order_timeslot: order_timeslot,
             engineer_name: engineer.engineer_name,
             customer_name: customer.customer_name,
             customer_addr: customer.customer_addr,
@@ -36,5 +39,41 @@ async function findSkillIdsByNames(skillNames) {
         throw new Error('입력값과 일치하는 품목이 존재하지 않습니다.');
     }
     return skills.map((skill) => skill.skill_id);
+}
+async function handleEngineerData(engineerWithSkill) {
+    const engineerMap = new Map();
+    engineerWithSkill.forEach((engineerSkill) => {
+        const { engineer, skill } = engineerSkill;
+        if (engineerMap.has(engineer.engineer_id)) {
+            engineerMap
+                .get(engineer.engineer_id)
+                .engineer_skills.push(skill.skill_type);
+        }
+        else {
+            engineerMap.set(engineer.engineer_id, {
+                ...engineer,
+                engineer_skills: [skill.skill_type],
+            });
+        }
+    });
+    console.log([...engineerMap]);
+    return Array.from(engineerMap.values());
+}
+async function handleOrderDetailsData(orderDetails) {
+    const orderList = orderDetails.map((infos) => {
+        return {
+            order_date: infos.order.order_date,
+            customer_name: infos.customer.customer_name,
+            customer_phone: infos.customer.customer_phone,
+            customer_addr: infos.customer.customer_addr,
+            customer_remark: infos.customer.customer_remark,
+            engineer_name: infos.engineer.engineer_name,
+            order_product: infos.order.order_product,
+            order_payment: infos.order.order_payment,
+            order_receipt_docs: infos.order.order_receipt_docs,
+            receipt_docs_issued: infos.order.reciept_docs_issued,
+        };
+    });
+    return orderList;
 }
 //# sourceMappingURL=DataHandlerFunc.js.map

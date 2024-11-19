@@ -6,6 +6,7 @@ import {
   Patch,
   Param,
   Delete,
+  BadRequestException,
 } from '@nestjs/common';
 import { EngineerService } from './engineer.service';
 import { CreateEngineerDto } from './dto/create-engineer.dto';
@@ -49,10 +50,9 @@ export class EngineerController {
   @Post('createEngineer')
   async create(@Body() createEngineerDto: CreateEngineerDto): Promise<void> {
     try {
-      console.log('Request received:', createEngineerDto);
       return await this.engineerService.create(createEngineerDto);
     } catch (error) {
-      console.log(error);
+      throw new BadRequestException(`${error} 잘못된 요청입니다.`);
     }
   }
 
@@ -75,7 +75,20 @@ export class EngineerController {
     return await this.engineerService.getAllSchedule();
   }
 
+  @Get('getEngineerdailySalary')
+  @ApiOperation({
+    description: '모든 기사의 일급 정보를 호출한다',
+    summary: '모든 기사의 날짜별 일당을 호출한다',
+  })
+  async getEngineerSalary() {
+    return await this.engineerService.getDailySalary();
+  }
+
   @Get(':id')
+  @ApiOperation({
+    description: '파라미터로 전달받은 id의 기사정보를 조회',
+    summary: '특정 기사의 정보를 조회한다',
+  })
   findOne(@Param('id') id: string) {
     return this.engineerService.findOne(+id);
   }
@@ -89,6 +102,10 @@ export class EngineerController {
   }
 
   @Delete(':id')
+  @ApiOperation({
+    description: '파라미터로 전달받은 id를 가진 기사정보를 삭제',
+    summary: '특정 기사의 정보를 삭제한다',
+  })
   remove(@Param('id') id: string) {
     return this.engineerService.remove(+id);
   }

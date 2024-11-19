@@ -20,6 +20,7 @@ const typeorm_2 = require("typeorm");
 const engineer_entity_1 = require("../engineer/entities/engineer.entity");
 const customer_entity_1 = require("../customer/entities/customer.entity");
 const customer_engineer_order_entity_1 = require("./entities/customer_engineer_order.entity");
+const DataHandlerFunc_1 = require("../util/DataHandlerFunc");
 let OrderInfoService = class OrderInfoService {
     constructor(orderInfoRepository, engineerRepository, customerRepository, OrderDetailRepository) {
         this.orderInfoRepository = orderInfoRepository;
@@ -39,21 +40,7 @@ let OrderInfoService = class OrderInfoService {
             .leftJoinAndSelect('CustomerEngineerOrder.order', 'order')
             .leftJoinAndSelect('CustomerEngineerOrder.engineer', 'engineer')
             .getMany();
-        const orderList = orderDetails.map((infos) => {
-            return {
-                order_date: infos.order.order_date,
-                customer_name: infos.customer.customer_name,
-                customer_phone: infos.customer.customer_phone,
-                customer_addr: infos.customer.customer_addr,
-                customer_remark: infos.customer.customer_remark,
-                engineer_name: infos.engineer.engineer_name,
-                order_product: infos.order.order_product,
-                order_payment: infos.order.order_payment,
-                order_receipt_docs: infos.order.order_receipt_docs,
-                receipt_docs_issued: infos.order.reciept_docs_issued,
-            };
-        });
-        return orderList;
+        return await (0, DataHandlerFunc_1.handleOrderDetailsData)(orderDetails);
     }
     async findWithId(id) {
         return await this.orderInfoRepository.find({ where: { order_id: id } });

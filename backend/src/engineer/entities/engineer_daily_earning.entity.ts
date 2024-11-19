@@ -14,13 +14,13 @@ export class EngineerDailyEarning {
   @PrimaryGeneratedColumn()
   idx: number;
 
-  @ManyToOne(() => Order, (order) => order.order_id)
+  @ManyToOne(() => Order, (order) => order.dailyEarnings)
   @JoinColumn({ name: 'order_id' })
-  order_id: Order;
+  order: Order;
 
-  @ManyToOne(() => Engineer)
+  @ManyToOne(() => Engineer, (engineer) => engineer.dailyEarnings)
   @JoinColumn({ name: 'engineer_id' })
-  engineer_id: Engineer;
+  engineer: Engineer;
 
   @Column({ type: 'int' })
   daily_income: number;

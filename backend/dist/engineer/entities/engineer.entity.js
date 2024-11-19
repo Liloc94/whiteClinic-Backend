@@ -12,6 +12,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.Engineer = void 0;
 const class_validator_1 = require("class-validator");
 const typeorm_1 = require("typeorm");
+const engineer_daily_earning_entity_1 = require("./engineer_daily_earning.entity");
 let Engineer = class Engineer {
 };
 exports.Engineer = Engineer;
@@ -22,6 +23,10 @@ __decorate([
     }),
     __metadata("design:type", Number)
 ], Engineer.prototype, "engineer_id", void 0);
+__decorate([
+    (0, typeorm_1.OneToMany)(() => engineer_daily_earning_entity_1.EngineerDailyEarning, (dailyEarning) => dailyEarning.engineer),
+    __metadata("design:type", Array)
+], Engineer.prototype, "dailyEarnings", void 0);
 __decorate([
     (0, typeorm_1.Column)({ type: 'varchar', length: 255 }),
     __metadata("design:type", String)

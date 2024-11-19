@@ -3,6 +3,7 @@ import {
   BadRequestException,
   ConflictException,
   Injectable,
+  NotFoundException,
 } from '@nestjs/common';
 import { CreateEngineerDto } from './dto/create-engineer.dto';
 import { UpdateEngineerDto } from './dto/update-engineer.dto';
@@ -16,6 +17,7 @@ import {
   handleEngineerData,
   handleEngineerScheduleData,
 } from 'src/util/DataHandlerFunc';
+import { EngineerDailyEarning } from './entities/engineer_daily_earning.entity';
 
 @Injectable()
 export class EngineerService {
@@ -34,6 +36,9 @@ export class EngineerService {
 
     @InjectRepository(CustomerEngineerOrder)
     private readonly orderDetailRepository: Repository<CustomerEngineerOrder>,
+
+    @InjectRepository(EngineerDailyEarning)
+    private readonly engineerDailyEarningRepository: Repository<EngineerDailyEarning>,
   ) {}
 
   async create(engineerData: CreateEngineerDto) {
@@ -42,7 +47,7 @@ export class EngineerService {
         throw new BadRequestException('저장할 기사 정보가 존재하지 않습니다');
       }
 
-      // 비구조화로 나눈 이후 남은 정보부터 먼저 저장하여 id 생성되게끔 하기
+      // destructuring 이후 남은 정보부터 먼저 저장하여 id 생성되게끔 하기
       const { engineer_valid_skill, ...engineerWithoutSkill } = engineerData;
       const savedEngineer = await this.engineerRepository.save({
         ...engineerWithoutSkill,
@@ -78,7 +83,9 @@ export class EngineerService {
       .leftJoinAndSelect('engineerSkill.engineer', 'engineer') // 엔지니어 정보 조인
       .leftJoinAndSelect('engineerSkill.skill', 'skill') // 스킬 정보 조인
       .getMany();
-
+    if (!engineerWithSkills[0]) {
+      throw new NotFoundException('기사 정보가 존재하지 않습니다.');
+    }
     return await handleEngineerData(engineerWithSkills);
   }
 
@@ -89,18 +96,39 @@ export class EngineerService {
       .leftJoinAndSelect('customerEngineerOrder.engineer', 'engineer')
       .leftJoinAndSelect('customerEngineerOrder.order', 'order')
       .getMany();
+
+    if (!engineerSchedule[0]) {
+      throw new NotFoundException('기사 스케쥴 데이터가 존재하지 않습니다.');
+    }
     return await handleEngineerScheduleData(engineerSchedule);
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} engineer`;
+  async getDailySalary() {
+    const dailySalaryTest = await this.engineerDailyEarningRepository.find({
+      relations: ['engineer', 'order'],
+    });
+
+    return dailySalaryTest;
   }
 
-  update(id: number, updateEngineerDto: UpdateEngineerDto) {
-    return `This action updates a #${id} engineer with ${updateEngineerDto}`;
+  async findOne(id: number) {
+    const exactEngineer = await this.engineerRepository.find({
+      where: { engineer_id: id },
+    });
+
+    if (exactEngineer.length == 0) {
+      throw new NotFoundException(
+        `ID : #${id}를 갖는 기사정보가 존재하지 않습니다.`,
+      );
+    }
+    return exactEngineer;
   }
 
-  remove(id: number) {
+  async update(id: number, updateEngineerDto: UpdateEngineerDto) {
+    return `This action updates a #${id} engineer with ${{ ...updateEngineerDto }}`;
+  }
+
+  async remove(id: number) {
     return `This action removes a id : #${id} engineer`;
   }
 }

@@ -1,11 +1,5 @@
 // engineer_skill.entity.ts
-import {
-  Entity,
-  ManyToOne,
-  JoinColumn,
-  PrimaryColumn,
-  ManyToMany,
-} from 'typeorm';
+import { Entity, ManyToOne, JoinColumn, PrimaryColumn } from 'typeorm';
 import { Engineer } from './engineer.entity';
 import { Skill } from './skills.entity';
 

@@ -1,6 +1,7 @@
 // engineer.entity.ts
 import { IsOptional } from 'class-validator';
-import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
+import { EngineerDailyEarning } from './engineer_daily_earning.entity';
 
 @Entity('engineer', { schema: 'white_clinic' })
 export class Engineer {
@@ -9,6 +10,12 @@ export class Engineer {
     name: 'engineer_id',
   })
   engineer_id: number;
+
+  @OneToMany(
+    () => EngineerDailyEarning,
+    (dailyEarning) => dailyEarning.engineer,
+  )
+  dailyEarnings: EngineerDailyEarning[];
 
   @Column({ type: 'varchar', length: 255 })
   engineer_name: string;

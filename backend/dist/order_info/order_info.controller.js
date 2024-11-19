@@ -18,7 +18,6 @@ const order_info_service_1 = require("./order_info.service");
 const create_order_info_dto_1 = require("./dto/create-order_info.dto");
 const update_order_info_dto_1 = require("./dto/update-order_info.dto");
 const swagger_1 = require("@nestjs/swagger");
-const search_order_list_dto_1 = require("./dto/search-order-list.dto");
 let OrderInfoController = class OrderInfoController {
     constructor(orderInfoService) {
         this.orderInfoService = orderInfoService;
@@ -28,6 +27,9 @@ let OrderInfoController = class OrderInfoController {
     }
     findAll() {
         return this.orderInfoService.findOrderDetails();
+    }
+    findOne(id) {
+        return this.orderInfoService.findWithId(+id);
     }
     update(id, updateOrderInfoDto) {
         return this.orderInfoService.update(+id, updateOrderInfoDto);
@@ -53,13 +55,23 @@ __decorate([
     (0, common_1.Get)('getAllOrderDetails'),
     (0, swagger_1.ApiOperation)({
         summary: '모든 상세 주문 정보를 호출한다',
-        description: '주문정보',
+        description: 'DB의 모든 주문정보를 불러온다',
     }),
-    (0, swagger_1.ApiProperty)({ type: typeof search_order_list_dto_1.OrderListDto }),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", void 0)
 ], OrderInfoController.prototype, "findAll", null);
+__decorate([
+    (0, common_1.Get)('getOrder:id'),
+    (0, swagger_1.ApiOperation)({
+        summary: '파라미터로 전달받은 id 를 기반으로 매치되는 주문정보를 호출한다.',
+    }),
+    (0, swagger_1.ApiParam)({ name: '아이디' }),
+    __param(0, (0, common_1.Param)('id')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String]),
+    __metadata("design:returntype", void 0)
+], OrderInfoController.prototype, "findOne", null);
 __decorate([
     (0, common_1.Patch)(':id'),
     __param(0, (0, common_1.Param)('id')),
@@ -76,7 +88,7 @@ __decorate([
     __metadata("design:returntype", void 0)
 ], OrderInfoController.prototype, "remove", null);
 exports.OrderInfoController = OrderInfoController = __decorate([
-    (0, swagger_1.ApiTags)('주문정보 관련 API'),
+    (0, swagger_1.ApiTags)('주문정보 API'),
     (0, common_1.Controller)('order-info'),
     __metadata("design:paramtypes", [order_info_service_1.OrderInfoService])
 ], OrderInfoController);

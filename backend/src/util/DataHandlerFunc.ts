@@ -75,7 +75,7 @@ export async function handleEngineerData(engineerWithSkill: EngineerSkill[]) {
       });
     }
   });
-
+  console.log([...engineerMap]);
   return Array.from(engineerMap.values());
 }
 

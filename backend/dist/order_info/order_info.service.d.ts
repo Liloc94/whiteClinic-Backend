@@ -5,7 +5,6 @@ import { Repository } from 'typeorm';
 import { Engineer } from 'src/engineer/entities/engineer.entity';
 import { Customer } from 'src/customer/entities/customer.entity';
 import { CustomerEngineerOrder } from './entities/customer_engineer_order.entity';
-import { OrderListDto } from './dto/search-order-list.dto';
 export declare class OrderInfoService {
     private readonly orderInfoRepository;
     private readonly engineerRepository;
@@ -28,7 +27,7 @@ export declare class OrderInfoService {
         receipt_docs_issued: boolean;
     } & Order>;
     findAll(): Promise<Order[]>;
-    findOrderDetails(): Promise<OrderListDto[]>;
+    findOrderDetails(): Promise<import("./dto/search-order-list.dto").OrderListDto[]>;
     findWithId(id: number): Promise<Order[]>;
     update(id: number, updateOrderInfoDto: UpdateOrderInfoDto): Promise<import("typeorm").UpdateResult>;
     remove(id: number): Promise<import("typeorm").DeleteResult>;

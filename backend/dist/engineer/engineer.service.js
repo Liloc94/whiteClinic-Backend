@@ -21,12 +21,14 @@ const skills_entity_1 = require("./entities/skills.entity");
 const engineer_skill_entity_1 = require("./entities/engineer_skill.entity");
 const customer_engineer_order_entity_1 = require("../order_info/entities/customer_engineer_order.entity");
 const DataHandlerFunc_1 = require("../util/DataHandlerFunc");
+const engineer_daily_earning_entity_1 = require("./entities/engineer_daily_earning.entity");
 let EngineerService = class EngineerService {
-    constructor(engineerRepository, skillRepository, engineerSkillRepository, orderDetailRepository) {
+    constructor(engineerRepository, skillRepository, engineerSkillRepository, orderDetailRepository, engineerDailyEarningRepository) {
         this.engineerRepository = engineerRepository;
         this.skillRepository = skillRepository;
         this.engineerSkillRepository = engineerSkillRepository;
         this.orderDetailRepository = orderDetailRepository;
+        this.engineerDailyEarningRepository = engineerDailyEarningRepository;
     }
     async create(engineerData) {
         try {
@@ -61,22 +63,10 @@ let EngineerService = class EngineerService {
             .leftJoinAndSelect('engineerSkill.engineer', 'engineer')
             .leftJoinAndSelect('engineerSkill.skill', 'skill')
             .getMany();
-        const engineerMap = new Map();
-        engineerWithSkills.forEach((engineerSkill) => {
-            const { engineer, skill } = engineerSkill;
-            if (engineerMap.has(engineer.engineer_id)) {
-                engineerMap
-                    .get(engineer.engineer_id)
-                    .engineer_skills.push(skill.skill_type);
-            }
-            else {
-                engineerMap.set(engineer.engineer_id, {
-                    ...engineer,
-                    engineer_skills: [skill.skill_type],
-                });
-            }
-        });
-        return Array.from(engineerMap.values());
+        if (!engineerWithSkills[0]) {
+            throw new common_1.NotFoundException('기사 정보가 존재하지 않습니다.');
+        }
+        return await (0, DataHandlerFunc_1.handleEngineerData)(engineerWithSkills);
     }
     async getAllSchedule() {
         const engineerSchedule = await this.orderDetailRepository
@@ -85,15 +75,30 @@ let EngineerService = class EngineerService {
             .leftJoinAndSelect('customerEngineerOrder.engineer', 'engineer')
             .leftJoinAndSelect('customerEngineerOrder.order', 'order')
             .getMany();
-        return await (0, DataHandlerFunc_1.handleOrderDetails)(engineerSchedule);
+        if (!engineerSchedule[0]) {
+            throw new common_1.NotFoundException('기사 스케쥴 데이터가 존재하지 않습니다.');
+        }
+        return await (0, DataHandlerFunc_1.handleEngineerScheduleData)(engineerSchedule);
     }
-    findOne(id) {
-        return `This action returns a #${id} engineer`;
+    async getDailySalary() {
+        const dailySalaryTest = await this.engineerDailyEarningRepository.find({
+            relations: ['engineer', 'order'],
+        });
+        return dailySalaryTest;
     }
-    update(id, updateEngineerDto) {
-        return `This action updates a #${id} engineer with ${updateEngineerDto}`;
+    async findOne(id) {
+        const exactEngineer = await this.engineerRepository.find({
+            where: { engineer_id: id },
+        });
+        if (exactEngineer.length == 0) {
+            throw new common_1.NotFoundException(`ID : #${id}를 갖는 기사정보가 존재하지 않습니다.`);
+        }
+        return exactEngineer;
     }
-    remove(id) {
+    async update(id, updateEngineerDto) {
+        return `This action updates a #${id} engineer with ${{ ...updateEngineerDto }}`;
+    }
+    async remove(id) {
         return `This action removes a id : #${id} engineer`;
     }
 };
@@ -104,7 +109,9 @@ exports.EngineerService = EngineerService = __decorate([
     __param(1, (0, typeorm_2.InjectRepository)(skills_entity_1.Skill)),
     __param(2, (0, typeorm_2.InjectRepository)(engineer_skill_entity_1.EngineerSkill)),
     __param(3, (0, typeorm_2.InjectRepository)(customer_engineer_order_entity_1.CustomerEngineerOrder)),
+    __param(4, (0, typeorm_2.InjectRepository)(engineer_daily_earning_entity_1.EngineerDailyEarning)),
     __metadata("design:paramtypes", [typeorm_1.Repository,
+        typeorm_1.Repository,
         typeorm_1.Repository,
         typeorm_1.Repository,
         typeorm_1.Repository])

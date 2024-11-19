@@ -29,7 +29,25 @@ export class OrderInfoService {
   ) {}
 
   async create(createOrderInfoDto: CreateOrderInfoDto) {
-    return await this.orderInfoRepository.save({ ...createOrderInfoDto });
+    const {
+      order_customer_address,
+      order_customer_name,
+      order_customer_phone,
+      order_remark,
+      ...rest
+    } = createOrderInfoDto;
+
+    const customerInfo = {
+      customer_name: order_customer_name,
+      customer_phone: order_customer_phone,
+      customer_address: order_customer_address,
+      customer_remark: order_remark,
+    };
+
+    // 비구조화 이후 각각 다른 테이블에 저장
+    this.orderInfoRepository.save({ ...rest });
+    this.customerRepository.save({ ...customerInfo });
+    return createOrderInfoDto;
   }
 
   async findAll() {
