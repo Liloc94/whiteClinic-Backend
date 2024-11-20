@@ -84,7 +84,7 @@ export class EngineerController {
     }
   }
 
-  @Get('getEngineerdailySalary:id')
+  @Post('getEngineerdailySalary:id')
   @ApiOperation({
     description: '파라미터로 받은 id를 가진 기사의 일급 정보를 호출한다',
     summary: '특정 기사의 날짜별 일당을 호출한다',

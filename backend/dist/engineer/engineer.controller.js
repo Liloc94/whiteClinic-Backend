@@ -132,7 +132,7 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], EngineerController.prototype, "getAllSchedule", null);
 __decorate([
-    (0, common_1.Get)('getEngineerdailySalary:id'),
+    (0, common_1.Post)('getEngineerdailySalary:id'),
     (0, swagger_1.ApiOperation)({
         description: '파라미터로 받은 id를 가진 기사의 일급 정보를 호출한다',
         summary: '특정 기사의 날짜별 일당을 호출한다',
