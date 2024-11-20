@@ -14,10 +14,10 @@ export class CreateOrderInfoDto {
   @ApiProperty({ description: '고객 주소' })
   order_customer_addr: string;
 
-  @ApiProperty({ description: '주문 특이사항' })
-  order_remark?: string;
+  @ApiProperty({ description: '고객 특이사항' })
+  order_customer_remark?: string;
 
-  @ApiProperty({ description: '예약금여부', default: false })
+  @ApiProperty({ description: '예약금여부', nullable: false })
   deposit_payed: boolean;
 
   @ApiProperty({ description: '예약금' })
@@ -35,7 +35,7 @@ export class CreateOrderInfoDto {
   })
   order_receipt_docs: string;
 
-  @ApiProperty({ description: '증빙서류 발행여부', default: false })
+  @ApiProperty({ description: '증빙서류 발행여부', nullable: false })
   receipt_docs_issued: boolean;
 
   // 세척 정보 등록 ---------------------------------------------
@@ -46,14 +46,17 @@ export class CreateOrderInfoDto {
   @ApiProperty({ description: '의뢰제품' })
   order_product: string;
 
+  @ApiProperty({ description: '품목 수기입력 시' })
+  order_remark?: string;
+
   @ApiProperty({ description: '주문대수' })
   order_count: number;
 
   @ApiProperty({ description: '주문 총 금액' })
   order_total_amount: number;
 
-  @ApiProperty({ description: '할인여부', default: false })
-  order_isdiscount: boolean;
+  @ApiProperty({ description: '할인여부', nullable: false })
+  order_isDiscount: boolean;
 
   @ApiProperty({ description: '할인율' })
   order_discount_ratio: number;

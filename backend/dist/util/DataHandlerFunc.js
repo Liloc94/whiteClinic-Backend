@@ -65,12 +65,12 @@ async function handleOrderDetailsData(orderDetails) {
     return orderList;
 }
 async function handleCreateOrderInfo(orderInfo) {
-    const { order_customer_addr, order_customer_name, order_customer_phone, order_remark, order_engineer_name: engineer_name, ...rest } = orderInfo;
+    const { order_customer_addr, order_customer_name, order_customer_phone, order_customer_remark, order_engineer_name: engineer_name, ...rest } = orderInfo;
     const customerInfo = {
         customer_name: order_customer_name,
         customer_phone: order_customer_phone,
         customer_addr: order_customer_addr,
-        customer_remark: order_remark,
+        customer_remark: order_customer_remark,
     };
     return [rest, customerInfo, engineer_name];
 }

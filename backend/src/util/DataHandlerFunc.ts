@@ -98,7 +98,7 @@ export async function handleCreateOrderInfo(
     order_customer_addr,
     order_customer_name,
     order_customer_phone,
-    order_remark,
+    order_customer_remark,
     order_engineer_name: engineer_name,
     ...rest
   } = orderInfo;
@@ -107,7 +107,7 @@ export async function handleCreateOrderInfo(
     customer_name: order_customer_name,
     customer_phone: order_customer_phone,
     customer_addr: order_customer_addr,
-    customer_remark: order_remark,
+    customer_remark: order_customer_remark,
   };
 
   return [rest, customerInfo, engineer_name];

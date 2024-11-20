@@ -53,6 +53,8 @@ let OrderInfoService = class OrderInfoService {
                 daily_income: savedOrderInfo.order_total_amount,
                 date: savedOrderInfo.order_date,
             };
+            console.log('savedOrderInfo : ' + savedOrderInfo);
+            console.log('engineer : ' + engineer.engineer_id);
             await this.incomeInfoService.saveDailyIncome(incomes);
             await queryRunner.manager.save(customerEngineerOrder);
             await queryRunner.commitTransaction();

@@ -31,11 +31,11 @@ __decorate([
     __metadata("design:type", String)
 ], CreateOrderInfoDto.prototype, "order_customer_addr", void 0);
 __decorate([
-    (0, swagger_1.ApiProperty)({ description: '주문 특이사항' }),
+    (0, swagger_1.ApiProperty)({ description: '고객 특이사항' }),
     __metadata("design:type", String)
-], CreateOrderInfoDto.prototype, "order_remark", void 0);
+], CreateOrderInfoDto.prototype, "order_customer_remark", void 0);
 __decorate([
-    (0, swagger_1.ApiProperty)({ description: '예약금여부', default: false }),
+    (0, swagger_1.ApiProperty)({ description: '예약금여부', nullable: false }),
     __metadata("design:type", Boolean)
 ], CreateOrderInfoDto.prototype, "deposit_payed", void 0);
 __decorate([
@@ -57,7 +57,7 @@ __decorate([
     __metadata("design:type", String)
 ], CreateOrderInfoDto.prototype, "order_receipt_docs", void 0);
 __decorate([
-    (0, swagger_1.ApiProperty)({ description: '증빙서류 발행여부', default: false }),
+    (0, swagger_1.ApiProperty)({ description: '증빙서류 발행여부', nullable: false }),
     __metadata("design:type", Boolean)
 ], CreateOrderInfoDto.prototype, "receipt_docs_issued", void 0);
 __decorate([
@@ -69,6 +69,10 @@ __decorate([
     __metadata("design:type", String)
 ], CreateOrderInfoDto.prototype, "order_product", void 0);
 __decorate([
+    (0, swagger_1.ApiProperty)({ description: '품목 수기입력 시' }),
+    __metadata("design:type", String)
+], CreateOrderInfoDto.prototype, "order_remark", void 0);
+__decorate([
     (0, swagger_1.ApiProperty)({ description: '주문대수' }),
     __metadata("design:type", Number)
 ], CreateOrderInfoDto.prototype, "order_count", void 0);
@@ -77,9 +81,9 @@ __decorate([
     __metadata("design:type", Number)
 ], CreateOrderInfoDto.prototype, "order_total_amount", void 0);
 __decorate([
-    (0, swagger_1.ApiProperty)({ description: '할인여부', default: false }),
+    (0, swagger_1.ApiProperty)({ description: '할인여부', nullable: false }),
     __metadata("design:type", Boolean)
-], CreateOrderInfoDto.prototype, "order_isdiscount", void 0);
+], CreateOrderInfoDto.prototype, "order_isDiscount", void 0);
 __decorate([
     (0, swagger_1.ApiProperty)({ description: '할인율' }),
     __metadata("design:type", Number)
