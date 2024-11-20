@@ -108,7 +108,7 @@ export class EngineerService {
     return await handleEngineerScheduleData(engineerSchedule);
   }
 
-  async getDailySalary(id) {
+  async getDailySalary(id: number) {
     const queryRunner = this.dataSource.createQueryRunner();
 
     queryRunner.connect();
