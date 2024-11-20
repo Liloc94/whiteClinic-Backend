@@ -5,11 +5,11 @@ export declare class OrderInfoController {
     private readonly orderInfoService;
     constructor(orderInfoService: OrderInfoService);
     create(createOrderInfoDto: CreateOrderInfoDto): Promise<{
-        savedOrder: import("./entities/order_info.entity").Order;
-        savedCustomer: import("../customer/entities/customer.entity").Customer;
+        savedOrderInfo: any;
+        savedCustomer: any;
     }>;
     findAll(): Promise<import("./dto/search-order-list.dto").OrderListDto[]>;
     findOne(id: string): Promise<import("./entities/order_info.entity").Order[]>;
-    update(id: string, updateOrderInfoDto: UpdateOrderInfoDto): Promise<import("typeorm").UpdateResult>;
+    update(id: string, updateOrderInfoDto: UpdateOrderInfoDto): Promise<void>;
     remove(id: string): Promise<import("typeorm").DeleteResult>;
 }

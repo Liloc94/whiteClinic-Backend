@@ -18,10 +18,6 @@ let CustomerEngineerOrder = class CustomerEngineerOrder {
 };
 exports.CustomerEngineerOrder = CustomerEngineerOrder;
 __decorate([
-    (0, typeorm_1.PrimaryGeneratedColumn)(),
-    __metadata("design:type", Number)
-], CustomerEngineerOrder.prototype, "idx", void 0);
-__decorate([
     (0, typeorm_1.ManyToOne)(() => customer_entity_1.Customer, (customer) => customer.customer_id),
     (0, typeorm_1.JoinColumn)({ name: 'customer_id' }),
     __metadata("design:type", Array)

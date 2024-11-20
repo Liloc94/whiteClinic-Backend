@@ -22,50 +22,109 @@ const customer_entity_1 = require("../customer/entities/customer.entity");
 const customer_engineer_order_entity_1 = require("./entities/customer_engineer_order.entity");
 const DataHandlerFunc_1 = require("../util/DataHandlerFunc");
 let OrderInfoService = class OrderInfoService {
-    constructor(orderInfoRepository, engineerRepository, customerRepository, OrderDetailRepository) {
+    constructor(orderInfoRepository, engineerRepository, customerRepository, OrderDetailRepository, dataSource) {
         this.orderInfoRepository = orderInfoRepository;
         this.engineerRepository = engineerRepository;
         this.customerRepository = customerRepository;
         this.OrderDetailRepository = OrderDetailRepository;
+        this.dataSource = dataSource;
     }
     async create(createOrderInfoDto) {
-        const temp = await (0, DataHandlerFunc_1.handleCreateOrderInfo)(createOrderInfoDto);
-        const savedOrder = await this.orderInfoRepository.save({
-            ...temp[0],
-        });
-        const savedCustomer = await this.customerRepository.save({
-            ...temp[1],
-        });
-        const savedEngineer = await this.engineerRepository.findOne({
-            where: { engineer_name: temp[2] },
-        });
-        const entityObject = {
-            order: savedOrder,
-            customer: savedCustomer,
-            engineer: savedEngineer,
-        };
-        await this.OrderDetailRepository.save({ ...entityObject });
-        return { savedOrder, savedCustomer };
+        const queryRunner = this.dataSource.createQueryRunner();
+        await queryRunner.connect();
+        await queryRunner.startTransaction();
+        try {
+            const temp = await (0, DataHandlerFunc_1.handleCreateOrderInfo)(createOrderInfoDto);
+            const savedOrderInfo = await queryRunner.manager.save(temp[0]);
+            const savedCustomer = await queryRunner.manager.save(temp[1]);
+            const engineer = await queryRunner.manager.findOneByOrFail(engineer_entity_1.Engineer, {
+                engineer_name: temp[2],
+            });
+            const customerEngineerOrder = queryRunner.manager.create(customer_engineer_order_entity_1.CustomerEngineerOrder, {
+                customer: savedCustomer,
+                order: savedOrderInfo,
+                engineer: engineer,
+            });
+            await queryRunner.manager.save(customerEngineerOrder);
+            await queryRunner.commitTransaction();
+            return { savedOrderInfo, savedCustomer };
+        }
+        catch (error) {
+            await queryRunner.rollbackTransaction();
+            console.error('트랜잭션 실패, 롤백 실행', error.message);
+            throw error;
+        }
+        finally {
+            await queryRunner.release();
+        }
     }
     async findAll() {
-        return await this.orderInfoRepository.find();
+        try {
+            return await this.orderInfoRepository.find();
+        }
+        catch (error) {
+            throw new common_1.NotFoundException(error);
+        }
     }
     async findOrderDetails() {
-        const orderDetails = await this.OrderDetailRepository.createQueryBuilder('CustomerEngineerOrder')
-            .leftJoinAndSelect('CustomerEngineerOrder.customer', 'customer')
-            .leftJoinAndSelect('CustomerEngineerOrder.order', 'order')
-            .leftJoinAndSelect('CustomerEngineerOrder.engineer', 'engineer')
-            .getMany();
-        return await (0, DataHandlerFunc_1.handleOrderDetailsData)(orderDetails);
+        const queryRunner = this.dataSource.createQueryRunner();
+        queryRunner.connect();
+        queryRunner.startTransaction();
+        try {
+            const orderDetails = await queryRunner.manager
+                .createQueryBuilder(customer_engineer_order_entity_1.CustomerEngineerOrder, 'CustomerEngineerOrder')
+                .leftJoinAndSelect('CustomerEngineerOrder.customer', 'customer')
+                .leftJoinAndSelect('CustomerEngineerOrder.order', 'order')
+                .leftJoinAndSelect('CustomerEngineerOrder.engineer', 'engineer')
+                .getMany();
+            return await (0, DataHandlerFunc_1.handleOrderDetailsData)(orderDetails);
+        }
+        catch (error) {
+            queryRunner.rollbackTransaction();
+            console.log('트랜잭션 실패, 롤백실행');
+            throw error;
+        }
+        finally {
+            queryRunner.release();
+        }
     }
     async findWithId(id) {
-        return await this.orderInfoRepository.find({ where: { order_id: id } });
+        try {
+            return await this.orderInfoRepository.find({ where: { order_id: id } });
+        }
+        catch (error) {
+            throw new common_1.NotFoundException(error);
+        }
     }
     async update(id, updateOrderInfoDto) {
-        return await this.orderInfoRepository.update({ ...updateOrderInfoDto }, { order_id: id });
+        const queryRunner = this.dataSource.createQueryRunner();
+        queryRunner.connect();
+        queryRunner.startTransaction();
+        try {
+            await queryRunner.manager.update(order_info_entity_1.Order, { ...updateOrderInfoDto }, { order_id: id });
+        }
+        catch (error) {
+            queryRunner.rollbackTransaction();
+            throw error;
+        }
+        finally {
+            queryRunner.release();
+        }
     }
     async remove(id) {
-        return await this.orderInfoRepository.delete({ order_id: id });
+        const queryRunner = this.dataSource.createQueryRunner();
+        queryRunner.connect();
+        queryRunner.startTransaction();
+        try {
+            return await queryRunner.manager.delete(order_info_entity_1.Order, { order_id: id });
+        }
+        catch (error) {
+            queryRunner.rollbackTransaction();
+            throw error;
+        }
+        finally {
+            queryRunner.release();
+        }
     }
 };
 exports.OrderInfoService = OrderInfoService;
@@ -78,6 +137,7 @@ exports.OrderInfoService = OrderInfoService = __decorate([
     __metadata("design:paramtypes", [typeorm_2.Repository,
         typeorm_2.Repository,
         typeorm_2.Repository,
-        typeorm_2.Repository])
+        typeorm_2.Repository,
+        typeorm_2.DataSource])
 ], OrderInfoService);
 //# sourceMappingURL=order_info.service.js.map
