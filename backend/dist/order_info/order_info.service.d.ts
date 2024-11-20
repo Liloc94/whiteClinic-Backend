@@ -5,13 +5,15 @@ import { DataSource, Repository } from 'typeorm';
 import { Engineer } from 'src/engineer/entities/engineer.entity';
 import { Customer } from 'src/customer/entities/customer.entity';
 import { CustomerEngineerOrder } from './entities/customer_engineer_order.entity';
+import { IncomeInfoService } from 'src/income.service';
 export declare class OrderInfoService {
     private readonly orderInfoRepository;
     private readonly engineerRepository;
     private readonly customerRepository;
     private readonly OrderDetailRepository;
     private readonly dataSource;
-    constructor(orderInfoRepository: Repository<Order>, engineerRepository: Repository<Engineer>, customerRepository: Repository<Customer>, OrderDetailRepository: Repository<CustomerEngineerOrder>, dataSource: DataSource);
+    private readonly incomeInfoService;
+    constructor(orderInfoRepository: Repository<Order>, engineerRepository: Repository<Engineer>, customerRepository: Repository<Customer>, OrderDetailRepository: Repository<CustomerEngineerOrder>, dataSource: DataSource, incomeInfoService: IncomeInfoService);
     create(createOrderInfoDto: CreateOrderInfoDto): Promise<{
         savedOrderInfo: any;
         savedCustomer: any;
@@ -20,5 +22,5 @@ export declare class OrderInfoService {
     findOrderDetails(): Promise<import("./dto/search-order-list.dto").OrderListDto[]>;
     findWithId(id: number): Promise<Order[]>;
     update(id: number, updateOrderInfoDto: UpdateOrderInfoDto): Promise<void>;
-    remove(id: number): Promise<import("typeorm").DeleteResult>;
+    remove(id: number): Promise<void>;
 }

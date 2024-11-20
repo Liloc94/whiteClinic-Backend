@@ -25,17 +25,17 @@ let OrderInfoController = class OrderInfoController {
     async create(createOrderInfoDto) {
         return await this.orderInfoService.create(createOrderInfoDto);
     }
-    findAll() {
-        return this.orderInfoService.findOrderDetails();
+    async findAll() {
+        return await this.orderInfoService.findOrderDetails();
     }
-    findOne(id) {
-        return this.orderInfoService.findWithId(+id);
+    async findOne(id) {
+        return await this.orderInfoService.findWithId(+id);
     }
-    update(id, updateOrderInfoDto) {
-        return this.orderInfoService.update(+id, updateOrderInfoDto);
+    async update(id, updateOrderInfoDto) {
+        return await this.orderInfoService.update(+id, updateOrderInfoDto);
     }
-    remove(id) {
-        return this.orderInfoService.remove(+id);
+    async remove(id) {
+        return await this.orderInfoService.remove(+id);
     }
 };
 exports.OrderInfoController = OrderInfoController;
@@ -58,7 +58,7 @@ __decorate([
     }),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", []),
-    __metadata("design:returntype", void 0)
+    __metadata("design:returntype", Promise)
 ], OrderInfoController.prototype, "findAll", null);
 __decorate([
     (0, common_1.Get)('getOrder:id'),
@@ -68,7 +68,7 @@ __decorate([
     __param(0, (0, common_1.Param)('id')),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String]),
-    __metadata("design:returntype", void 0)
+    __metadata("design:returntype", Promise)
 ], OrderInfoController.prototype, "findOne", null);
 __decorate([
     (0, common_1.Patch)(':id'),
@@ -76,14 +76,14 @@ __decorate([
     __param(1, (0, common_1.Body)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String, update_order_info_dto_1.UpdateOrderInfoDto]),
-    __metadata("design:returntype", void 0)
+    __metadata("design:returntype", Promise)
 ], OrderInfoController.prototype, "update", null);
 __decorate([
     (0, common_1.Delete)(':id'),
     __param(0, (0, common_1.Param)('id')),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String]),
-    __metadata("design:returntype", void 0)
+    __metadata("design:returntype", Promise)
 ], OrderInfoController.prototype, "remove", null);
 exports.OrderInfoController = OrderInfoController = __decorate([
     (0, swagger_1.ApiTags)('주문정보 API'),

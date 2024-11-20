@@ -31,28 +31,28 @@ export class OrderInfoController {
     summary: '모든 상세 주문 정보를 호출한다',
     description: 'DB의 모든 주문정보를 불러온다',
   })
-  findAll() {
-    return this.orderInfoService.findOrderDetails();
+  async findAll() {
+    return await this.orderInfoService.findOrderDetails();
   }
 
   @Get('getOrder:id')
   @ApiOperation({
     summary: '파라미터로 전달받은 id 를 기반으로 매치되는 주문정보를 호출한다.',
   })
-  findOne(@Param('id') id: string) {
-    return this.orderInfoService.findWithId(+id);
+  async findOne(@Param('id') id: string) {
+    return await this.orderInfoService.findWithId(+id);
   }
 
   @Patch(':id')
-  update(
+  async update(
     @Param('id') id: string,
     @Body() updateOrderInfoDto: UpdateOrderInfoDto,
   ) {
-    return this.orderInfoService.update(+id, updateOrderInfoDto);
+    return await this.orderInfoService.update(+id, updateOrderInfoDto);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.orderInfoService.remove(+id);
+  async remove(@Param('id') id: string) {
+    return await this.orderInfoService.remove(+id);
   }
 }

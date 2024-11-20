@@ -2,6 +2,7 @@
 import { IsOptional } from 'class-validator';
 import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
 import { EngineerDailyEarning } from './engineer_daily_earning.entity';
+import { EngineerWeeklyEarning } from './engineer_weekly_earning.entity';
 
 @Entity('engineer', { schema: 'white_clinic' })
 export class Engineer {
@@ -16,6 +17,12 @@ export class Engineer {
     (dailyEarning) => dailyEarning.engineer,
   )
   dailyEarnings: EngineerDailyEarning[];
+
+  @OneToMany(
+    () => EngineerWeeklyEarning,
+    (weeklyEarning) => weeklyEarning.engineer,
+  )
+  weeklyEarnings: EngineerWeeklyEarning[];
 
   @Column({ type: 'varchar', length: 255 })
   engineer_name: string;

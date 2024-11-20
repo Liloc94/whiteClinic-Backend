@@ -21,13 +21,15 @@ const engineer_entity_1 = require("../engineer/entities/engineer.entity");
 const customer_entity_1 = require("../customer/entities/customer.entity");
 const customer_engineer_order_entity_1 = require("./entities/customer_engineer_order.entity");
 const DataHandlerFunc_1 = require("../util/DataHandlerFunc");
+const income_service_1 = require("../income.service");
 let OrderInfoService = class OrderInfoService {
-    constructor(orderInfoRepository, engineerRepository, customerRepository, OrderDetailRepository, dataSource) {
+    constructor(orderInfoRepository, engineerRepository, customerRepository, OrderDetailRepository, dataSource, incomeInfoService) {
         this.orderInfoRepository = orderInfoRepository;
         this.engineerRepository = engineerRepository;
         this.customerRepository = customerRepository;
         this.OrderDetailRepository = OrderDetailRepository;
         this.dataSource = dataSource;
+        this.incomeInfoService = incomeInfoService;
     }
     async create(createOrderInfoDto) {
         const queryRunner = this.dataSource.createQueryRunner();
@@ -35,8 +37,8 @@ let OrderInfoService = class OrderInfoService {
         await queryRunner.startTransaction();
         try {
             const temp = await (0, DataHandlerFunc_1.handleCreateOrderInfo)(createOrderInfoDto);
-            const savedOrderInfo = await queryRunner.manager.save(temp[0]);
-            const savedCustomer = await queryRunner.manager.save(temp[1]);
+            const savedOrderInfo = await queryRunner.manager.save(order_info_entity_1.Order, temp[0]);
+            const savedCustomer = await queryRunner.manager.save(customer_entity_1.Customer, temp[1]);
             const engineer = await queryRunner.manager.findOneByOrFail(engineer_entity_1.Engineer, {
                 engineer_name: temp[2],
             });
@@ -45,6 +47,13 @@ let OrderInfoService = class OrderInfoService {
                 order: savedOrderInfo,
                 engineer: engineer,
             });
+            const incomes = {
+                order_id: savedOrderInfo.order_id,
+                engineer_id: engineer.engineer_id,
+                daily_income: savedOrderInfo.order_total_amount,
+                date: savedOrderInfo.order_date,
+            };
+            await this.incomeInfoService.saveDailyIncome(incomes);
             await queryRunner.manager.save(customerEngineerOrder);
             await queryRunner.commitTransaction();
             return { savedOrderInfo, savedCustomer };
@@ -55,7 +64,9 @@ let OrderInfoService = class OrderInfoService {
             throw error;
         }
         finally {
-            await queryRunner.release();
+            if (!queryRunner.isReleased) {
+                await queryRunner.release();
+            }
         }
     }
     async findAll() {
@@ -77,6 +88,7 @@ let OrderInfoService = class OrderInfoService {
                 .leftJoinAndSelect('CustomerEngineerOrder.order', 'order')
                 .leftJoinAndSelect('CustomerEngineerOrder.engineer', 'engineer')
                 .getMany();
+            await queryRunner.commitTransaction();
             return await (0, DataHandlerFunc_1.handleOrderDetailsData)(orderDetails);
         }
         catch (error) {
@@ -85,7 +97,9 @@ let OrderInfoService = class OrderInfoService {
             throw error;
         }
         finally {
-            queryRunner.release();
+            if (!queryRunner.isReleased) {
+                await queryRunner.release();
+            }
         }
     }
     async findWithId(id) {
@@ -102,13 +116,16 @@ let OrderInfoService = class OrderInfoService {
         queryRunner.startTransaction();
         try {
             await queryRunner.manager.update(order_info_entity_1.Order, { ...updateOrderInfoDto }, { order_id: id });
+            await queryRunner.commitTransaction();
         }
         catch (error) {
             queryRunner.rollbackTransaction();
             throw error;
         }
         finally {
-            queryRunner.release();
+            if (!queryRunner.isReleased) {
+                await queryRunner.release();
+            }
         }
     }
     async remove(id) {
@@ -116,14 +133,17 @@ let OrderInfoService = class OrderInfoService {
         queryRunner.connect();
         queryRunner.startTransaction();
         try {
-            return await queryRunner.manager.delete(order_info_entity_1.Order, { order_id: id });
+            await queryRunner.manager.delete(order_info_entity_1.Order, { order_id: id });
+            await queryRunner.commitTransaction();
         }
         catch (error) {
             queryRunner.rollbackTransaction();
             throw error;
         }
         finally {
-            queryRunner.release();
+            if (!queryRunner.isReleased) {
+                await queryRunner.release();
+            }
         }
     }
 };
@@ -138,6 +158,7 @@ exports.OrderInfoService = OrderInfoService = __decorate([
         typeorm_2.Repository,
         typeorm_2.Repository,
         typeorm_2.Repository,
-        typeorm_2.DataSource])
+        typeorm_2.DataSource,
+        income_service_1.IncomeInfoService])
 ], OrderInfoService);
 //# sourceMappingURL=order_info.service.js.map

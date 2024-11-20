@@ -7,6 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.OrderInfoModule = void 0;
+const income_service_1 = require("../income.service");
 const common_1 = require("@nestjs/common");
 const order_info_service_1 = require("./order_info.service");
 const order_info_controller_1 = require("./order_info.controller");
@@ -15,6 +16,8 @@ const customer_engineer_order_entity_1 = require("./entities/customer_engineer_o
 const order_info_entity_1 = require("./entities/order_info.entity");
 const engineer_entity_1 = require("../engineer/entities/engineer.entity");
 const customer_entity_1 = require("../customer/entities/customer.entity");
+const engineer_weekly_earning_entity_1 = require("../engineer/entities/engineer_weekly_earning.entity");
+const engineer_daily_earning_entity_1 = require("../engineer/entities/engineer_daily_earning.entity");
 let OrderInfoModule = class OrderInfoModule {
 };
 exports.OrderInfoModule = OrderInfoModule;
@@ -23,6 +26,8 @@ exports.OrderInfoModule = OrderInfoModule = __decorate([
         imports: [
             typeorm_1.TypeOrmModule.forFeature([
                 customer_engineer_order_entity_1.CustomerEngineerOrder,
+                engineer_weekly_earning_entity_1.EngineerWeeklyEarning,
+                engineer_daily_earning_entity_1.EngineerDailyEarning,
                 engineer_entity_1.Engineer,
                 order_info_entity_1.Order,
                 customer_entity_1.Customer,
@@ -30,7 +35,7 @@ exports.OrderInfoModule = OrderInfoModule = __decorate([
         ],
         exports: [typeorm_1.TypeOrmModule],
         controllers: [order_info_controller_1.OrderInfoController],
-        providers: [order_info_service_1.OrderInfoService],
+        providers: [order_info_service_1.OrderInfoService, income_service_1.IncomeInfoService],
     })
 ], OrderInfoModule);
 //# sourceMappingURL=order_info.module.js.map

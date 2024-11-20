@@ -18,6 +18,7 @@ const skills_entity_1 = require("./entities/skills.entity");
 const order_info_entity_1 = require("../order_info/entities/order_info.entity");
 const customer_engineer_order_entity_1 = require("../order_info/entities/customer_engineer_order.entity");
 const skillUtil_service_1 = require("../skillUtil.service");
+const engineer_weekly_earning_entity_1 = require("./entities/engineer_weekly_earning.entity");
 let EngineerModule = class EngineerModule {
 };
 exports.EngineerModule = EngineerModule;
@@ -27,6 +28,7 @@ exports.EngineerModule = EngineerModule = __decorate([
             typeorm_1.TypeOrmModule.forFeature([
                 customer_engineer_order_entity_1.CustomerEngineerOrder,
                 engineer_daily_earning_entity_1.EngineerDailyEarning,
+                engineer_weekly_earning_entity_1.EngineerWeeklyEarning,
                 engineer_entity_1.Engineer,
                 engineer_skill_entity_1.EngineerSkill,
                 skills_entity_1.Skill,

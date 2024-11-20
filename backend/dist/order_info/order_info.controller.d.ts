@@ -11,5 +11,5 @@ export declare class OrderInfoController {
     findAll(): Promise<import("./dto/search-order-list.dto").OrderListDto[]>;
     findOne(id: string): Promise<import("./entities/order_info.entity").Order[]>;
     update(id: string, updateOrderInfoDto: UpdateOrderInfoDto): Promise<void>;
-    remove(id: string): Promise<import("typeorm").DeleteResult>;
+    remove(id: string): Promise<void>;
 }

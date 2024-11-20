@@ -11,6 +11,7 @@ import {
   handleCreateOrderInfo,
   handleOrderDetailsData,
 } from 'src/util/DataHandlerFunc';
+import { IncomeInfoService } from 'src/income.service';
 
 @Injectable()
 export class OrderInfoService {
@@ -29,6 +30,8 @@ export class OrderInfoService {
     private readonly OrderDetailRepository: Repository<CustomerEngineerOrder>,
     // 쿼리러너 실행용 데이터소스
     private readonly dataSource: DataSource,
+    // daily, weekly 매출 저장용 서비스
+    private readonly incomeInfoService: IncomeInfoService,
   ) {}
 
   async create(createOrderInfoDto: CreateOrderInfoDto) {
@@ -38,18 +41,14 @@ export class OrderInfoService {
 
     try {
       const temp = await handleCreateOrderInfo(createOrderInfoDto);
-
       // OrderInfo 저장
-      const savedOrderInfo = await queryRunner.manager.save(temp[0]);
-
+      const savedOrderInfo = await queryRunner.manager.save(Order, temp[0]);
       // Customer 저장
-      const savedCustomer = await queryRunner.manager.save(temp[1]);
-
+      const savedCustomer = await queryRunner.manager.save(Customer, temp[1]);
       // Engineer 조회
       const engineer = await queryRunner.manager.findOneByOrFail(Engineer, {
         engineer_name: temp[2],
       });
-
       // CustomerEngineerOrder 저장
       const customerEngineerOrder = queryRunner.manager.create(
         CustomerEngineerOrder,
@@ -59,11 +58,18 @@ export class OrderInfoService {
           engineer: engineer,
         },
       );
-      await queryRunner.manager.save(customerEngineerOrder);
 
+      const incomes = {
+        order_id: savedOrderInfo.order_id,
+        engineer_id: engineer.engineer_id,
+        daily_income: savedOrderInfo.order_total_amount,
+        date: savedOrderInfo.order_date,
+      };
+      await this.incomeInfoService.saveDailyIncome(incomes);
+
+      await queryRunner.manager.save(customerEngineerOrder);
       // 트랜잭션 커밋
       await queryRunner.commitTransaction();
-
       return { savedOrderInfo, savedCustomer };
     } catch (error) {
       // 에러 발생 시 롤백
@@ -72,7 +78,9 @@ export class OrderInfoService {
       throw error;
     } finally {
       // QueryRunner 해제
-      await queryRunner.release();
+      if (!queryRunner.isReleased) {
+        await queryRunner.release();
+      }
     }
   }
 
@@ -99,6 +107,7 @@ export class OrderInfoService {
         .leftJoinAndSelect('CustomerEngineerOrder.engineer', 'engineer')
         .getMany();
 
+      await queryRunner.commitTransaction();
       return await handleOrderDetailsData(orderDetails);
     } catch (error) {
       queryRunner.rollbackTransaction();
@@ -106,7 +115,9 @@ export class OrderInfoService {
 
       throw error;
     } finally {
-      queryRunner.release();
+      if (!queryRunner.isReleased) {
+        await queryRunner.release();
+      }
     }
   }
 
@@ -129,11 +140,15 @@ export class OrderInfoService {
         { ...updateOrderInfoDto }, // 업데이트 정보 파라미터
         { order_id: id }, // 업데이트할 타겟 컬럼
       );
+
+      await queryRunner.commitTransaction();
     } catch (error) {
       queryRunner.rollbackTransaction();
       throw error;
     } finally {
-      queryRunner.release();
+      if (!queryRunner.isReleased) {
+        await queryRunner.release();
+      }
     }
   }
 
@@ -142,12 +157,15 @@ export class OrderInfoService {
     queryRunner.connect();
     queryRunner.startTransaction();
     try {
-      return await queryRunner.manager.delete(Order, { order_id: id });
+      await queryRunner.manager.delete(Order, { order_id: id });
+      await queryRunner.commitTransaction();
     } catch (error) {
       queryRunner.rollbackTransaction();
       throw error;
     } finally {
-      queryRunner.release();
+      if (!queryRunner.isReleased) {
+        await queryRunner.release();
+      }
     }
   }
 }
