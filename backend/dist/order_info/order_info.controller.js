@@ -22,8 +22,8 @@ let OrderInfoController = class OrderInfoController {
     constructor(orderInfoService) {
         this.orderInfoService = orderInfoService;
     }
-    create(createOrderInfoDto) {
-        return this.orderInfoService.create(createOrderInfoDto);
+    async create(createOrderInfoDto) {
+        return await this.orderInfoService.create(createOrderInfoDto);
     }
     findAll() {
         return this.orderInfoService.findOrderDetails();
@@ -41,7 +41,6 @@ let OrderInfoController = class OrderInfoController {
 exports.OrderInfoController = OrderInfoController;
 __decorate([
     (0, common_1.Post)('createNewOrder'),
-    (0, swagger_1.ApiBody)({ type: create_order_info_dto_1.CreateOrderInfoDto }),
     (0, swagger_1.ApiOperation)({
         summary: '새로운 주문정보를 DB에 저장한다.',
         description: '입력한 정보를 DB 내부 order_info 테이블에 저장한다.',
@@ -49,7 +48,7 @@ __decorate([
     __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [create_order_info_dto_1.CreateOrderInfoDto]),
-    __metadata("design:returntype", void 0)
+    __metadata("design:returntype", Promise)
 ], OrderInfoController.prototype, "create", null);
 __decorate([
     (0, common_1.Get)('getAllOrderDetails'),

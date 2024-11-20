@@ -1,12 +1,12 @@
 // customer_engineer_order.entity.ts
 import { Customer } from 'src/customer/entities/customer.entity';
-import { Entity, PrimaryColumn, ManyToOne, JoinColumn } from 'typeorm';
+import { Entity, ManyToOne, JoinColumn, PrimaryGeneratedColumn } from 'typeorm';
 import { Order } from './order_info.entity';
 import { Engineer } from 'src/engineer/entities/engineer.entity';
 
 @Entity('customer_engineer_order')
 export class CustomerEngineerOrder {
-  @PrimaryColumn()
+  @PrimaryGeneratedColumn()
   idx: number;
 
   @ManyToOne(() => Customer, {

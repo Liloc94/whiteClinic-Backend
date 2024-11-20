@@ -15,7 +15,7 @@ let Skill = class Skill {
 };
 exports.Skill = Skill;
 __decorate([
-    (0, typeorm_1.PrimaryColumn)(),
+    (0, typeorm_1.PrimaryGeneratedColumn)(),
     __metadata("design:type", Number)
 ], Skill.prototype, "skill_id", void 0);
 __decorate([

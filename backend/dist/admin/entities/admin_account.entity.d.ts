@@ -4,6 +4,6 @@ export declare class AdminAccount {
     admin_id: string;
     admin_pw: string;
     role: string;
-    token_version: number;
+    token_version?: number;
     refreshTokens: AdminRefreshToken[];
 }

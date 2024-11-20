@@ -27,7 +27,7 @@ __decorate([
     __metadata("design:type", String)
 ], Customer.prototype, "customer_phone", void 0);
 __decorate([
-    (0, typeorm_1.Column)({ type: 'varchar', length: 100, unique: true }),
+    (0, typeorm_1.Column)({ type: 'varchar', length: 255, unique: true }),
     __metadata("design:type", String)
 ], Customer.prototype, "customer_addr", void 0);
 __decorate([

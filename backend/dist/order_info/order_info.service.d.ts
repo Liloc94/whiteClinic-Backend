@@ -11,7 +11,10 @@ export declare class OrderInfoService {
     private readonly customerRepository;
     private readonly OrderDetailRepository;
     constructor(orderInfoRepository: Repository<Order>, engineerRepository: Repository<Engineer>, customerRepository: Repository<Customer>, OrderDetailRepository: Repository<CustomerEngineerOrder>);
-    create(createOrderInfoDto: CreateOrderInfoDto): Promise<CreateOrderInfoDto>;
+    create(createOrderInfoDto: CreateOrderInfoDto): Promise<{
+        savedOrder: Order;
+        savedCustomer: Customer;
+    }>;
     findAll(): Promise<Order[]>;
     findOrderDetails(): Promise<import("./dto/search-order-list.dto").OrderListDto[]>;
     findWithId(id: number): Promise<Order[]>;

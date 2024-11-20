@@ -29,7 +29,7 @@ __decorate([
 __decorate([
     (0, swagger_1.ApiProperty)({ description: '고객 주소' }),
     __metadata("design:type", String)
-], CreateOrderInfoDto.prototype, "order_customer_address", void 0);
+], CreateOrderInfoDto.prototype, "order_customer_addr", void 0);
 __decorate([
     (0, swagger_1.ApiProperty)({ description: '주문 특이사항' }),
     __metadata("design:type", String)
@@ -84,4 +84,8 @@ __decorate([
     (0, swagger_1.ApiProperty)({ description: '할인율' }),
     __metadata("design:type", Number)
 ], CreateOrderInfoDto.prototype, "order_discount_ratio", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ description: '담당 기사' }),
+    __metadata("design:type", String)
+], CreateOrderInfoDto.prototype, "order_engineer_name", void 0);
 //# sourceMappingURL=create-order_info.dto.js.map

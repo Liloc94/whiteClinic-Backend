@@ -29,16 +29,23 @@ let OrderInfoService = class OrderInfoService {
         this.OrderDetailRepository = OrderDetailRepository;
     }
     async create(createOrderInfoDto) {
-        const { order_customer_address, order_customer_name, order_customer_phone, order_remark, ...rest } = createOrderInfoDto;
-        const customerInfo = {
-            customer_name: order_customer_name,
-            customer_phone: order_customer_phone,
-            customer_address: order_customer_address,
-            customer_remark: order_remark,
+        const temp = await (0, DataHandlerFunc_1.handleCreateOrderInfo)(createOrderInfoDto);
+        const savedOrder = await this.orderInfoRepository.save({
+            ...temp[0],
+        });
+        const savedCustomer = await this.customerRepository.save({
+            ...temp[1],
+        });
+        const savedEngineer = await this.engineerRepository.findOne({
+            where: { engineer_name: temp[2] },
+        });
+        const entityObject = {
+            order: savedOrder,
+            customer: savedCustomer,
+            engineer: savedEngineer,
         };
-        this.orderInfoRepository.save({ ...rest });
-        this.customerRepository.save({ ...customerInfo });
-        return createOrderInfoDto;
+        await this.OrderDetailRepository.save({ ...entityObject });
+        return { savedOrder, savedCustomer };
     }
     async findAll() {
         return await this.orderInfoRepository.find();

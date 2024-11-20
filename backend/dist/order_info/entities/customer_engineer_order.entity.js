@@ -18,7 +18,7 @@ let CustomerEngineerOrder = class CustomerEngineerOrder {
 };
 exports.CustomerEngineerOrder = CustomerEngineerOrder;
 __decorate([
-    (0, typeorm_1.PrimaryColumn)(),
+    (0, typeorm_1.PrimaryGeneratedColumn)(),
     __metadata("design:type", Number)
 ], CustomerEngineerOrder.prototype, "idx", void 0);
 __decorate([

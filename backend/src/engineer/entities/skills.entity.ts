@@ -1,9 +1,9 @@
 // skills.entity.ts
-import { Entity, PrimaryColumn, Column } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity('skills')
 export class Skill {
-  @PrimaryColumn()
+  @PrimaryGeneratedColumn()
   skill_id: number;
 
   @Column({ type: 'varchar', length: 255 })

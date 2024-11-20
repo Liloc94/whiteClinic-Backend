@@ -1,5 +1,6 @@
 import { EngineerScheduleDto } from 'src/engineer/dto/search-engineer-schedule.dto';
 import { EngineerSkill } from 'src/engineer/entities/engineer_skill.entity';
+import { CreateOrderInfoDto } from 'src/order_info/dto/create-order_info.dto';
 import { OrderListDto } from 'src/order_info/dto/search-order-list.dto';
 import { CustomerEngineerOrder } from 'src/order_info/entities/customer_engineer_order.entity';
 
@@ -83,4 +84,31 @@ export async function handleOrderDetailsData(
   });
 
   return orderList;
+}
+
+/**
+ *
+ * @param orderInfo 주문등록 시 입력 정보, CreateOrderInfoDto 타입
+ * @returns [주문정보, 고객정보, 기사성함] 배열로 반환
+ */
+export async function handleCreateOrderInfo(
+  orderInfo: CreateOrderInfoDto,
+): Promise<any> {
+  const {
+    order_customer_addr,
+    order_customer_name,
+    order_customer_phone,
+    order_remark,
+    order_engineer_name: engineer_name,
+    ...rest
+  } = orderInfo;
+
+  const customerInfo = {
+    customer_name: order_customer_name,
+    customer_phone: order_customer_phone,
+    customer_addr: order_customer_addr,
+    customer_remark: order_remark,
+  };
+
+  return [rest, customerInfo, engineer_name];
 }

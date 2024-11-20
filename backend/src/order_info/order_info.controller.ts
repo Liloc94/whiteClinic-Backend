@@ -10,7 +10,7 @@ import {
 import { OrderInfoService } from './order_info.service';
 import { CreateOrderInfoDto } from './dto/create-order_info.dto';
 import { UpdateOrderInfoDto } from './dto/update-order_info.dto';
-import { ApiBody, ApiOperation, ApiTags } from '@nestjs/swagger';
+import { ApiOperation, ApiTags } from '@nestjs/swagger';
 
 @ApiTags('주문정보 API')
 @Controller('order-info')
@@ -18,13 +18,12 @@ export class OrderInfoController {
   constructor(private readonly orderInfoService: OrderInfoService) {}
 
   @Post('createNewOrder')
-  @ApiBody({ type: CreateOrderInfoDto })
   @ApiOperation({
     summary: '새로운 주문정보를 DB에 저장한다.',
     description: '입력한 정보를 DB 내부 order_info 테이블에 저장한다.',
   })
-  create(@Body() createOrderInfoDto: CreateOrderInfoDto) {
-    return this.orderInfoService.create(createOrderInfoDto);
+  async create(@Body() createOrderInfoDto: CreateOrderInfoDto) {
+    return await this.orderInfoService.create(createOrderInfoDto);
   }
 
   @Get('getAllOrderDetails')

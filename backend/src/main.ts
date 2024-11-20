@@ -20,8 +20,6 @@ async function bootstrap() {
   app.useGlobalFilters(new ValidationExceptionFilter());
   app.useGlobalPipes(
     new ValidationPipe({
-      whitelist: true, // DTO에 정의되지 않은 속성 제거
-      forbidNonWhitelisted: true, // DTO에 정의되지 않은 속성이 포함된 경우 에러 발생
       transform: true, // 자동 변환
       enableDebugMessages: true, // 개발 환경에서 상세한 에러 메시지
       validationError: {

@@ -3,11 +3,14 @@ import { CreateOrderInfoDto } from './dto/create-order_info.dto';
 import { UpdateOrderInfoDto } from './dto/update-order_info.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Order } from './entities/order_info.entity';
-import { Repository } from 'typeorm';
+import { DeepPartial, Repository } from 'typeorm';
 import { Engineer } from 'src/engineer/entities/engineer.entity';
 import { Customer } from 'src/customer/entities/customer.entity';
 import { CustomerEngineerOrder } from './entities/customer_engineer_order.entity';
-import { handleOrderDetailsData } from 'src/util/DataHandlerFunc';
+import {
+  handleCreateOrderInfo,
+  handleOrderDetailsData,
+} from 'src/util/DataHandlerFunc';
 
 @Injectable()
 export class OrderInfoService {
@@ -29,25 +32,27 @@ export class OrderInfoService {
   ) {}
 
   async create(createOrderInfoDto: CreateOrderInfoDto) {
-    const {
-      order_customer_address,
-      order_customer_name,
-      order_customer_phone,
-      order_remark,
-      ...rest
-    } = createOrderInfoDto;
+    const temp = await handleCreateOrderInfo(createOrderInfoDto);
 
-    const customerInfo = {
-      customer_name: order_customer_name,
-      customer_phone: order_customer_phone,
-      customer_address: order_customer_address,
-      customer_remark: order_remark,
+    const savedOrder: Order = await this.orderInfoRepository.save({
+      ...temp[0],
+    });
+    const savedCustomer: Customer = await this.customerRepository.save({
+      ...temp[1],
+    });
+    const savedEngineer: Engineer = await this.engineerRepository.findOne({
+      where: { engineer_name: temp[2] },
+    });
+
+    const entityObject: DeepPartial<CustomerEngineerOrder> = {
+      order: savedOrder,
+      customer: savedCustomer,
+      engineer: savedEngineer,
     };
 
-    // 비구조화 이후 각각 다른 테이블에 저장
-    this.orderInfoRepository.save({ ...rest });
-    this.customerRepository.save({ ...customerInfo });
-    return createOrderInfoDto;
+    await this.OrderDetailRepository.save({ ...entityObject });
+
+    return { savedOrder, savedCustomer };
   }
 
   async findAll() {

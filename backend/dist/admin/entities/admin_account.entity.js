@@ -32,7 +32,7 @@ __decorate([
     __metadata("design:type", String)
 ], AdminAccount.prototype, "role", void 0);
 __decorate([
-    (0, typeorm_1.Column)({ type: 'int', default: 0 }),
+    (0, typeorm_1.Column)({ type: 'int', nullable: true, default: 0 }),
     __metadata("design:type", Number)
 ], AdminAccount.prototype, "token_version", void 0);
 __decorate([

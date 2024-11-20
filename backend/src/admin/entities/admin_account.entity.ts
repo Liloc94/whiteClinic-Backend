@@ -22,8 +22,8 @@ export class AdminAccount {
   @Column({ type: 'varchar', length: 50 })
   role: string;
 
-  @Column({ type: 'int', default: 0 })
-  token_version: number;
+  @Column({ type: 'int', nullable: true, default: 0 })
+  token_version?: number;
 
   @OneToMany(() => AdminRefreshToken, (refreshToken) => refreshToken.admin)
   @JoinColumn()

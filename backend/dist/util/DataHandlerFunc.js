@@ -4,6 +4,7 @@ exports.handleEngineerScheduleData = handleEngineerScheduleData;
 exports.handleMappedData = handleMappedData;
 exports.handleEngineerData = handleEngineerData;
 exports.handleOrderDetailsData = handleOrderDetailsData;
+exports.handleCreateOrderInfo = handleCreateOrderInfo;
 async function handleEngineerScheduleData(orderDetails) {
     const scheduleList = orderDetails.map((detail) => {
         const { customer, engineer, order } = detail;
@@ -62,5 +63,15 @@ async function handleOrderDetailsData(orderDetails) {
         };
     });
     return orderList;
+}
+async function handleCreateOrderInfo(orderInfo) {
+    const { order_customer_addr, order_customer_name, order_customer_phone, order_remark, order_engineer_name: engineer_name, ...rest } = orderInfo;
+    const customerInfo = {
+        customer_name: order_customer_name,
+        customer_phone: order_customer_phone,
+        customer_addr: order_customer_addr,
+        customer_remark: order_remark,
+    };
+    return [rest, customerInfo, engineer_name];
 }
 //# sourceMappingURL=DataHandlerFunc.js.map

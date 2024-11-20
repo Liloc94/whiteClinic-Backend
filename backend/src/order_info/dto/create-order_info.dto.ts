@@ -12,7 +12,7 @@ export class CreateOrderInfoDto {
   order_customer_phone: string;
 
   @ApiProperty({ description: '고객 주소' })
-  order_customer_address: string;
+  order_customer_addr: string;
 
   @ApiProperty({ description: '주문 특이사항' })
   order_remark?: string;
@@ -57,4 +57,8 @@ export class CreateOrderInfoDto {
 
   @ApiProperty({ description: '할인율' })
   order_discount_ratio: number;
+
+  // 기사 정보 등록 --------------------------------------------------
+  @ApiProperty({ description: '담당 기사' })
+  order_engineer_name: string;
 }

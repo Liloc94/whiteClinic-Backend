@@ -16,8 +16,6 @@ async function bootstrap() {
     const port = URLS_1.SERVER_PORT;
     app.useGlobalFilters(new ValidationExceptionFilter_1.ValidationExceptionFilter());
     app.useGlobalPipes(new common_1.ValidationPipe({
-        whitelist: true,
-        forbidNonWhitelisted: true,
         transform: true,
         enableDebugMessages: true,
         validationError: {
