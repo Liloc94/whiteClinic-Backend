@@ -103,31 +103,45 @@ let EngineerService = class EngineerService {
         }
     }
     async findOne(id) {
-        const exactEngineer = await this.engineerRepository.find({
-            where: { engineer_id: id },
-        });
-        if (exactEngineer.length == 0) {
-            throw new common_1.NotFoundException(`ID : #${id}를 갖는 기사정보가 존재하지 않습니다.`);
+        const queryRunner = this.dataSource.createQueryRunner();
+        queryRunner.connect();
+        queryRunner.startTransaction();
+        try {
+            const exactEngineer = await queryRunner.manager.find(engineer_entity_1.Engineer, {
+                where: { engineer_id: id },
+            });
+            await queryRunner.commitTransaction();
+            return exactEngineer;
         }
-        return exactEngineer;
+        catch (error) {
+            await queryRunner.rollbackTransaction();
+            throw error;
+        }
+        finally {
+            await queryRunner.release();
+        }
     }
     async updateEngineerInfo(id, updateInfo) {
-        const targetInfo = await this.engineerRepository.findOne({
-            where: { engineer_id: id },
-        });
-        if (!targetInfo) {
-            throw new common_1.NotFoundException(`Engineer with ID ${id} not found`);
-        }
-        const { engineer_valid_skill, ...rest } = updateInfo;
-        const engineerSkill = await this.skillService.findSkillIdsByNames(engineer_valid_skill);
-        await this.engineerSkillRepository.delete({ engineer_id: id });
-        (await engineerSkill).map((skillNumber) => {
-            this.engineerSkillRepository.delete({
-                skill_id: skillNumber,
+        const queryRunner = this.dataSource.createQueryRunner();
+        queryRunner.connect();
+        queryRunner.startTransaction();
+        try {
+            const { engineer_valid_skill, ...rest } = updateInfo;
+            const engineerSkill = await this.skillService.findSkillIdsByNames(engineer_valid_skill);
+            await queryRunner.manager.delete(engineer_skill_entity_1.EngineerSkill, { engineer_id: id });
+            (await engineerSkill).map((skillNumber) => {
+                queryRunner.manager.delete(engineer_skill_entity_1.EngineerSkill, {
+                    skill_id: skillNumber,
+                });
+                queryRunner.manager.save(engineer_skill_entity_1.EngineerSkill, { skill_id: skillNumber });
             });
-            this.engineerSkillRepository.save({ skill_id: skillNumber });
-        });
-        await this.engineerRepository.update({ engineer_id: id }, rest);
+            await queryRunner.manager.update(engineer_entity_1.Engineer, { engineer_id: id }, rest);
+            await queryRunner.commitTransaction();
+        }
+        catch (error) {
+            await queryRunner.rollbackTransaction();
+            throw error;
+        }
     }
     async removeEngineerInfo(id) {
         await this.engineerRepository.delete({ engineer_id: id });

@@ -62,16 +62,16 @@ let EngineerController = class EngineerController {
             throw new common_1.NotFoundException(error);
         }
     }
-    update(id, updateEngineerDto) {
+    async update(id, updateEngineerDto) {
         try {
-            return this.engineerService.updateEngineerInfo(+id, updateEngineerDto);
+            return await this.engineerService.updateEngineerInfo(+id, updateEngineerDto);
         }
         catch (error) {
             throw new Error(error);
         }
     }
-    remove(id) {
-        return this.engineerService.removeEngineerInfo(+id);
+    async remove(id) {
+        return await this.engineerService.removeEngineerInfo(+id);
     }
 };
 exports.EngineerController = EngineerController;
@@ -163,7 +163,7 @@ __decorate([
     __param(1, (0, common_1.Body)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String, update_engineer_dto_1.UpdateEngineerDto]),
-    __metadata("design:returntype", void 0)
+    __metadata("design:returntype", Promise)
 ], EngineerController.prototype, "update", null);
 __decorate([
     (0, common_1.Delete)(':id'),
@@ -174,7 +174,7 @@ __decorate([
     __param(0, (0, common_1.Param)('id')),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String]),
-    __metadata("design:returntype", void 0)
+    __metadata("design:returntype", Promise)
 ], EngineerController.prototype, "remove", null);
 exports.EngineerController = EngineerController = __decorate([
     (0, swagger_1.ApiTags)('기사정보 API'),

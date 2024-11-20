@@ -134,43 +134,50 @@ export class EngineerService {
   }
 
   async findOne(id: number) {
-    const exactEngineer = await this.engineerRepository.find({
-      where: { engineer_id: id },
-    });
+    const queryRunner = this.dataSource.createQueryRunner();
+    queryRunner.connect();
+    queryRunner.startTransaction();
+    try {
+      const exactEngineer = await queryRunner.manager.find(Engineer, {
+        where: { engineer_id: id },
+      });
 
-    if (exactEngineer.length == 0) {
-      throw new NotFoundException(
-        `ID : #${id}를 갖는 기사정보가 존재하지 않습니다.`,
-      );
+      await queryRunner.commitTransaction();
+      return exactEngineer;
+    } catch (error) {
+      await queryRunner.rollbackTransaction();
+      throw error;
+    } finally {
+      await queryRunner.release();
     }
-    return exactEngineer;
   }
 
   async updateEngineerInfo(id: number, updateInfo: UpdateEngineerDto) {
-    // 기사 정보 조회
-    const targetInfo = await this.engineerRepository.findOne({
-      where: { engineer_id: id },
-    });
+    const queryRunner = this.dataSource.createQueryRunner();
 
-    // 대상 기사가 존재하지 않는 경우 처리
-    if (!targetInfo) {
-      throw new NotFoundException(`Engineer with ID ${id} not found`);
-    }
+    queryRunner.connect();
+    queryRunner.startTransaction();
 
-    // 기사 가능품목만 구조분해 이후 따로 저장
-    const { engineer_valid_skill, ...rest } = updateInfo;
-    const engineerSkill =
-      await this.skillService.findSkillIdsByNames(engineer_valid_skill);
+    try {
+      // 기사 가능품목만 구조분해 이후 따로 저장
+      const { engineer_valid_skill, ...rest } = updateInfo;
+      const engineerSkill =
+        await this.skillService.findSkillIdsByNames(engineer_valid_skill);
+      await queryRunner.manager.delete(EngineerSkill, { engineer_id: id });
 
-    await this.engineerSkillRepository.delete({ engineer_id: id });
-    (await engineerSkill).map((skillNumber) => {
-      this.engineerSkillRepository.delete({
-        skill_id: skillNumber,
+      (await engineerSkill).map((skillNumber) => {
+        queryRunner.manager.delete(EngineerSkill, {
+          skill_id: skillNumber,
+        });
+        queryRunner.manager.save(EngineerSkill, { skill_id: skillNumber });
       });
-      this.engineerSkillRepository.save({ skill_id: skillNumber });
-    });
-    // 기사 정보 업데이트
-    await this.engineerRepository.update({ engineer_id: id }, rest);
+      // 기사 정보 업데이트
+      await queryRunner.manager.update(Engineer, { engineer_id: id }, rest);
+      await queryRunner.commitTransaction();
+    } catch (error) {
+      await queryRunner.rollbackTransaction();
+      throw error;
+    }
   }
 
   async removeEngineerInfo(id: number) {

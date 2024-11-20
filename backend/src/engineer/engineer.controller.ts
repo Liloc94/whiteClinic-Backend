@@ -115,12 +115,15 @@ export class EngineerController {
     description: '전달받은 id의 기사정보를 파라미터 값으로 수정한다',
     summary: '특정 기사의 정보를 업데이트한다.',
   })
-  update(
+  async update(
     @Param('id') id: string,
     @Body() updateEngineerDto: UpdateEngineerDto,
   ) {
     try {
-      return this.engineerService.updateEngineerInfo(+id, updateEngineerDto);
+      return await this.engineerService.updateEngineerInfo(
+        +id,
+        updateEngineerDto,
+      );
     } catch (error) {
       throw new Error(error);
     }
@@ -131,7 +134,7 @@ export class EngineerController {
     description: '파라미터로 전달받은 id를 가진 기사정보를 삭제',
     summary: '특정 기사의 정보를 삭제한다',
   })
-  remove(@Param('id') id: string) {
-    return this.engineerService.removeEngineerInfo(+id);
+  async remove(@Param('id') id: string) {
+    return await this.engineerService.removeEngineerInfo(+id);
   }
 }
