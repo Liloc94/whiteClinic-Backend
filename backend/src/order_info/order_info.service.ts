@@ -12,6 +12,7 @@ import {
   handleOrderDetailsData,
 } from 'src/util/DataHandlerFunc';
 import { IncomeInfoService } from 'src/income.service';
+import { IncomeType } from 'src/util/constantTypes';
 
 @Injectable()
 export class OrderInfoService {
@@ -59,20 +60,21 @@ export class OrderInfoService {
         },
       );
 
-      const incomes = {
+      const incomes: IncomeType = {
+        idx: null,
         order_id: savedOrderInfo.order_id,
         engineer_id: engineer.engineer_id,
         daily_income: savedOrderInfo.order_total_amount,
         date: savedOrderInfo.order_date,
       };
-      console.log('savedOrderInfo : ' + savedOrderInfo);
-      console.log('engineer : ' + engineer.engineer_id);
-
-      await this.incomeInfoService.saveDailyIncome(incomes);
 
       await queryRunner.manager.save(customerEngineerOrder);
       // 트랜잭션 커밋
       await queryRunner.commitTransaction();
+
+      // 쿼리 실행 이후 시점의 아이디값을 참조하기 위해 commitTransaction 이후에 코드 추가
+      await this.incomeInfoService.saveDailyIncome(incomes);
+
       return { savedOrderInfo, savedCustomer };
     } catch (error) {
       // 에러 발생 시 롤백

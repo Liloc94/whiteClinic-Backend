@@ -46,9 +46,9 @@ let EngineerController = class EngineerController {
             throw new common_1.NotFoundException(error);
         }
     }
-    async getEngineerSalary() {
+    async getEngineerSalary(id) {
         try {
-            return await this.engineerService.getDailySalary();
+            return await this.engineerService.getDailySalary(id);
         }
         catch (error) {
             throw new common_1.NotFoundException(error);
@@ -132,17 +132,18 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], EngineerController.prototype, "getAllSchedule", null);
 __decorate([
-    (0, common_1.Get)('getEngineerdailySalary'),
+    (0, common_1.Get)('getEngineerdailySalary:id'),
     (0, swagger_1.ApiOperation)({
-        description: '모든 기사의 일급 정보를 호출한다',
-        summary: '모든 기사의 날짜별 일당을 호출한다',
+        description: '파라미터로 받은 id를 가진 기사의 일급 정보를 호출한다',
+        summary: '특정 기사의 날짜별 일당을 호출한다',
     }),
+    __param(0, (0, common_1.Param)('id')),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", []),
+    __metadata("design:paramtypes", [Number]),
     __metadata("design:returntype", Promise)
 ], EngineerController.prototype, "getEngineerSalary", null);
 __decorate([
-    (0, common_1.Get)(':id'),
+    (0, common_1.Post)(':id'),
     (0, swagger_1.ApiOperation)({
         description: '파라미터로 전달받은 id의 기사정보를 조회',
         summary: '특정 기사의 정보를 조회한다',

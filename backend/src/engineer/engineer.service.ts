@@ -1,5 +1,5 @@
 import { EngineerSkill } from 'src/engineer/entities/engineer_skill.entity';
-import { Repository } from 'typeorm';
+import { Repository, DataSource } from 'typeorm';
 import {
   BadRequestException,
   ConflictException,
@@ -18,6 +18,7 @@ import {
 } from 'src/util/DataHandlerFunc';
 import { EngineerDailyEarning } from './entities/engineer_daily_earning.entity';
 import { SkillService } from 'src/skillUtil.service';
+import { IncomeType } from 'src/util/constantTypes';
 
 @Injectable()
 export class EngineerService {
@@ -41,6 +42,7 @@ export class EngineerService {
     private readonly engineerDailyEarningRepository: Repository<EngineerDailyEarning>,
 
     private readonly skillService: SkillService, // 다른 서비스 의존성 주입
+    private readonly dataSource: DataSource,
   ) {}
 
   async createEngineerInfo(engineerData: CreateEngineerDto) {
@@ -106,12 +108,29 @@ export class EngineerService {
     return await handleEngineerScheduleData(engineerSchedule);
   }
 
-  async getDailySalary() {
-    const dailySalaryTest = await this.engineerDailyEarningRepository.find({
-      relations: ['engineer', 'order'],
-    });
+  async getDailySalary(id) {
+    const queryRunner = this.dataSource.createQueryRunner();
 
-    return dailySalaryTest;
+    queryRunner.connect();
+    queryRunner.startTransaction();
+
+    try {
+      const engineerDailyIncome = await queryRunner.manager.find(
+        EngineerDailyEarning,
+        {
+          where: {
+            engineer: {
+              engineer_id: id, // engineer 엔티티에서 id를 사용하여 검색
+            },
+          },
+        },
+      );
+
+      await queryRunner.commitTransaction();
+      return engineerDailyIncome;
+    } catch (error) {
+      throw new NotFoundException(error);
+    }
   }
 
   async findOne(id: number) {

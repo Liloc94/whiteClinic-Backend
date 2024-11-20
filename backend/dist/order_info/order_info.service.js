@@ -48,16 +48,15 @@ let OrderInfoService = class OrderInfoService {
                 engineer: engineer,
             });
             const incomes = {
+                idx: null,
                 order_id: savedOrderInfo.order_id,
                 engineer_id: engineer.engineer_id,
                 daily_income: savedOrderInfo.order_total_amount,
                 date: savedOrderInfo.order_date,
             };
-            console.log('savedOrderInfo : ' + savedOrderInfo);
-            console.log('engineer : ' + engineer.engineer_id);
-            await this.incomeInfoService.saveDailyIncome(incomes);
             await queryRunner.manager.save(customerEngineerOrder);
             await queryRunner.commitTransaction();
+            await this.incomeInfoService.saveDailyIncome(incomes);
             return { savedOrderInfo, savedCustomer };
         }
         catch (error) {

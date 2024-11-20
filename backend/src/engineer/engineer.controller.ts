@@ -84,20 +84,20 @@ export class EngineerController {
     }
   }
 
-  @Get('getEngineerdailySalary')
+  @Get('getEngineerdailySalary:id')
   @ApiOperation({
-    description: '모든 기사의 일급 정보를 호출한다',
-    summary: '모든 기사의 날짜별 일당을 호출한다',
+    description: '파라미터로 받은 id를 가진 기사의 일급 정보를 호출한다',
+    summary: '특정 기사의 날짜별 일당을 호출한다',
   })
-  async getEngineerSalary() {
+  async getEngineerSalary(@Param('id') id: number) {
     try {
-      return await this.engineerService.getDailySalary();
+      return await this.engineerService.getDailySalary(id);
     } catch (error) {
       throw new NotFoundException(error);
     }
   }
 
-  @Get(':id')
+  @Post(':id')
   @ApiOperation({
     description: '파라미터로 전달받은 id의 기사정보를 조회',
     summary: '특정 기사의 정보를 조회한다',

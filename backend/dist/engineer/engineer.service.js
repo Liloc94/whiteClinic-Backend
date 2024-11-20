@@ -24,13 +24,14 @@ const DataHandlerFunc_1 = require("../util/DataHandlerFunc");
 const engineer_daily_earning_entity_1 = require("./entities/engineer_daily_earning.entity");
 const skillUtil_service_1 = require("../skillUtil.service");
 let EngineerService = class EngineerService {
-    constructor(engineerRepository, skillRepository, engineerSkillRepository, orderDetailRepository, engineerDailyEarningRepository, skillService) {
+    constructor(engineerRepository, skillRepository, engineerSkillRepository, orderDetailRepository, engineerDailyEarningRepository, skillService, dataSource) {
         this.engineerRepository = engineerRepository;
         this.skillRepository = skillRepository;
         this.engineerSkillRepository = engineerSkillRepository;
         this.orderDetailRepository = orderDetailRepository;
         this.engineerDailyEarningRepository = engineerDailyEarningRepository;
         this.skillService = skillService;
+        this.dataSource = dataSource;
     }
     async createEngineerInfo(engineerData) {
         try {
@@ -82,11 +83,24 @@ let EngineerService = class EngineerService {
         }
         return await (0, DataHandlerFunc_1.handleEngineerScheduleData)(engineerSchedule);
     }
-    async getDailySalary() {
-        const dailySalaryTest = await this.engineerDailyEarningRepository.find({
-            relations: ['engineer', 'order'],
-        });
-        return dailySalaryTest;
+    async getDailySalary(id) {
+        const queryRunner = this.dataSource.createQueryRunner();
+        queryRunner.connect();
+        queryRunner.startTransaction();
+        try {
+            const engineerDailyIncome = await queryRunner.manager.find(engineer_daily_earning_entity_1.EngineerDailyEarning, {
+                where: {
+                    engineer: {
+                        engineer_id: id,
+                    },
+                },
+            });
+            await queryRunner.commitTransaction();
+            return engineerDailyIncome;
+        }
+        catch (error) {
+            throw new common_1.NotFoundException(error);
+        }
     }
     async findOne(id) {
         const exactEngineer = await this.engineerRepository.find({
@@ -132,6 +146,7 @@ exports.EngineerService = EngineerService = __decorate([
         typeorm_1.Repository,
         typeorm_1.Repository,
         typeorm_1.Repository,
-        skillUtil_service_1.SkillService])
+        skillUtil_service_1.SkillService,
+        typeorm_1.DataSource])
 ], EngineerService);
 //# sourceMappingURL=engineer.service.js.map

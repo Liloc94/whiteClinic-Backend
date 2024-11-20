@@ -1,5 +1,5 @@
 import { EngineerSkill } from 'src/engineer/entities/engineer_skill.entity';
-import { Repository } from 'typeorm';
+import { Repository, DataSource } from 'typeorm';
 import { CreateEngineerDto } from './dto/create-engineer.dto';
 import { UpdateEngineerDto } from './dto/update-engineer.dto';
 import { Engineer } from './entities/engineer.entity';
@@ -14,11 +14,12 @@ export declare class EngineerService {
     private readonly orderDetailRepository;
     private readonly engineerDailyEarningRepository;
     private readonly skillService;
-    constructor(engineerRepository: Repository<Engineer>, skillRepository: Repository<Skill>, engineerSkillRepository: Repository<EngineerSkill>, orderDetailRepository: Repository<CustomerEngineerOrder>, engineerDailyEarningRepository: Repository<EngineerDailyEarning>, skillService: SkillService);
+    private readonly dataSource;
+    constructor(engineerRepository: Repository<Engineer>, skillRepository: Repository<Skill>, engineerSkillRepository: Repository<EngineerSkill>, orderDetailRepository: Repository<CustomerEngineerOrder>, engineerDailyEarningRepository: Repository<EngineerDailyEarning>, skillService: SkillService, dataSource: DataSource);
     createEngineerInfo(engineerData: CreateEngineerDto): Promise<void>;
     findAll(): Promise<any[]>;
     getAllSchedule(): Promise<import("./dto/search-engineer-schedule.dto").EngineerScheduleDto[]>;
-    getDailySalary(): Promise<EngineerDailyEarning[]>;
+    getDailySalary(id: any): Promise<EngineerDailyEarning[]>;
     findOne(id: number): Promise<Engineer[]>;
     updateEngineerInfo(id: number, updateInfo: UpdateEngineerDto): Promise<void>;
     removeEngineerInfo(id: number): Promise<void>;

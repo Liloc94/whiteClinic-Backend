@@ -29,7 +29,12 @@ let IncomeInfoService = class IncomeInfoService {
         queryRunner.connect();
         queryRunner.startTransaction();
         try {
-            await queryRunner.manager.save(engineer_daily_earning_entity_1.EngineerDailyEarning, { ...incomeData });
+            await queryRunner.manager.save(engineer_daily_earning_entity_1.EngineerDailyEarning, {
+                daily_income: incomeData.daily_income,
+                date: incomeData.date,
+                order: { order_id: incomeData.order_id },
+                engineer: { engineer_id: incomeData.engineer_id },
+            });
             queryRunner.commitTransaction();
         }
         catch (error) {
