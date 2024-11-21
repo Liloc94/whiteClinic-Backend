@@ -1,7 +1,6 @@
-import { Engineer } from './engineer.entity';
 export declare class EngineerWeeklyEarning {
     idx: number;
-    engineer: Engineer;
+    engineer: number;
     weekly: string;
     weekly_earning: number;
     isPaid: boolean;

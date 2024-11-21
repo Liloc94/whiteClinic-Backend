@@ -11,7 +11,6 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.EngineerWeeklyEarning = void 0;
 const typeorm_1 = require("typeorm");
-const engineer_entity_1 = require("./engineer.entity");
 let EngineerWeeklyEarning = class EngineerWeeklyEarning {
 };
 exports.EngineerWeeklyEarning = EngineerWeeklyEarning;
@@ -20,12 +19,8 @@ __decorate([
     __metadata("design:type", Number)
 ], EngineerWeeklyEarning.prototype, "idx", void 0);
 __decorate([
-    (0, typeorm_1.ManyToOne)(() => engineer_entity_1.Engineer, (weeklyEarning) => weeklyEarning.weeklyEarnings, {
-        onDelete: 'CASCADE',
-        onUpdate: 'CASCADE',
-    }),
-    (0, typeorm_1.JoinColumn)({ name: 'engineer_id' }),
-    __metadata("design:type", engineer_entity_1.Engineer)
+    (0, typeorm_1.Column)({ type: 'int2' }),
+    __metadata("design:type", Number)
 ], EngineerWeeklyEarning.prototype, "engineer", void 0);
 __decorate([
     (0, typeorm_1.Column)({ type: 'varchar' }),
