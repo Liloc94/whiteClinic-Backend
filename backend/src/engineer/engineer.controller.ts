@@ -105,7 +105,7 @@ export class EngineerController {
     }
   }
 
-  @Get('getEngineerWeeklyDetail')
+  @Post('getEngineerWeeklyDetail')
   @ApiOperation({
     description: 'id와 날짜 정보를 기준으로 기사주급과 지급여부를 조회한다 ',
     summary:

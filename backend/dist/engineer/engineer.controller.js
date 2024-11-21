@@ -158,7 +158,7 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], EngineerController.prototype, "saveEngineerWeeklySalary", null);
 __decorate([
-    (0, common_1.Get)('getEngineerWeeklyDetail'),
+    (0, common_1.Post)('getEngineerWeeklyDetail'),
     (0, swagger_1.ApiOperation)({
         description: 'id와 날짜 정보를 기준으로 기사주급과 지급여부를 조회한다 ',
         summary: '파라미터로 받은 기사 id, 날짜를 기준으로 해당하는 기사의 주급과 지급여부 조회',
