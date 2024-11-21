@@ -33,7 +33,7 @@ __decorate([
 __decorate([
     (0, typeorm_1.Column)({ type: 'boolean' }),
     __metadata("design:type", Boolean)
-], EngineerWeeklyEarning.prototype, "isPaid", void 0);
+], EngineerWeeklyEarning.prototype, "is_paid", void 0);
 exports.EngineerWeeklyEarning = EngineerWeeklyEarning = __decorate([
     (0, typeorm_1.Entity)('engineer_weekly_earning')
 ], EngineerWeeklyEarning);

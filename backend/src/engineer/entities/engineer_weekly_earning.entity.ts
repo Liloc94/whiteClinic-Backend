@@ -15,5 +15,5 @@ export class EngineerWeeklyEarning {
   weekly_earning: number;
 
   @Column({ type: 'boolean' })
-  isPaid: boolean;
+  is_paid: boolean;
 }

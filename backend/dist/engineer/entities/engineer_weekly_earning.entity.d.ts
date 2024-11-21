@@ -3,5 +3,5 @@ export declare class EngineerWeeklyEarning {
     engineer_id: number;
     weekly: string;
     weekly_earning: number;
-    isPaid: boolean;
+    is_paid: boolean;
 }
