@@ -83,5 +83,6 @@ export class CreateEngineerDto {
     ],
   })
   @IsString()
+  @IsOptional()
   engineer_dayoff: string;
 }
