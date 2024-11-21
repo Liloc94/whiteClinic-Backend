@@ -186,14 +186,16 @@ export class EngineerService {
     await queryRunner.startTransaction();
 
     try {
-      const searchedInfo = await queryRunner.manager.find(
+      const searchedInfo = await queryRunner.manager.findOne(
         EngineerWeeklyEarning,
         {
           where: { engineer_id: idDate.engineer_id, weekly: idDate.weekly },
         },
       );
       await queryRunner.commitTransaction();
-      return searchedInfo;
+      const { idx, ...rest } = searchedInfo;
+
+      return rest;
     } catch (error) {
       await queryRunner.rollbackTransaction();
       throw error;

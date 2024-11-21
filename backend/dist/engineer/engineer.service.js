@@ -130,11 +130,12 @@ let EngineerService = class EngineerService {
         await queryRunner.connect();
         await queryRunner.startTransaction();
         try {
-            const searchedInfo = await queryRunner.manager.find(engineer_weekly_earning_entity_1.EngineerWeeklyEarning, {
+            const searchedInfo = await queryRunner.manager.findOne(engineer_weekly_earning_entity_1.EngineerWeeklyEarning, {
                 where: { engineer_id: idDate.engineer_id, weekly: idDate.weekly },
             });
             await queryRunner.commitTransaction();
-            return searchedInfo;
+            const { idx, ...rest } = searchedInfo;
+            return rest;
         }
         catch (error) {
             await queryRunner.rollbackTransaction();
