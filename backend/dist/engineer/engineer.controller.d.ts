@@ -1,3 +1,4 @@
+import { EngineerWeeklySalaryDto } from './dto/save-engineer-weeklyEarning.dto';
 import { EngineerService } from './engineer.service';
 import { CreateEngineerDto } from './dto/create-engineer.dto';
 import { UpdateEngineerDto } from './dto/update-engineer.dto';
@@ -8,6 +9,7 @@ export declare class EngineerController {
     findAll(): Promise<any[]>;
     getAllSchedule(): Promise<import("./dto/search-engineer-schedule.dto").EngineerScheduleDto[]>;
     getEngineerSalary(id: number): Promise<import("./entities/engineer_daily_earning.entity").EngineerDailyEarning[]>;
+    saveEngineerWeeklySalary(weeklySalary: EngineerWeeklySalaryDto): Promise<void>;
     findOne(id: string): Promise<import("./entities/engineer.entity").Engineer[]>;
     update(id: string, updateEngineerDto: UpdateEngineerDto): Promise<void>;
     remove(id: string): Promise<void>;

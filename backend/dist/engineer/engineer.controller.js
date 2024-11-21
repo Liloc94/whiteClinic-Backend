@@ -13,6 +13,7 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.EngineerController = void 0;
+const save_engineer_weeklyEarning_dto_1 = require("./dto/save-engineer-weeklyEarning.dto");
 const common_1 = require("@nestjs/common");
 const engineer_service_1 = require("./engineer.service");
 const create_engineer_dto_1 = require("./dto/create-engineer.dto");
@@ -54,9 +55,17 @@ let EngineerController = class EngineerController {
             throw new common_1.NotFoundException(error);
         }
     }
-    findOne(id) {
+    async saveEngineerWeeklySalary(weeklySalary) {
         try {
-            return this.engineerService.findOne(+id);
+            return await this.engineerService.saveEngineerWeeklySalary(weeklySalary);
+        }
+        catch (error) {
+            throw new common_1.BadRequestException(error);
+        }
+    }
+    async findOne(id) {
+        try {
+            return await this.engineerService.findOne(+id);
         }
         catch (error) {
             throw new common_1.NotFoundException(error);
@@ -82,16 +91,7 @@ __decorate([
         schema: {
             example: {
                 engineer_valid_skill: ['벽걸이', '원웨이', '포웨이'],
-                engineer_dayoff: [
-                    'dayoff & payday 동일',
-                    '월요일',
-                    '화요일',
-                    '수요일',
-                    '목요일',
-                    '금요일',
-                    '토요일',
-                    '일요일',
-                ],
+                engineer_dayoff: ['dayoff & payday 동일', '월요일 ~ 일요일 중 선택'],
                 engineer_commission_rate: ['다음 중 택 1', 50, 55, 60, 65, 70, 75, 80],
             },
         },
@@ -143,6 +143,17 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], EngineerController.prototype, "getEngineerSalary", null);
 __decorate([
+    (0, common_1.Post)('saveEngineerWeeklySalary'),
+    (0, swagger_1.ApiOperation)({
+        description: '기사의 주급 및 지급여부를 저장한다',
+        summary: '기사 아이디, 주급, 주차, 지급여부 저장,',
+    }),
+    __param(0, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [save_engineer_weeklyEarning_dto_1.EngineerWeeklySalaryDto]),
+    __metadata("design:returntype", Promise)
+], EngineerController.prototype, "saveEngineerWeeklySalary", null);
+__decorate([
     (0, common_1.Post)(':id'),
     (0, swagger_1.ApiOperation)({
         description: '파라미터로 전달받은 id의 기사정보를 조회',
@@ -151,7 +162,7 @@ __decorate([
     __param(0, (0, common_1.Param)('id')),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String]),
-    __metadata("design:returntype", void 0)
+    __metadata("design:returntype", Promise)
 ], EngineerController.prototype, "findOne", null);
 __decorate([
     (0, common_1.Patch)('updateEngineerInfo:id'),

@@ -1,3 +1,4 @@
+import { EngineerWeeklySalaryDto } from './dto/save-engineer-weeklyEarning.dto';
 import {
   Controller,
   Get,
@@ -26,16 +27,7 @@ export class EngineerController {
     schema: {
       example: {
         engineer_valid_skill: ['벽걸이', '원웨이', '포웨이'],
-        engineer_dayoff: [
-          'dayoff & payday 동일',
-          '월요일',
-          '화요일',
-          '수요일',
-          '목요일',
-          '금요일',
-          '토요일',
-          '일요일',
-        ],
+        engineer_dayoff: ['dayoff & payday 동일', '월요일 ~ 일요일 중 선택'],
         engineer_commission_rate: ['다음 중 택 1', 50, 55, 60, 65, 70, 75, 80],
       },
     },
@@ -97,14 +89,29 @@ export class EngineerController {
     }
   }
 
+  @Post('saveEngineerWeeklySalary')
+  @ApiOperation({
+    description: '기사의 주급 및 지급여부를 저장한다',
+    summary: '기사 아이디, 주급, 주차, 지급여부 저장,',
+  })
+  async saveEngineerWeeklySalary(
+    @Body() weeklySalary: EngineerWeeklySalaryDto,
+  ) {
+    try {
+      return await this.engineerService.saveEngineerWeeklySalary(weeklySalary);
+    } catch (error) {
+      throw new BadRequestException(error);
+    }
+  }
+
   @Post(':id')
   @ApiOperation({
     description: '파라미터로 전달받은 id의 기사정보를 조회',
     summary: '특정 기사의 정보를 조회한다',
   })
-  findOne(@Param('id') id: string) {
+  async findOne(@Param('id') id: string) {
     try {
-      return this.engineerService.findOne(+id);
+      return await this.engineerService.findOne(+id);
     } catch (error) {
       throw new NotFoundException(error);
     }

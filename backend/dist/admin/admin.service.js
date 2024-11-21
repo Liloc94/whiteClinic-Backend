@@ -19,17 +19,29 @@ const typeorm_2 = require("@nestjs/typeorm");
 const bcrypt = require("bcrypt");
 const admin_account_entity_1 = require("./entities/admin_account.entity");
 let AdminService = class AdminService {
-    constructor(adminRepository) {
+    constructor(adminRepository, dataSource) {
         this.adminRepository = adminRepository;
+        this.dataSource = dataSource;
     }
     async createAdmin(adminid, adminpw, role = 'admin') {
-        const hashedPassword = await bcrypt.hash(adminpw, 10);
-        const admin = this.adminRepository.create({
-            admin_id: adminid,
-            admin_pw: hashedPassword,
-            role,
-        });
-        return this.adminRepository.save(admin);
+        const queryRunner = this.dataSource.createQueryRunner();
+        queryRunner.connect();
+        queryRunner.startTransaction();
+        try {
+            const hashedPassword = await bcrypt.hash(adminpw, 10);
+            const admin = queryRunner.manager.create(admin_account_entity_1.AdminAccount, {
+                admin_id: adminid,
+                admin_pw: hashedPassword,
+                role,
+            });
+            const saveData = await queryRunner.manager.save(admin_account_entity_1.AdminAccount, admin);
+            queryRunner.commitTransaction();
+            return saveData;
+        }
+        catch (error) {
+            queryRunner.rollbackTransaction();
+            throw error;
+        }
     }
     async findOne(adminid) {
         try {
@@ -55,6 +67,7 @@ exports.AdminService = AdminService;
 exports.AdminService = AdminService = __decorate([
     (0, common_1.Injectable)(),
     __param(0, (0, typeorm_2.InjectRepository)(admin_account_entity_1.AdminAccount)),
-    __metadata("design:paramtypes", [typeorm_1.Repository])
+    __metadata("design:paramtypes", [typeorm_1.Repository,
+        typeorm_1.DataSource])
 ], AdminService);
 //# sourceMappingURL=admin.service.js.map

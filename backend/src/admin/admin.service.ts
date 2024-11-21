@@ -1,5 +1,5 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
-import { Repository } from 'typeorm';
+import { Repository, DataSource } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import * as bcrypt from 'bcrypt';
 import { AdminAccount } from './entities/admin_account.entity';
@@ -8,6 +8,8 @@ export class AdminService {
   constructor(
     @InjectRepository(AdminAccount)
     private readonly adminRepository: Repository<AdminAccount>,
+
+    private readonly dataSource: DataSource,
   ) {}
 
   // 관리자 계정 생성
@@ -16,13 +18,27 @@ export class AdminService {
     adminpw: string,
     role: string = 'admin',
   ): Promise<AdminAccount> {
-    const hashedPassword = await bcrypt.hash(adminpw, 10);
-    const admin = this.adminRepository.create({
-      admin_id: adminid,
-      admin_pw: hashedPassword,
-      role,
-    });
-    return this.adminRepository.save(admin);
+    const queryRunner = this.dataSource.createQueryRunner();
+
+    queryRunner.connect();
+    queryRunner.startTransaction();
+
+    try {
+      const hashedPassword = await bcrypt.hash(adminpw, 10);
+      const admin = queryRunner.manager.create(AdminAccount, {
+        admin_id: adminid,
+        admin_pw: hashedPassword,
+        role,
+      });
+      const saveData = await queryRunner.manager.save(AdminAccount, admin);
+
+      queryRunner.commitTransaction();
+
+      return saveData;
+    } catch (error) {
+      queryRunner.rollbackTransaction();
+      throw error;
+    }
   }
 
   // 아이디와 일치하는 리프레시 토큰을 가진 회원정보 찾기

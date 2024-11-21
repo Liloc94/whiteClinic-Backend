@@ -8,80 +8,82 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-var __param = (this && this.__param) || function (paramIndex, decorator) {
-    return function (target, key) { decorator(target, key, paramIndex); }
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.EngineerService = void 0;
 const engineer_skill_entity_1 = require("./entities/engineer_skill.entity");
 const typeorm_1 = require("typeorm");
 const common_1 = require("@nestjs/common");
 const engineer_entity_1 = require("./entities/engineer.entity");
-const typeorm_2 = require("@nestjs/typeorm");
-const skills_entity_1 = require("./entities/skills.entity");
 const customer_engineer_order_entity_1 = require("../order_info/entities/customer_engineer_order.entity");
 const DataHandlerFunc_1 = require("../util/DataHandlerFunc");
 const engineer_daily_earning_entity_1 = require("./entities/engineer_daily_earning.entity");
 const skillUtil_service_1 = require("../skillUtil.service");
+const temp_emgineer_info_entity_1 = require("./entities/temp_emgineer_info.entity");
+const engineer_weekly_earning_entity_1 = require("./entities/engineer_weekly_earning.entity");
 let EngineerService = class EngineerService {
-    constructor(engineerRepository, skillRepository, engineerSkillRepository, orderDetailRepository, engineerDailyEarningRepository, skillService, dataSource) {
-        this.engineerRepository = engineerRepository;
-        this.skillRepository = skillRepository;
-        this.engineerSkillRepository = engineerSkillRepository;
-        this.orderDetailRepository = orderDetailRepository;
-        this.engineerDailyEarningRepository = engineerDailyEarningRepository;
+    constructor(skillService, dataSource) {
         this.skillService = skillService;
         this.dataSource = dataSource;
     }
     async createEngineerInfo(engineerData) {
+        const queryRunner = this.dataSource.createQueryRunner();
+        queryRunner.connect();
+        queryRunner.startTransaction();
         try {
-            if (!engineerData) {
-                throw new common_1.BadRequestException('저장할 기사 정보가 존재하지 않습니다');
-            }
             const { engineer_valid_skill, ...engineerWithoutSkill } = engineerData;
-            const savedEngineer = await this.engineerRepository.save({
+            const savedEngineer = await queryRunner.manager.save(engineer_entity_1.Engineer, {
                 ...engineerWithoutSkill,
             });
-            await this.engineerRepository.save({ ...savedEngineer });
+            await queryRunner.manager.save(engineer_entity_1.Engineer, { ...savedEngineer });
             const mappedSkillId = await this.skillService.findSkillIdsByNames(engineer_valid_skill);
-            await this.engineerRepository.find({
-                select: ['engineer_id'],
-                order: { engineer_id: 'DESC' },
-            });
             const engineerSkills = mappedSkillId.map((skillId) => ({
                 engineer_id: savedEngineer.engineer_id,
                 skill_id: skillId,
             }));
-            await this.engineerSkillRepository.insert(engineerSkills);
+            await queryRunner.manager.insert(engineer_skill_entity_1.EngineerSkill, engineerSkills);
+            queryRunner.commitTransaction();
         }
         catch (error) {
-            if (error.code === '23505') {
-                throw new common_1.ConflictException('이미 존재하는 엔지니어입니다.');
-            }
+            queryRunner.rollbackTransaction();
+            throw error;
         }
     }
     async findAll() {
-        const engineerWithSkills = await this.engineerSkillRepository
-            .createQueryBuilder('engineerSkill')
-            .leftJoinAndSelect('engineerSkill.engineer', 'engineer')
-            .leftJoinAndSelect('engineerSkill.skill', 'skill')
-            .getMany();
-        if (!engineerWithSkills[0]) {
-            throw new common_1.NotFoundException('기사 정보가 존재하지 않습니다.');
+        const queryRunner = this.dataSource.createQueryRunner();
+        queryRunner.connect();
+        queryRunner.startTransaction();
+        try {
+            const engineerWithSkills = await queryRunner.manager
+                .createQueryBuilder(engineer_skill_entity_1.EngineerSkill, 'engineerSkill')
+                .leftJoinAndSelect('engineerSkill.engineer', 'engineer')
+                .leftJoinAndSelect('engineerSkill.skill', 'skill')
+                .getMany();
+            queryRunner.commitTransaction();
+            return await (0, DataHandlerFunc_1.handleEngineerData)(engineerWithSkills);
         }
-        return await (0, DataHandlerFunc_1.handleEngineerData)(engineerWithSkills);
+        catch (error) {
+            queryRunner.rollbackTransaction();
+            throw error;
+        }
     }
     async getAllSchedule() {
-        const engineerSchedule = await this.orderDetailRepository
-            .createQueryBuilder('customerEngineerOrder')
-            .leftJoinAndSelect('customerEngineerOrder.customer', 'customer')
-            .leftJoinAndSelect('customerEngineerOrder.engineer', 'engineer')
-            .leftJoinAndSelect('customerEngineerOrder.order', 'order')
-            .getMany();
-        if (!engineerSchedule[0]) {
-            throw new common_1.NotFoundException('기사 스케쥴 데이터가 존재하지 않습니다.');
+        const queryRunner = this.dataSource.createQueryRunner();
+        queryRunner.connect();
+        queryRunner.startTransaction();
+        try {
+            const engineerSchedule = await queryRunner.manager
+                .createQueryBuilder(customer_engineer_order_entity_1.CustomerEngineerOrder, 'customerEngineerOrder')
+                .leftJoinAndSelect('customerEngineerOrder.customer', 'customer')
+                .leftJoinAndSelect('customerEngineerOrder.engineer', 'engineer')
+                .leftJoinAndSelect('customerEngineerOrder.order', 'order')
+                .getMany();
+            queryRunner.commitTransaction();
+            return await (0, DataHandlerFunc_1.handleEngineerScheduleData)(engineerSchedule);
         }
-        return await (0, DataHandlerFunc_1.handleEngineerScheduleData)(engineerSchedule);
+        catch (error) {
+            queryRunner.rollbackTransaction();
+            throw error;
+        }
     }
     async getDailySalary(id) {
         const queryRunner = this.dataSource.createQueryRunner();
@@ -100,6 +102,27 @@ let EngineerService = class EngineerService {
         }
         catch (error) {
             throw new common_1.NotFoundException(error);
+        }
+    }
+    async saveEngineerWeeklySalary(weeklySalary) {
+        const queryRunner = this.dataSource.createQueryRunner();
+        queryRunner.connect();
+        queryRunner.startTransaction();
+        try {
+            const isExistingWeekly = await queryRunner.manager.findOne(engineer_weekly_earning_entity_1.EngineerWeeklyEarning, { where: { weekly: weeklySalary.weekly } });
+            if (!!isExistingWeekly) {
+                await queryRunner.manager.update(engineer_weekly_earning_entity_1.EngineerWeeklyEarning, { weekly: weeklySalary.weekly }, { ...weeklySalary });
+            }
+            else {
+                await queryRunner.manager.save(engineer_weekly_earning_entity_1.EngineerWeeklyEarning, {
+                    ...weeklySalary,
+                });
+            }
+            await queryRunner.commitTransaction();
+        }
+        catch (error) {
+            await queryRunner.rollbackTransaction();
+            throw error;
         }
     }
     async findOne(id) {
@@ -129,12 +152,13 @@ let EngineerService = class EngineerService {
             const { engineer_valid_skill, ...rest } = updateInfo;
             const engineerSkill = await this.skillService.findSkillIdsByNames(engineer_valid_skill);
             await queryRunner.manager.delete(engineer_skill_entity_1.EngineerSkill, { engineer_id: id });
-            (await engineerSkill).map((skillNumber) => {
+            const promises = engineerSkill.map((skillNumber) => {
                 queryRunner.manager.delete(engineer_skill_entity_1.EngineerSkill, {
                     skill_id: skillNumber,
                 });
                 queryRunner.manager.save(engineer_skill_entity_1.EngineerSkill, { skill_id: skillNumber });
             });
+            await Promise.all(promises);
             await queryRunner.manager.update(engineer_entity_1.Engineer, { engineer_id: id }, rest);
             await queryRunner.commitTransaction();
         }
@@ -144,23 +168,29 @@ let EngineerService = class EngineerService {
         }
     }
     async removeEngineerInfo(id) {
-        await this.engineerRepository.delete({ engineer_id: id });
+        const queryRunner = this.dataSource.createQueryRunner();
+        queryRunner.connect();
+        queryRunner.startTransaction();
+        try {
+            const targetEngineer = await queryRunner.manager.findOneOrFail(engineer_entity_1.Engineer, {
+                where: { engineer_id: id },
+            });
+            await queryRunner.manager.save(temp_emgineer_info_entity_1.TempEngineer, { ...targetEngineer });
+            await queryRunner.manager.delete(engineer_entity_1.Engineer, {
+                where: { engineer_id: id },
+            });
+            await queryRunner.commitTransaction();
+        }
+        catch (error) {
+            queryRunner.rollbackTransaction();
+            throw error;
+        }
     }
 };
 exports.EngineerService = EngineerService;
 exports.EngineerService = EngineerService = __decorate([
     (0, common_1.Injectable)(),
-    __param(0, (0, typeorm_2.InjectRepository)(engineer_entity_1.Engineer)),
-    __param(1, (0, typeorm_2.InjectRepository)(skills_entity_1.Skill)),
-    __param(2, (0, typeorm_2.InjectRepository)(engineer_skill_entity_1.EngineerSkill)),
-    __param(3, (0, typeorm_2.InjectRepository)(customer_engineer_order_entity_1.CustomerEngineerOrder)),
-    __param(4, (0, typeorm_2.InjectRepository)(engineer_daily_earning_entity_1.EngineerDailyEarning)),
-    __metadata("design:paramtypes", [typeorm_1.Repository,
-        typeorm_1.Repository,
-        typeorm_1.Repository,
-        typeorm_1.Repository,
-        typeorm_1.Repository,
-        skillUtil_service_1.SkillService,
+    __metadata("design:paramtypes", [skillUtil_service_1.SkillService,
         typeorm_1.DataSource])
 ], EngineerService);
 //# sourceMappingURL=engineer.service.js.map

@@ -1,16 +1,9 @@
 import { EngineerSkill } from 'src/engineer/entities/engineer_skill.entity';
-import { Repository, DataSource } from 'typeorm';
-import {
-  BadRequestException,
-  ConflictException,
-  Injectable,
-  NotFoundException,
-} from '@nestjs/common';
+import { DataSource } from 'typeorm';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateEngineerDto } from './dto/create-engineer.dto';
 import { UpdateEngineerDto } from './dto/update-engineer.dto';
 import { Engineer } from './entities/engineer.entity';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Skill } from './entities/skills.entity';
 import { CustomerEngineerOrder } from 'src/order_info/entities/customer_engineer_order.entity';
 import {
   handleEngineerData,
@@ -18,94 +11,115 @@ import {
 } from 'src/util/DataHandlerFunc';
 import { EngineerDailyEarning } from './entities/engineer_daily_earning.entity';
 import { SkillService } from 'src/skillUtil.service';
-import { IncomeType } from 'src/util/constantTypes';
+import { TempEngineer } from './entities/temp_emgineer_info.entity';
+import { EngineerWeeklySalaryDto } from './dto/save-engineer-weeklyEarning.dto';
+import { EngineerWeeklyEarning } from './entities/engineer_weekly_earning.entity';
 
 @Injectable()
 export class EngineerService {
   constructor(
+    // NOTE : QueryRunner 사용 시 DB 의존성 주입이 필요하지 않다,
+    // 직접적으로 QueryRunner가 DB와의 연결을 담당하기 때문이다.
+
     // 기사 정보 저장 테이블
-    @InjectRepository(Engineer)
-    private readonly engineerRepository: Repository<Engineer>,
+    // @InjectRepository(Engineer)
+    // private readonly engineerRepository: Repository<Engineer>,
+    //  기사 정보 임시저장 테이블
+    // @InjectRepository(TempEngineer)
+    // private readonly tempEngineerRepository: Repository<TempEngineer>,
+    //  매핑을 위한 가능품목 테이블
+    // @InjectRepository(Skill)
+    // private readonly skillRepository: Repository<Skill>,
+    //  기사와 가능품목 매핑테이블
+    // @InjectRepository(EngineerSkill)
+    // private readonly engineerSkillRepository: Repository<EngineerSkill>,
+    // @InjectRepository(CustomerEngineerOrder)
+    // private readonly orderDetailRepository: Repository<CustomerEngineerOrder>,
+    // @InjectRepository(EngineerDailyEarning)
+    // private readonly engineerDailyEarningRepository: Repository<EngineerDailyEarning>,
 
-    // 매핑을 위한 가능품목 테이블
-    @InjectRepository(Skill)
-    private readonly skillRepository: Repository<Skill>,
-
-    // 기사와 가능품목 매핑테이블
-    @InjectRepository(EngineerSkill)
-    private readonly engineerSkillRepository: Repository<EngineerSkill>,
-
-    @InjectRepository(CustomerEngineerOrder)
-    private readonly orderDetailRepository: Repository<CustomerEngineerOrder>,
-
-    @InjectRepository(EngineerDailyEarning)
-    private readonly engineerDailyEarningRepository: Repository<EngineerDailyEarning>,
-
-    private readonly skillService: SkillService, // 다른 서비스 의존성 주입
+    // module 내의 providers 배열에 추가가 필요함.
+    private readonly skillService: SkillService, // 별도의 서비스 의존성 주입
     private readonly dataSource: DataSource,
   ) {}
 
   async createEngineerInfo(engineerData: CreateEngineerDto) {
-    try {
-      if (!engineerData) {
-        throw new BadRequestException('저장할 기사 정보가 존재하지 않습니다');
-      }
+    const queryRunner = this.dataSource.createQueryRunner();
 
+    queryRunner.connect();
+    queryRunner.startTransaction();
+
+    try {
       // destructuring 이후 남은 정보부터 먼저 저장하여 id 생성되게끔 하기
       const { engineer_valid_skill, ...engineerWithoutSkill } = engineerData;
-      const savedEngineer = await this.engineerRepository.save({
+
+      const savedEngineer = await queryRunner.manager.save(Engineer, {
         ...engineerWithoutSkill,
       });
-      await this.engineerRepository.save({ ...savedEngineer });
+
+      await queryRunner.manager.save(Engineer, { ...savedEngineer });
 
       // 입력 데이터로부터 받아온 가능품목배열의 문자열을 검색 후 skill id 를 다시 배열로 반환받는다.
       const mappedSkillId =
         await this.skillService.findSkillIdsByNames(engineer_valid_skill);
-
-      // 기사 테이블에서 가장 마지막에 생성된 기사의 아이디 추출
-      await this.engineerRepository.find({
-        select: ['engineer_id'], // ID만 선택
-        order: { engineer_id: 'DESC' },
-      });
 
       // 3. 새로 생성된 기사의 ID는 savedEngineer에서 직접 사용
       const engineerSkills = mappedSkillId.map((skillId) => ({
         engineer_id: savedEngineer.engineer_id, // 또는 savedEngineer.engineer_id
         skill_id: skillId,
       }));
-      await this.engineerSkillRepository.insert(engineerSkills);
+
+      await queryRunner.manager.insert(EngineerSkill, engineerSkills);
+
+      queryRunner.commitTransaction();
     } catch (error) {
-      if (error.code === '23505') {
-        // 중복 키 에러 코드
-        throw new ConflictException('이미 존재하는 엔지니어입니다.');
-      }
+      queryRunner.rollbackTransaction();
+      throw error;
     }
   }
 
   async findAll() {
-    const engineerWithSkills = await this.engineerSkillRepository
-      .createQueryBuilder('engineerSkill')
-      .leftJoinAndSelect('engineerSkill.engineer', 'engineer') // 엔지니어 정보 조인
-      .leftJoinAndSelect('engineerSkill.skill', 'skill') // 스킬 정보 조인
-      .getMany();
-    if (!engineerWithSkills[0]) {
-      throw new NotFoundException('기사 정보가 존재하지 않습니다.');
+    const queryRunner = this.dataSource.createQueryRunner();
+    queryRunner.connect();
+    queryRunner.startTransaction();
+
+    try {
+      const engineerWithSkills = await queryRunner.manager
+        .createQueryBuilder(EngineerSkill, 'engineerSkill')
+        .leftJoinAndSelect('engineerSkill.engineer', 'engineer')
+        .leftJoinAndSelect('engineerSkill.skill', 'skill')
+        .getMany();
+
+      queryRunner.commitTransaction();
+
+      return await handleEngineerData(engineerWithSkills);
+    } catch (error) {
+      queryRunner.rollbackTransaction();
+      throw error;
     }
-    return await handleEngineerData(engineerWithSkills);
   }
 
   async getAllSchedule() {
-    const engineerSchedule = await this.orderDetailRepository
-      .createQueryBuilder('customerEngineerOrder')
-      .leftJoinAndSelect('customerEngineerOrder.customer', 'customer')
-      .leftJoinAndSelect('customerEngineerOrder.engineer', 'engineer')
-      .leftJoinAndSelect('customerEngineerOrder.order', 'order')
-      .getMany();
+    const queryRunner = this.dataSource.createQueryRunner();
 
-    if (!engineerSchedule[0]) {
-      throw new NotFoundException('기사 스케쥴 데이터가 존재하지 않습니다.');
+    queryRunner.connect();
+    queryRunner.startTransaction();
+
+    try {
+      const engineerSchedule = await queryRunner.manager
+        .createQueryBuilder(CustomerEngineerOrder, 'customerEngineerOrder')
+        .leftJoinAndSelect('customerEngineerOrder.customer', 'customer')
+        .leftJoinAndSelect('customerEngineerOrder.engineer', 'engineer')
+        .leftJoinAndSelect('customerEngineerOrder.order', 'order')
+        .getMany();
+
+      queryRunner.commitTransaction();
+
+      return await handleEngineerScheduleData(engineerSchedule);
+    } catch (error) {
+      queryRunner.rollbackTransaction();
+      throw error;
     }
-    return await handleEngineerScheduleData(engineerSchedule);
   }
 
   async getDailySalary(id: number) {
@@ -130,6 +144,37 @@ export class EngineerService {
       return engineerDailyIncome;
     } catch (error) {
       throw new NotFoundException(error);
+    }
+  }
+
+  async saveEngineerWeeklySalary(weeklySalary: EngineerWeeklySalaryDto) {
+    const queryRunner = this.dataSource.createQueryRunner();
+
+    queryRunner.connect();
+    queryRunner.startTransaction();
+
+    try {
+      // 몇 주차인지 먼저 검증
+      const isExistingWeekly = await queryRunner.manager.findOne(
+        EngineerWeeklyEarning,
+        { where: { weekly: weeklySalary.weekly } },
+      );
+
+      if (!!isExistingWeekly) {
+        await queryRunner.manager.update(
+          EngineerWeeklyEarning,
+          { weekly: weeklySalary.weekly },
+          { ...weeklySalary },
+        );
+      } else {
+        await queryRunner.manager.save(EngineerWeeklyEarning, {
+          ...weeklySalary,
+        });
+      }
+      await queryRunner.commitTransaction();
+    } catch (error) {
+      await queryRunner.rollbackTransaction();
+      throw error;
     }
   }
 
@@ -163,14 +208,22 @@ export class EngineerService {
       const { engineer_valid_skill, ...rest } = updateInfo;
       const engineerSkill =
         await this.skillService.findSkillIdsByNames(engineer_valid_skill);
+
       await queryRunner.manager.delete(EngineerSkill, { engineer_id: id });
 
-      (await engineerSkill).map((skillNumber) => {
+      // map , forEach 등의 반복문은 비동기로 처리할 수 없다,
+      // 변수에 담아 Promise.all() 함수의 매개변수로 전달하여 반복문 내의 모든 작업을
+      // 한번에 병렬로 비동기 처리할 수 있다.
+      const promises = engineerSkill.map((skillNumber) => {
         queryRunner.manager.delete(EngineerSkill, {
           skill_id: skillNumber,
         });
         queryRunner.manager.save(EngineerSkill, { skill_id: skillNumber });
       });
+
+      // 해당 함수를 통해 반복순회를 병렬로 비동기처리할 수 있다.
+      await Promise.all(promises);
+
       // 기사 정보 업데이트
       await queryRunner.manager.update(Engineer, { engineer_id: id }, rest);
       await queryRunner.commitTransaction();
@@ -181,12 +234,28 @@ export class EngineerService {
   }
 
   async removeEngineerInfo(id: number) {
-    // const targetEngineer = await this.engineerRepository.findOne({
-    //   where: { engineer_id: id },
-    // });
+    const queryRunner = this.dataSource.createQueryRunner();
 
-    // 기사정보 임시저장 테이블
-    // this.tempEngineerRepository.save({ ...targetEngineer });
-    await this.engineerRepository.delete({ engineer_id: id });
+    queryRunner.connect();
+    queryRunner.startTransaction();
+
+    try {
+      const targetEngineer = await queryRunner.manager.findOneOrFail(Engineer, {
+        where: { engineer_id: id },
+      });
+
+      // 기사정보 임시 저장테이블에 먼저 저장
+      await queryRunner.manager.save(TempEngineer, { ...targetEngineer });
+
+      // id 값을 가진 기사정보를 기사테이블에서 삭제
+      await queryRunner.manager.delete(Engineer, {
+        where: { engineer_id: id },
+      });
+
+      await queryRunner.commitTransaction();
+    } catch (error) {
+      queryRunner.rollbackTransaction();
+      throw error;
+    }
   }
 }

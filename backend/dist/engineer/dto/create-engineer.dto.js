@@ -105,6 +105,7 @@ __decorate([
         ],
     }),
     (0, class_validator_1.IsString)(),
+    (0, class_validator_1.IsOptional)(),
     __metadata("design:type", String)
 ], CreateEngineerDto.prototype, "engineer_dayoff", void 0);
 //# sourceMappingURL=create-engineer.dto.js.map
