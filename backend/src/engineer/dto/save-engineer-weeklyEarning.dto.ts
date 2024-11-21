@@ -8,7 +8,7 @@ export class EngineerWeeklySalaryDto {
 
   @ApiProperty({ description: '기사 주급' })
   @IsNumber()
-  engineer_weekly_salary: number;
+  weekly_earning: number;
 
   @ApiProperty({ description: '지급 여부' })
   @IsBoolean()

@@ -24,7 +24,7 @@ __decorate([
     (0, swagger_1.ApiProperty)({ description: '기사 주급' }),
     (0, class_validator_1.IsNumber)(),
     __metadata("design:type", Number)
-], EngineerWeeklySalaryDto.prototype, "engineer_weekly_salary", void 0);
+], EngineerWeeklySalaryDto.prototype, "weekly_earning", void 0);
 __decorate([
     (0, swagger_1.ApiProperty)({ description: '지급 여부' }),
     (0, class_validator_1.IsBoolean)(),

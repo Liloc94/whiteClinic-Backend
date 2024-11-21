@@ -36,19 +36,4 @@ export class IncomeInfoService {
       throw error;
     }
   }
-
-  //   async saveWeeklyIncome() {
-  //     const queryRunner = this.dataSource.createQueryRunner();
-
-  //     queryRunner.connect();
-  //     queryRunner.startTransaction();
-
-  //     try {
-  //       await queryRunner.manager.save(EngineerWeeklyEarning);
-
-  //       await queryRunner.commitTransaction();
-  //     } catch (error) {
-  //       throw error;
-  //     }
-  //   }
 }
