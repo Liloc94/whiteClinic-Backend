@@ -29,7 +29,7 @@ __decorate([
     __metadata("design:type", Array)
 ], Engineer.prototype, "dailyEarnings", void 0);
 __decorate([
-    (0, typeorm_1.OneToMany)(() => engineer_weekly_earning_entity_1.EngineerWeeklyEarning, (weeklyEarning) => weeklyEarning.engineer),
+    (0, typeorm_1.OneToMany)(() => engineer_weekly_earning_entity_1.EngineerWeeklyEarning, (weeklyEarning) => weeklyEarning.engineer_id),
     __metadata("design:type", Array)
 ], Engineer.prototype, "weeklyEarnings", void 0);
 __decorate([

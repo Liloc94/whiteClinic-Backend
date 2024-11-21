@@ -29,7 +29,7 @@ __decorate([
     (0, swagger_1.ApiProperty)({ description: '지급 여부' }),
     (0, class_validator_1.IsBoolean)(),
     __metadata("design:type", Boolean)
-], EngineerWeeklySalaryDto.prototype, "isPaid", void 0);
+], EngineerWeeklySalaryDto.prototype, "is_paid", void 0);
 __decorate([
     (0, swagger_1.ApiProperty)({ description: 'n 주차' }),
     (0, class_validator_1.IsString)(),

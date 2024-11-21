@@ -1,6 +1,6 @@
 export declare class EngineerWeeklySalaryDto {
     engineer_id: number;
     weekly_earning: number;
-    isPaid: boolean;
+    is_paid: boolean;
     weekly: string;
 }

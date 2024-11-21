@@ -20,7 +20,7 @@ export class Engineer {
 
   @OneToMany(
     () => EngineerWeeklyEarning,
-    (weeklyEarning) => weeklyEarning.engineer,
+    (weeklyEarning) => weeklyEarning.engineer_id,
   )
   weeklyEarnings: EngineerWeeklyEarning[];
 
