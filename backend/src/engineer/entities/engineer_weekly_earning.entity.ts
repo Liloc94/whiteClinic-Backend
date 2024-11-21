@@ -6,7 +6,7 @@ export class EngineerWeeklyEarning {
   idx: number;
 
   @Column({ type: 'int2' })
-  engineer: number;
+  engineer_id: number;
 
   @Column({ type: 'varchar' })
   weekly: string;

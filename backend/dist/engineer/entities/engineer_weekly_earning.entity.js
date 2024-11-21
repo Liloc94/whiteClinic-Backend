@@ -21,7 +21,7 @@ __decorate([
 __decorate([
     (0, typeorm_1.Column)({ type: 'int2' }),
     __metadata("design:type", Number)
-], EngineerWeeklyEarning.prototype, "engineer", void 0);
+], EngineerWeeklyEarning.prototype, "engineer_id", void 0);
 __decorate([
     (0, typeorm_1.Column)({ type: 'varchar' }),
     __metadata("design:type", String)
