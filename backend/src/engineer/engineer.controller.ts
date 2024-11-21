@@ -14,6 +14,7 @@ import { EngineerService } from './engineer.service';
 import { CreateEngineerDto } from './dto/create-engineer.dto';
 import { UpdateEngineerDto } from './dto/update-engineer.dto';
 import { ApiBody, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { EngineerWeeklyDetailDto } from './dto/search-engineer-weeklyEarningIsPaid.dto';
 
 @ApiTags('기사정보 API')
 @Controller('engineer')
@@ -102,6 +103,16 @@ export class EngineerController {
     } catch (error) {
       throw new BadRequestException(error);
     }
+  }
+
+  @Get('getEngineerWeeklyDetail')
+  @ApiOperation({
+    description: 'id와 날짜 정보를 기준으로 기사주급과 지급여부를 조회한다 ',
+    summary:
+      '파라미터로 받은 기사 id, 날짜를 기준으로 해당하는 기사의 주급과 지급여부 조회',
+  })
+  async getEngineerWeeklyDetail(@Body() idDate: EngineerWeeklyDetailDto) {
+    return await this.engineerService.getEngineerWeeklyDetail(idDate);
   }
 
   @Post(':id')

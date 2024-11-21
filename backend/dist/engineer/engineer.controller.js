@@ -19,6 +19,7 @@ const engineer_service_1 = require("./engineer.service");
 const create_engineer_dto_1 = require("./dto/create-engineer.dto");
 const update_engineer_dto_1 = require("./dto/update-engineer.dto");
 const swagger_1 = require("@nestjs/swagger");
+const search_engineer_weeklyEarningIsPaid_dto_1 = require("./dto/search-engineer-weeklyEarningIsPaid.dto");
 let EngineerController = class EngineerController {
     constructor(engineerService) {
         this.engineerService = engineerService;
@@ -62,6 +63,9 @@ let EngineerController = class EngineerController {
         catch (error) {
             throw new common_1.BadRequestException(error);
         }
+    }
+    async getEngineerWeeklyDetail(idDate) {
+        return await this.engineerService.getEngineerWeeklyDetail(idDate);
     }
     async findOne(id) {
         try {
@@ -153,6 +157,17 @@ __decorate([
     __metadata("design:paramtypes", [save_engineer_weeklyEarning_dto_1.EngineerWeeklySalaryDto]),
     __metadata("design:returntype", Promise)
 ], EngineerController.prototype, "saveEngineerWeeklySalary", null);
+__decorate([
+    (0, common_1.Get)('getEngineerWeeklyDetail'),
+    (0, swagger_1.ApiOperation)({
+        description: 'id와 날짜 정보를 기준으로 기사주급과 지급여부를 조회한다 ',
+        summary: '파라미터로 받은 기사 id, 날짜를 기준으로 해당하는 기사의 주급과 지급여부 조회',
+    }),
+    __param(0, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [search_engineer_weeklyEarningIsPaid_dto_1.EngineerWeeklyDetailDto]),
+    __metadata("design:returntype", Promise)
+], EngineerController.prototype, "getEngineerWeeklyDetail", null);
 __decorate([
     (0, common_1.Post)(':id'),
     (0, swagger_1.ApiOperation)({

@@ -14,6 +14,7 @@ import { SkillService } from 'src/skillUtil.service';
 import { TempEngineer } from './entities/temp_emgineer_info.entity';
 import { EngineerWeeklySalaryDto } from './dto/save-engineer-weeklyEarning.dto';
 import { EngineerWeeklyEarning } from './entities/engineer_weekly_earning.entity';
+import { EngineerWeeklyDetailDto } from './dto/search-engineer-weeklyEarningIsPaid.dto';
 
 @Injectable()
 export class EngineerService {
@@ -172,6 +173,27 @@ export class EngineerService {
         });
       }
       await queryRunner.commitTransaction();
+    } catch (error) {
+      await queryRunner.rollbackTransaction();
+      throw error;
+    }
+  }
+
+  async getEngineerWeeklyDetail(idDate: EngineerWeeklyDetailDto) {
+    const queryRunner = this.dataSource.createQueryRunner();
+
+    await queryRunner.connect();
+    await queryRunner.startTransaction();
+
+    try {
+      const searchedInfo = await queryRunner.manager.find(
+        EngineerWeeklyEarning,
+        {
+          where: { engineer_id: idDate.engineer_id, weekly: idDate.weekly },
+        },
+      );
+      await queryRunner.commitTransaction();
+      return searchedInfo;
     } catch (error) {
       await queryRunner.rollbackTransaction();
       throw error;

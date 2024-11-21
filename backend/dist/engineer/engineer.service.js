@@ -125,6 +125,22 @@ let EngineerService = class EngineerService {
             throw error;
         }
     }
+    async getEngineerWeeklyDetail(idDate) {
+        const queryRunner = this.dataSource.createQueryRunner();
+        await queryRunner.connect();
+        await queryRunner.startTransaction();
+        try {
+            const searchedInfo = await queryRunner.manager.find(engineer_weekly_earning_entity_1.EngineerWeeklyEarning, {
+                where: { engineer_id: idDate.engineer_id, weekly: idDate.weekly },
+            });
+            await queryRunner.commitTransaction();
+            return searchedInfo;
+        }
+        catch (error) {
+            await queryRunner.rollbackTransaction();
+            throw error;
+        }
+    }
     async findOne(id) {
         const queryRunner = this.dataSource.createQueryRunner();
         queryRunner.connect();
