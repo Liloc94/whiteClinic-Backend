@@ -6,7 +6,6 @@ import {
   Patch,
   Param,
   Delete,
-  Res,
   Header,
   StreamableFile,
   HttpException,
@@ -17,7 +16,6 @@ import { CreateOrderInfoDto } from './dto/create-order_info.dto';
 import { UpdateOrderInfoDto } from './dto/update-order_info.dto';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { ExcelService } from 'src/makeExcel.service';
-import { Response } from 'express';
 
 @ApiTags('주문정보 API')
 @Controller('order-info')
@@ -72,7 +70,7 @@ export class OrderInfoController {
 
       const fileName = `주문상세_${new Date().toISOString().slice(0, 10)}.xlsx`;
       const encodedFileName = encodeURIComponent(fileName);
-      
+
       // options를 생성자에서 직접 전달
       return new StreamableFile(stream, {
         type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
