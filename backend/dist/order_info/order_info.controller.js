@@ -58,7 +58,7 @@ let OrderInfoController = class OrderInfoController {
 };
 exports.OrderInfoController = OrderInfoController;
 __decorate([
-    (0, common_1.Post)('createNewOrder'),
+    (0, common_1.Post)('orders'),
     (0, swagger_1.ApiOperation)({
         summary: '새로운 주문정보를 DB에 저장한다.',
         description: '입력한 정보를 DB 내부 order_info 테이블에 저장한다.',
@@ -69,7 +69,7 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], OrderInfoController.prototype, "create", null);
 __decorate([
-    (0, common_1.Get)('getAllOrderDetails'),
+    (0, common_1.Get)('orderDetails'),
     (0, swagger_1.ApiOperation)({
         summary: '모든 상세 주문 정보를 호출한다',
         description: 'DB의 모든 주문정보를 불러온다',
@@ -79,7 +79,7 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], OrderInfoController.prototype, "findAll", null);
 __decorate([
-    (0, common_1.Get)('getOrder:id'),
+    (0, common_1.Get)('orders/:id'),
     (0, swagger_1.ApiOperation)({
         summary: '파라미터로 전달받은 id 를 기반으로 매치되는 주문정보를 호출한다.',
     }),
@@ -89,7 +89,7 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], OrderInfoController.prototype, "findOne", null);
 __decorate([
-    (0, common_1.Post)('getOrderInfoExcel'),
+    (0, common_1.Post)('download-order-excel'),
     (0, common_1.Header)('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'),
     (0, swagger_1.ApiOperation)({
         description: '모든 주문정보 일괄 조회후 엑셀파일로 다운로드 테스트',
@@ -116,7 +116,7 @@ __decorate([
 ], OrderInfoController.prototype, "remove", null);
 exports.OrderInfoController = OrderInfoController = __decorate([
     (0, swagger_1.ApiTags)('주문정보 API'),
-    (0, common_1.Controller)('order-info'),
+    (0, common_1.Controller)('order-management'),
     __metadata("design:paramtypes", [order_info_service_1.OrderInfoService,
         makeExcel_service_1.ExcelService])
 ], OrderInfoController);
