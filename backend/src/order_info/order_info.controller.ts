@@ -18,13 +18,13 @@ import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { ExcelService } from 'src/makeExcel.service';
 
 @ApiTags('주문정보 API')
-@Controller('order-info')
+@Controller('order-management')
 export class OrderInfoController {
   constructor(
     private readonly orderInfoService: OrderInfoService,
     private readonly excelService: ExcelService,
   ) {}
-  @Post('createNewOrder')
+  @Post('orders')
   @ApiOperation({
     summary: '새로운 주문정보를 DB에 저장한다.',
     description: '입력한 정보를 DB 내부 order_info 테이블에 저장한다.',
@@ -33,7 +33,7 @@ export class OrderInfoController {
     return await this.orderInfoService.create(createOrderInfoDto);
   }
 
-  @Get('getAllOrderDetails')
+  @Get('orderDetails')
   @ApiOperation({
     summary: '모든 상세 주문 정보를 호출한다',
     description: 'DB의 모든 주문정보를 불러온다',
@@ -42,7 +42,7 @@ export class OrderInfoController {
     return await this.orderInfoService.findOrderDetails();
   }
 
-  @Get('getOrder:id')
+  @Get('orders/:id')
   @ApiOperation({
     summary: '파라미터로 전달받은 id 를 기반으로 매치되는 주문정보를 호출한다.',
   })
@@ -50,7 +50,7 @@ export class OrderInfoController {
     return await this.orderInfoService.findWithId(+id);
   }
 
-  @Post('getOrderInfoExcel')
+  @Post('download-order-excel')
   @Header(
     'Content-Type',
     'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
