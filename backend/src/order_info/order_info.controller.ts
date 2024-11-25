@@ -33,7 +33,7 @@ export class OrderInfoController {
     return await this.orderInfoService.create(createOrderInfoDto);
   }
 
-  @Get('orderDetails')
+  @Get('orders-details')
   @ApiOperation({
     summary: '모든 상세 주문 정보를 호출한다',
     description: 'DB의 모든 주문정보를 불러온다',

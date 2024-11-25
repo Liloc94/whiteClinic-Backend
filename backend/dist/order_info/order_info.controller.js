@@ -69,7 +69,7 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], OrderInfoController.prototype, "create", null);
 __decorate([
-    (0, common_1.Get)('orderDetails'),
+    (0, common_1.Get)('orders-details'),
     (0, swagger_1.ApiOperation)({
         summary: '모든 상세 주문 정보를 호출한다',
         description: 'DB의 모든 주문정보를 불러온다',
