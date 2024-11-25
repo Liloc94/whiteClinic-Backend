@@ -15,6 +15,9 @@ import { CreateEngineerDto } from './dto/create-engineer.dto';
 import { UpdateEngineerDto } from './dto/update-engineer.dto';
 import { ApiBody, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { EngineerWeeklyDetailDto } from './dto/search-engineer-weeklyEarningIsPaid.dto';
+import { EngineerScheduleDto } from './dto/search-engineer-schedule.dto';
+import { EngineerDailyEarning } from './entities/engineer_daily_earning.entity';
+import { Engineer } from './entities/engineer.entity';
 
 @ApiTags('기사정보 API')
 @Controller('engineer')
@@ -56,7 +59,7 @@ export class EngineerController {
   })
   @ApiResponse({ status: 200, description: '기사정보 조회 완료' })
   @Get('searchAllEngineer')
-  async findAll() {
+  async findAll(): Promise<any[]> {
     try {
       return await this.engineerService.findAll();
     } catch (error) {
@@ -69,7 +72,7 @@ export class EngineerController {
     description: '모든 기사들의 스케쥴 정보의 일괄조회를 요청',
   })
   @Get('getAllEngineerSchedule')
-  async getAllSchedule() {
+  async getAllSchedule(): Promise<EngineerScheduleDto[]> {
     try {
       return await this.engineerService.getAllSchedule();
     } catch (error) {
@@ -82,7 +85,9 @@ export class EngineerController {
     description: '파라미터로 받은 id를 가진 기사의 일급 정보를 호출한다',
     summary: '특정 기사의 날짜별 일당을 호출한다',
   })
-  async getEngineerSalary(@Param('id') id: number) {
+  async getEngineerSalary(
+    @Param('id') id: number,
+  ): Promise<EngineerDailyEarning[]> {
     try {
       return await this.engineerService.getDailySalary(id);
     } catch (error) {
@@ -97,7 +102,7 @@ export class EngineerController {
   })
   async saveEngineerWeeklySalary(
     @Body() weeklySalary: EngineerWeeklySalaryDto,
-  ) {
+  ): Promise<void> {
     try {
       return await this.engineerService.saveEngineerWeeklySalary(weeklySalary);
     } catch (error) {
@@ -111,7 +116,9 @@ export class EngineerController {
     summary:
       '파라미터로 받은 기사 id, 날짜를 기준으로 해당하는 기사의 주급과 지급여부 조회',
   })
-  async getEngineerWeeklyDetail(@Body() idDate: EngineerWeeklyDetailDto) {
+  async getEngineerWeeklyDetail(
+    @Body() idDate: EngineerWeeklyDetailDto,
+  ): Promise<any> {
     return await this.engineerService.getEngineerWeeklyDetail(idDate);
   }
 
@@ -120,7 +127,7 @@ export class EngineerController {
     description: '파라미터로 전달받은 id의 기사정보를 조회',
     summary: '특정 기사의 정보를 조회한다',
   })
-  async findOne(@Param('id') id: string) {
+  async findOne(@Param('id') id: string): Promise<Engineer[]> {
     try {
       return await this.engineerService.findOne(+id);
     } catch (error) {
@@ -136,7 +143,7 @@ export class EngineerController {
   async update(
     @Param('id') id: string,
     @Body() updateEngineerDto: UpdateEngineerDto,
-  ) {
+  ): Promise<void> {
     try {
       return await this.engineerService.updateEngineerInfo(
         +id,
@@ -152,7 +159,7 @@ export class EngineerController {
     description: '파라미터로 전달받은 id를 가진 기사정보를 삭제',
     summary: '특정 기사의 정보를 삭제한다',
   })
-  async remove(@Param('id') id: string) {
+  async remove(@Param('id') id: string): Promise<void> {
     return await this.engineerService.removeEngineerInfo(+id);
   }
 }

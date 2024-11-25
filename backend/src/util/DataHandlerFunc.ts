@@ -82,7 +82,6 @@ export async function handleOrderDetailsData(
       receipt_docs_issued: infos.order.reciept_docs_issued,
     };
   });
-
   return orderList;
 }
 

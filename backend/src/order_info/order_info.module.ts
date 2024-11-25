@@ -9,6 +9,7 @@ import { Engineer } from 'src/engineer/entities/engineer.entity';
 import { Customer } from 'src/customer/entities/customer.entity';
 import { EngineerWeeklyEarning } from 'src/engineer/entities/engineer_weekly_earning.entity';
 import { EngineerDailyEarning } from 'src/engineer/entities/engineer_daily_earning.entity';
+import { ExcelService } from 'src/makeExcel.service';
 
 @Module({
   imports: [
@@ -23,6 +24,6 @@ import { EngineerDailyEarning } from 'src/engineer/entities/engineer_daily_earni
   ],
   exports: [TypeOrmModule],
   controllers: [OrderInfoController],
-  providers: [OrderInfoService, IncomeInfoService],
+  providers: [OrderInfoService, IncomeInfoService, ExcelService],
 })
 export class OrderInfoModule {}

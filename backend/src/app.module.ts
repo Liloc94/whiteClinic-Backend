@@ -29,6 +29,7 @@ import { EngineerModule } from './engineer/engineer.module';
       synchronize: false,
       migrationsRun: true,
       logging: true,
+      logger: 'advanced-console',
     }),
     RefreshTokenModule,
     AdminModule,

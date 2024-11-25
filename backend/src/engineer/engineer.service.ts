@@ -188,11 +188,11 @@ export class EngineerService {
     try {
       const searchedInfo = await queryRunner.manager.findOne(
         EngineerWeeklyEarning,
-        {
-          where: { engineer_id: idDate.engineer_id, weekly: idDate.weekly },
-        },
+        { where: { engineer_id: idDate.engineer_id, weekly: idDate.weekly } },
       );
       await queryRunner.commitTransaction();
+      // idx 불필요함, 구조분해 후 남겨두기
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       const { idx, ...rest } = searchedInfo;
 
       return rest;

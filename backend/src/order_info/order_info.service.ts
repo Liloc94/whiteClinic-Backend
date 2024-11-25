@@ -13,6 +13,7 @@ import {
 } from 'src/util/DataHandlerFunc';
 import { IncomeInfoService } from 'src/income.service';
 import { IncomeType } from 'src/util/constantTypes';
+import { ExcelService } from 'src/makeExcel.service';
 
 @Injectable()
 export class OrderInfoService {
@@ -33,6 +34,8 @@ export class OrderInfoService {
     private readonly dataSource: DataSource,
     // daily, weekly 매출 저장용 서비스
     private readonly incomeInfoService: IncomeInfoService,
+    // 엑셀파일 다운로드용 API 서비스
+    private readonly makeExcelService: ExcelService,
   ) {}
 
   async create(createOrderInfoDto: CreateOrderInfoDto) {
@@ -101,8 +104,8 @@ export class OrderInfoService {
   async findOrderDetails() {
     const queryRunner = this.dataSource.createQueryRunner();
 
-    queryRunner.connect();
-    queryRunner.startTransaction();
+    await queryRunner.connect();
+    await queryRunner.startTransaction();
 
     try {
       const orderDetails = await queryRunner.manager
@@ -115,7 +118,7 @@ export class OrderInfoService {
       await queryRunner.commitTransaction();
       return await handleOrderDetailsData(orderDetails);
     } catch (error) {
-      queryRunner.rollbackTransaction();
+      await queryRunner.rollbackTransaction();
       console.log('트랜잭션 실패, 롤백실행');
 
       throw error;
@@ -123,6 +126,32 @@ export class OrderInfoService {
       if (!queryRunner.isReleased) {
         await queryRunner.release();
       }
+    }
+  }
+
+  async downloadExcel() {
+    // DB에서 데이터를 가져오는 로직 (샘플 데이터 사용)
+    console.log('downloadExcel called ');
+    const queryRunner = this.dataSource.createQueryRunner();
+    queryRunner.connect();
+    queryRunner.startTransaction();
+
+    try {
+      const orderDetails = await queryRunner.manager
+        .createQueryBuilder(CustomerEngineerOrder, 'CustomerEngineerOrder')
+        .leftJoinAndSelect('CustomerEngineerOrder.customer', 'customer')
+        .leftJoinAndSelect('CustomerEngineerOrder.order', 'order')
+        .leftJoinAndSelect('CustomerEngineerOrder.engineer', 'engineer')
+        .getMany();
+
+      queryRunner.commitTransaction();
+      const data = handleOrderDetailsData(orderDetails);
+      return data;
+    } catch (error) {
+      queryRunner.rollbackTransaction();
+      console.log('Transaction failed, rolling back', error);
+
+      throw error;
     }
   }
 

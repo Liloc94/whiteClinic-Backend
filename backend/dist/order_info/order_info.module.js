@@ -18,6 +18,7 @@ const engineer_entity_1 = require("../engineer/entities/engineer.entity");
 const customer_entity_1 = require("../customer/entities/customer.entity");
 const engineer_weekly_earning_entity_1 = require("../engineer/entities/engineer_weekly_earning.entity");
 const engineer_daily_earning_entity_1 = require("../engineer/entities/engineer_daily_earning.entity");
+const makeExcel_service_1 = require("../makeExcel.service");
 let OrderInfoModule = class OrderInfoModule {
 };
 exports.OrderInfoModule = OrderInfoModule;
@@ -35,7 +36,7 @@ exports.OrderInfoModule = OrderInfoModule = __decorate([
         ],
         exports: [typeorm_1.TypeOrmModule],
         controllers: [order_info_controller_1.OrderInfoController],
-        providers: [order_info_service_1.OrderInfoService, income_service_1.IncomeInfoService],
+        providers: [order_info_service_1.OrderInfoService, income_service_1.IncomeInfoService, makeExcel_service_1.ExcelService],
     })
 ], OrderInfoModule);
 //# sourceMappingURL=order_info.module.js.map

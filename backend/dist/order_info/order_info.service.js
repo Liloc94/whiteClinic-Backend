@@ -22,14 +22,16 @@ const customer_entity_1 = require("../customer/entities/customer.entity");
 const customer_engineer_order_entity_1 = require("./entities/customer_engineer_order.entity");
 const DataHandlerFunc_1 = require("../util/DataHandlerFunc");
 const income_service_1 = require("../income.service");
+const makeExcel_service_1 = require("../makeExcel.service");
 let OrderInfoService = class OrderInfoService {
-    constructor(orderInfoRepository, engineerRepository, customerRepository, OrderDetailRepository, dataSource, incomeInfoService) {
+    constructor(orderInfoRepository, engineerRepository, customerRepository, OrderDetailRepository, dataSource, incomeInfoService, makeExcelService) {
         this.orderInfoRepository = orderInfoRepository;
         this.engineerRepository = engineerRepository;
         this.customerRepository = customerRepository;
         this.OrderDetailRepository = OrderDetailRepository;
         this.dataSource = dataSource;
         this.incomeInfoService = incomeInfoService;
+        this.makeExcelService = makeExcelService;
     }
     async create(createOrderInfoDto) {
         const queryRunner = this.dataSource.createQueryRunner();
@@ -80,8 +82,8 @@ let OrderInfoService = class OrderInfoService {
     }
     async findOrderDetails() {
         const queryRunner = this.dataSource.createQueryRunner();
-        queryRunner.connect();
-        queryRunner.startTransaction();
+        await queryRunner.connect();
+        await queryRunner.startTransaction();
         try {
             const orderDetails = await queryRunner.manager
                 .createQueryBuilder(customer_engineer_order_entity_1.CustomerEngineerOrder, 'CustomerEngineerOrder')
@@ -93,7 +95,7 @@ let OrderInfoService = class OrderInfoService {
             return await (0, DataHandlerFunc_1.handleOrderDetailsData)(orderDetails);
         }
         catch (error) {
-            queryRunner.rollbackTransaction();
+            await queryRunner.rollbackTransaction();
             console.log('트랜잭션 실패, 롤백실행');
             throw error;
         }
@@ -101,6 +103,28 @@ let OrderInfoService = class OrderInfoService {
             if (!queryRunner.isReleased) {
                 await queryRunner.release();
             }
+        }
+    }
+    async downloadExcel() {
+        console.log('downloadExcel called ');
+        const queryRunner = this.dataSource.createQueryRunner();
+        queryRunner.connect();
+        queryRunner.startTransaction();
+        try {
+            const orderDetails = await queryRunner.manager
+                .createQueryBuilder(customer_engineer_order_entity_1.CustomerEngineerOrder, 'CustomerEngineerOrder')
+                .leftJoinAndSelect('CustomerEngineerOrder.customer', 'customer')
+                .leftJoinAndSelect('CustomerEngineerOrder.order', 'order')
+                .leftJoinAndSelect('CustomerEngineerOrder.engineer', 'engineer')
+                .getMany();
+            queryRunner.commitTransaction();
+            const data = (0, DataHandlerFunc_1.handleOrderDetailsData)(orderDetails);
+            return data;
+        }
+        catch (error) {
+            queryRunner.rollbackTransaction();
+            console.log('Transaction failed, rolling back', error);
+            throw error;
         }
     }
     async findWithId(id) {
@@ -160,6 +184,7 @@ exports.OrderInfoService = OrderInfoService = __decorate([
         typeorm_2.Repository,
         typeorm_2.Repository,
         typeorm_2.DataSource,
-        income_service_1.IncomeInfoService])
+        income_service_1.IncomeInfoService,
+        makeExcel_service_1.ExcelService])
 ], OrderInfoService);
 //# sourceMappingURL=order_info.service.js.map

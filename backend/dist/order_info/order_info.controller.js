@@ -18,9 +18,11 @@ const order_info_service_1 = require("./order_info.service");
 const create_order_info_dto_1 = require("./dto/create-order_info.dto");
 const update_order_info_dto_1 = require("./dto/update-order_info.dto");
 const swagger_1 = require("@nestjs/swagger");
+const makeExcel_service_1 = require("../makeExcel.service");
 let OrderInfoController = class OrderInfoController {
-    constructor(orderInfoService) {
+    constructor(orderInfoService, excelService) {
         this.orderInfoService = orderInfoService;
+        this.excelService = excelService;
     }
     async create(createOrderInfoDto) {
         return await this.orderInfoService.create(createOrderInfoDto);
@@ -30,6 +32,22 @@ let OrderInfoController = class OrderInfoController {
     }
     async findOne(id) {
         return await this.orderInfoService.findWithId(+id);
+    }
+    async downloadOrderExcel() {
+        console.log('GET: downloadOrderExcel controller entered');
+        try {
+            const data = await this.orderInfoService.downloadExcel();
+            const stream = await this.excelService.createExcelStream(data);
+            const fileName = `주문상세_${new Date().toISOString().slice(0, 10)}.xlsx`;
+            const encodedFileName = encodeURIComponent(fileName);
+            return new common_1.StreamableFile(stream, {
+                type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+                disposition: `attachment; filename="${encodedFileName}"`,
+            });
+        }
+        catch (error) {
+            throw new common_1.HttpException('엑셀 파일 생성 중 오류가 발생했습니다', common_1.HttpStatus.INTERNAL_SERVER_ERROR, error);
+        }
     }
     async update(id, updateOrderInfoDto) {
         return await this.orderInfoService.update(+id, updateOrderInfoDto);
@@ -71,6 +89,17 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], OrderInfoController.prototype, "findOne", null);
 __decorate([
+    (0, common_1.Post)('getOrderInfoExcel'),
+    (0, common_1.Header)('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'),
+    (0, swagger_1.ApiOperation)({
+        description: '모든 주문정보 일괄 조회후 엑셀파일로 다운로드 테스트',
+        summary: '모든 주문정보 목록을 엑셀파일화 하여 클라이언트 측에서 바로 다운로드 받는다.',
+    }),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", []),
+    __metadata("design:returntype", Promise)
+], OrderInfoController.prototype, "downloadOrderExcel", null);
+__decorate([
     (0, common_1.Patch)(':id'),
     __param(0, (0, common_1.Param)('id')),
     __param(1, (0, common_1.Body)()),
@@ -88,6 +117,7 @@ __decorate([
 exports.OrderInfoController = OrderInfoController = __decorate([
     (0, swagger_1.ApiTags)('주문정보 API'),
     (0, common_1.Controller)('order-info'),
-    __metadata("design:paramtypes", [order_info_service_1.OrderInfoService])
+    __metadata("design:paramtypes", [order_info_service_1.OrderInfoService,
+        makeExcel_service_1.ExcelService])
 ], OrderInfoController);
 //# sourceMappingURL=order_info.controller.js.map

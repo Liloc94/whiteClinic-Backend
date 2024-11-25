@@ -41,6 +41,7 @@ exports.AppModule = AppModule = __decorate([
                 synchronize: false,
                 migrationsRun: true,
                 logging: true,
+                logger: 'advanced-console',
             }),
             refresh_token_module_1.RefreshTokenModule,
             admin_module_1.AdminModule,
