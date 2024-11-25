@@ -124,7 +124,7 @@ let OrderInfoService = class OrderInfoService {
         catch (error) {
             queryRunner.rollbackTransaction();
             console.log('Transaction failed, rolling back', error);
-            throw error;
+            throw new common_1.HttpException(`${error}`, common_1.HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
     async findWithId(id) {

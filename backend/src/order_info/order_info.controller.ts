@@ -68,13 +68,16 @@ export class OrderInfoController {
       const data = await this.orderInfoService.downloadExcel();
       const stream = await this.excelService.createExcelStream(data);
 
+      // 파일명 동적으로 생성하기
       const fileName = `주문상세_${new Date().toISOString().slice(0, 10)}.xlsx`;
       const encodedFileName = encodeURIComponent(fileName);
+
       const file = new StreamableFile(stream, {
         type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
         disposition: `attachment; filename="${encodedFileName}"`,
+        // options를 생성자에서 직접 전달
       });
-      // options를 생성자에서 직접 전달
+
       return file;
     } catch (error) {
       throw new HttpException(

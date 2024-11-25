@@ -1,4 +1,9 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  Injectable,
+  NotFoundException,
+  HttpException,
+  HttpStatus,
+} from '@nestjs/common';
 import { CreateOrderInfoDto } from './dto/create-order_info.dto';
 import { UpdateOrderInfoDto } from './dto/update-order_info.dto';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -151,7 +156,7 @@ export class OrderInfoService {
       queryRunner.rollbackTransaction();
       console.log('Transaction failed, rolling back', error);
 
-      throw error;
+      throw new HttpException(`${error}`, HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 
