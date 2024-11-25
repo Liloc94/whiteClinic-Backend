@@ -40,10 +40,11 @@ let OrderInfoController = class OrderInfoController {
             const stream = await this.excelService.createExcelStream(data);
             const fileName = `주문상세_${new Date().toISOString().slice(0, 10)}.xlsx`;
             const encodedFileName = encodeURIComponent(fileName);
-            return new common_1.StreamableFile(stream, {
+            const file = new common_1.StreamableFile(stream, {
                 type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
                 disposition: `attachment; filename="${encodedFileName}"`,
             });
+            return file;
         }
         catch (error) {
             throw new common_1.HttpException('엑셀 파일 생성 중 오류가 발생했습니다', common_1.HttpStatus.INTERNAL_SERVER_ERROR, error);
@@ -69,7 +70,7 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], OrderInfoController.prototype, "create", null);
 __decorate([
-    (0, common_1.Get)('orders-details'),
+    (0, common_1.Get)('orders/'),
     (0, swagger_1.ApiOperation)({
         summary: '모든 상세 주문 정보를 호출한다',
         description: 'DB의 모든 주문정보를 불러온다',
@@ -89,7 +90,7 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], OrderInfoController.prototype, "findOne", null);
 __decorate([
-    (0, common_1.Post)('download-order-excel'),
+    (0, common_1.Get)('orders/download/excel'),
     (0, common_1.Header)('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'),
     (0, swagger_1.ApiOperation)({
         description: '모든 주문정보 일괄 조회후 엑셀파일로 다운로드 테스트',
@@ -100,7 +101,7 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], OrderInfoController.prototype, "downloadOrderExcel", null);
 __decorate([
-    (0, common_1.Patch)(':id'),
+    (0, common_1.Patch)('orders/:id'),
     __param(0, (0, common_1.Param)('id')),
     __param(1, (0, common_1.Body)()),
     __metadata("design:type", Function),
@@ -108,7 +109,7 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], OrderInfoController.prototype, "update", null);
 __decorate([
-    (0, common_1.Delete)(':id'),
+    (0, common_1.Delete)('orders/:id'),
     __param(0, (0, common_1.Param)('id')),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String]),

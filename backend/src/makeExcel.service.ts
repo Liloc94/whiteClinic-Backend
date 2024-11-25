@@ -19,7 +19,7 @@ export class ExcelService {
     ];
 
     const rows = data.map((order) => [
-      order.order_date + '시',
+      order.order_date + ' 시',
       order.customer_name,
       order.customer_phone.replace(/^(\d{3})(\d{4})(\d{4})$/, '$1-$2-$3'),
       order.customer_addr,
@@ -28,7 +28,7 @@ export class ExcelService {
       order.order_product,
       order.order_payment,
       order.order_receipt_docs,
-      order.receipt_docs_issued ? '발행됨' : '미발행',
+      order.receipt_docs_issued ? '발행' : '미발행',
     ]);
 
     // 첫 번째 행에 헤더 추가
@@ -43,7 +43,8 @@ export class ExcelService {
       const maxLength = Math.max(
         ...sheetData.map((row) => row[colIndex]?.toString().length + 10 || 0),
       );
-      return { wch: Math.max(maxLength, header.length) }; // `wch`는 글자 수를 기준으로 너비를 설정
+      return { wch: Math.max(maxLength, header.length) };
+      // `wch`는 글자 수를 기준으로 너비를 설정
     });
 
     // 워크시트에 열 너비 적용
@@ -54,11 +55,13 @@ export class ExcelService {
     XLSX.utils.book_append_sheet(workbook, worksheet, 'Data');
 
     // 워크북을 Buffer로 변환
-    return await XLSX.write(workbook, { bookType: 'xlsx', type: 'buffer' });
+    return await XLSX.write(workbook, {
+      bookType: 'xlsx',
+      type: 'buffer',
+    });
   }
-  catch(error) {
-    console.error('Error generating Excel:', error);
-    throw new Error('엑셀 파일 생성 중 오류가 발생했습니다');
+  catch(error: Error) {
+    throw new Error('엑셀 파일 생성 중 오류가 발생했습니다' + error);
   }
 
   async createExcelStream(data: any[]): Promise<Readable> {

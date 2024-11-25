@@ -108,7 +108,7 @@ __decorate([
         description: '기사 정보 생성 요청',
         type: create_engineer_dto_1.CreateEngineerDto,
     }),
-    (0, common_1.Post)('createEngineer'),
+    (0, common_1.Post)('engineers'),
     __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [create_engineer_dto_1.CreateEngineerDto]),
@@ -120,7 +120,7 @@ __decorate([
         description: '모든 기사정보 조회 요청',
     }),
     (0, swagger_1.ApiResponse)({ status: 200, description: '기사정보 조회 완료' }),
-    (0, common_1.Get)('searchAllEngineer'),
+    (0, common_1.Get)('engineers'),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", Promise)
@@ -130,13 +130,13 @@ __decorate([
         summary: '전체 기사 스케쥴 일괄조회 API',
         description: '모든 기사들의 스케쥴 정보의 일괄조회를 요청',
     }),
-    (0, common_1.Get)('getAllEngineerSchedule'),
+    (0, common_1.Get)('engineers/schedules'),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", Promise)
 ], EngineerController.prototype, "getAllSchedule", null);
 __decorate([
-    (0, common_1.Post)('getEngineerdailySalary:id'),
+    (0, common_1.Post)('engineers/:id/daily-salary'),
     (0, swagger_1.ApiOperation)({
         description: '파라미터로 받은 id를 가진 기사의 일급 정보를 호출한다',
         summary: '특정 기사의 날짜별 일당을 호출한다',
@@ -147,7 +147,7 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], EngineerController.prototype, "getEngineerSalary", null);
 __decorate([
-    (0, common_1.Post)('saveEngineerWeeklySalary'),
+    (0, common_1.Post)('engineers/weekly-salaries'),
     (0, swagger_1.ApiOperation)({
         description: '기사의 주급 및 지급여부를 저장한다',
         summary: '기사 아이디, 주급, 주차, 지급여부 저장,',
@@ -158,7 +158,7 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], EngineerController.prototype, "saveEngineerWeeklySalary", null);
 __decorate([
-    (0, common_1.Post)('getEngineerWeeklyDetail'),
+    (0, common_1.Post)('/engineers/:id/weekly-salary-details'),
     (0, swagger_1.ApiOperation)({
         description: 'id와 날짜 정보를 기준으로 기사주급과 지급여부를 조회한다 ',
         summary: '파라미터로 받은 기사 id, 날짜를 기준으로 해당하는 기사의 주급과 지급여부 조회',
@@ -169,7 +169,7 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], EngineerController.prototype, "getEngineerWeeklyDetail", null);
 __decorate([
-    (0, common_1.Post)(':id'),
+    (0, common_1.Get)('engineers/:id'),
     (0, swagger_1.ApiOperation)({
         description: '파라미터로 전달받은 id의 기사정보를 조회',
         summary: '특정 기사의 정보를 조회한다',
@@ -180,7 +180,7 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], EngineerController.prototype, "findOne", null);
 __decorate([
-    (0, common_1.Patch)('updateEngineerInfo:id'),
+    (0, common_1.Patch)('engineers/:id'),
     (0, swagger_1.ApiOperation)({
         description: '전달받은 id의 기사정보를 파라미터 값으로 수정한다',
         summary: '특정 기사의 정보를 업데이트한다.',
@@ -192,7 +192,7 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], EngineerController.prototype, "update", null);
 __decorate([
-    (0, common_1.Delete)(':id'),
+    (0, common_1.Delete)('engineers/:id'),
     (0, swagger_1.ApiOperation)({
         description: '파라미터로 전달받은 id를 가진 기사정보를 삭제',
         summary: '특정 기사의 정보를 삭제한다',
@@ -204,7 +204,7 @@ __decorate([
 ], EngineerController.prototype, "remove", null);
 exports.EngineerController = EngineerController = __decorate([
     (0, swagger_1.ApiTags)('기사정보 API'),
-    (0, common_1.Controller)('engineer'),
+    (0, common_1.Controller)('engineer-management'),
     __metadata("design:paramtypes", [engineer_service_1.EngineerService])
 ], EngineerController);
 //# sourceMappingURL=engineer.controller.js.map

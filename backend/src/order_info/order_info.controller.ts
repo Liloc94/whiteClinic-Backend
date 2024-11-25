@@ -33,7 +33,7 @@ export class OrderInfoController {
     return await this.orderInfoService.create(createOrderInfoDto);
   }
 
-  @Get('orders-details')
+  @Get('orders/')
   @ApiOperation({
     summary: '모든 상세 주문 정보를 호출한다',
     description: 'DB의 모든 주문정보를 불러온다',
@@ -50,7 +50,7 @@ export class OrderInfoController {
     return await this.orderInfoService.findWithId(+id);
   }
 
-  @Post('download-order-excel')
+  @Get('orders/download/excel')
   @Header(
     'Content-Type',
     'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
@@ -70,12 +70,12 @@ export class OrderInfoController {
 
       const fileName = `주문상세_${new Date().toISOString().slice(0, 10)}.xlsx`;
       const encodedFileName = encodeURIComponent(fileName);
-
-      // options를 생성자에서 직접 전달
-      return new StreamableFile(stream, {
+      const file = new StreamableFile(stream, {
         type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
         disposition: `attachment; filename="${encodedFileName}"`,
       });
+      // options를 생성자에서 직접 전달
+      return file;
     } catch (error) {
       throw new HttpException(
         '엑셀 파일 생성 중 오류가 발생했습니다',
@@ -85,7 +85,7 @@ export class OrderInfoController {
     }
   }
 
-  @Patch(':id')
+  @Patch('orders/:id')
   async update(
     @Param('id') id: string,
     @Body() updateOrderInfoDto: UpdateOrderInfoDto,
@@ -93,7 +93,7 @@ export class OrderInfoController {
     return await this.orderInfoService.update(+id, updateOrderInfoDto);
   }
 
-  @Delete(':id')
+  @Delete('orders/:id')
   async remove(@Param('id') id: string) {
     return await this.orderInfoService.remove(+id);
   }

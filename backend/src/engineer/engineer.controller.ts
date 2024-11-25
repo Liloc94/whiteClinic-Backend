@@ -20,7 +20,7 @@ import { EngineerDailyEarning } from './entities/engineer_daily_earning.entity';
 import { Engineer } from './entities/engineer.entity';
 
 @ApiTags('기사정보 API')
-@Controller('engineer')
+@Controller('engineer-management')
 export class EngineerController {
   constructor(private readonly engineerService: EngineerService) {}
 
@@ -44,7 +44,7 @@ export class EngineerController {
     description: '기사 정보 생성 요청',
     type: CreateEngineerDto,
   })
-  @Post('createEngineer')
+  @Post('engineers')
   async create(@Body() createEngineerDto: CreateEngineerDto): Promise<void> {
     try {
       return await this.engineerService.createEngineerInfo(createEngineerDto);
@@ -58,7 +58,7 @@ export class EngineerController {
     description: '모든 기사정보 조회 요청',
   })
   @ApiResponse({ status: 200, description: '기사정보 조회 완료' })
-  @Get('searchAllEngineer')
+  @Get('engineers')
   async findAll(): Promise<any[]> {
     try {
       return await this.engineerService.findAll();
@@ -71,7 +71,7 @@ export class EngineerController {
     summary: '전체 기사 스케쥴 일괄조회 API',
     description: '모든 기사들의 스케쥴 정보의 일괄조회를 요청',
   })
-  @Get('getAllEngineerSchedule')
+  @Get('engineers/schedules')
   async getAllSchedule(): Promise<EngineerScheduleDto[]> {
     try {
       return await this.engineerService.getAllSchedule();
@@ -80,7 +80,7 @@ export class EngineerController {
     }
   }
 
-  @Post('getEngineerdailySalary:id')
+  @Post('engineers/:id/daily-salary')
   @ApiOperation({
     description: '파라미터로 받은 id를 가진 기사의 일급 정보를 호출한다',
     summary: '특정 기사의 날짜별 일당을 호출한다',
@@ -95,7 +95,7 @@ export class EngineerController {
     }
   }
 
-  @Post('saveEngineerWeeklySalary')
+  @Post('engineers/weekly-salaries')
   @ApiOperation({
     description: '기사의 주급 및 지급여부를 저장한다',
     summary: '기사 아이디, 주급, 주차, 지급여부 저장,',
@@ -110,7 +110,7 @@ export class EngineerController {
     }
   }
 
-  @Post('getEngineerWeeklyDetail')
+  @Post('/engineers/:id/weekly-salary-details')
   @ApiOperation({
     description: 'id와 날짜 정보를 기준으로 기사주급과 지급여부를 조회한다 ',
     summary:
@@ -122,7 +122,7 @@ export class EngineerController {
     return await this.engineerService.getEngineerWeeklyDetail(idDate);
   }
 
-  @Post(':id')
+  @Get('engineers/:id')
   @ApiOperation({
     description: '파라미터로 전달받은 id의 기사정보를 조회',
     summary: '특정 기사의 정보를 조회한다',
@@ -135,7 +135,7 @@ export class EngineerController {
     }
   }
 
-  @Patch('updateEngineerInfo:id')
+  @Patch('engineers/:id')
   @ApiOperation({
     description: '전달받은 id의 기사정보를 파라미터 값으로 수정한다',
     summary: '특정 기사의 정보를 업데이트한다.',
@@ -154,7 +154,7 @@ export class EngineerController {
     }
   }
 
-  @Delete(':id')
+  @Delete('engineers/:id')
   @ApiOperation({
     description: '파라미터로 전달받은 id를 가진 기사정보를 삭제',
     summary: '특정 기사의 정보를 삭제한다',

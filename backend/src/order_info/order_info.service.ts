@@ -146,7 +146,7 @@ export class OrderInfoService {
 
       queryRunner.commitTransaction();
       const data = handleOrderDetailsData(orderDetails);
-      return data;
+      return await data;
     } catch (error) {
       queryRunner.rollbackTransaction();
       console.log('Transaction failed, rolling back', error);
@@ -171,8 +171,8 @@ export class OrderInfoService {
     try {
       await queryRunner.manager.update(
         Order,
-        { ...updateOrderInfoDto }, // 업데이트 정보 파라미터
         { order_id: id }, // 업데이트할 타겟 컬럼
+        { ...updateOrderInfoDto }, // 업데이트 정보 파라미터
       );
 
       await queryRunner.commitTransaction();

@@ -119,7 +119,7 @@ let OrderInfoService = class OrderInfoService {
                 .getMany();
             queryRunner.commitTransaction();
             const data = (0, DataHandlerFunc_1.handleOrderDetailsData)(orderDetails);
-            return data;
+            return await data;
         }
         catch (error) {
             queryRunner.rollbackTransaction();
@@ -140,7 +140,7 @@ let OrderInfoService = class OrderInfoService {
         queryRunner.connect();
         queryRunner.startTransaction();
         try {
-            await queryRunner.manager.update(order_info_entity_1.Order, { ...updateOrderInfoDto }, { order_id: id });
+            await queryRunner.manager.update(order_info_entity_1.Order, { order_id: id }, { ...updateOrderInfoDto });
             await queryRunner.commitTransaction();
         }
         catch (error) {
