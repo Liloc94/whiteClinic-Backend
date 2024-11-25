@@ -7,11 +7,11 @@ export class ExcelService {
   async generateExcel(data: any[]): Promise<Buffer> {
     const headers = [
       '주문 일자',
-      '고객명',
+      '고객 성함',
       '고객 연락처',
       '고객 주소',
       '비고',
-      '기사명',
+      '기사 성함',
       '주문 제품',
       '결제 방법',
       '영수증 종류',
