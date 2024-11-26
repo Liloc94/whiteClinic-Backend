@@ -163,16 +163,14 @@ let EngineerService = class EngineerService {
         queryRunner.startTransaction();
         try {
             const { engineer_valid_skill, ...rest } = updateInfo;
-            const engineerSkill = await this.skillService.findSkillIdsByNames(engineer_valid_skill);
-            await queryRunner.manager.delete(engineer_skill_entity_1.EngineerSkill, { engineer_id: id });
-            const promises = engineerSkill.map((skillNumber) => {
-                queryRunner.manager.delete(engineer_skill_entity_1.EngineerSkill, {
-                    skill_id: skillNumber,
-                });
-                queryRunner.manager.save(engineer_skill_entity_1.EngineerSkill, { skill_id: skillNumber });
-            });
-            await Promise.all(promises);
             await queryRunner.manager.update(engineer_entity_1.Engineer, { engineer_id: id }, rest);
+            await queryRunner.manager.delete(engineer_skill_entity_1.EngineerSkill, { engineer_id: id });
+            const engineerSkill = await this.skillService.findSkillIdsByNames(engineer_valid_skill);
+            const newEngineerSkills = engineerSkill.map((skillId) => ({
+                engineer_id: id,
+                skill_id: skillId,
+            }));
+            await queryRunner.manager.save(engineer_skill_entity_1.EngineerSkill, newEngineerSkills);
             await queryRunner.commitTransaction();
         }
         catch (error) {

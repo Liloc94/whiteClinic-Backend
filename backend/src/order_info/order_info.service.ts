@@ -104,37 +104,55 @@ export class OrderInfoService {
 
   async update(id: number, updateOrderInfoDto: UpdateOrderInfoDto) {
     const queryRunner = this.dataSource.createQueryRunner();
-    queryRunner.connect();
-    queryRunner.startTransaction();
+    await queryRunner.connect();
+    await queryRunner.startTransaction();
 
     try {
+      // Order 및 Customer 관련 데이터 생성
       const temp = handleCreateOrderInfo(updateOrderInfoDto);
-      // OrderInfo 저장
+
+      // Order 저장
       const updatedOrderInfo = await queryRunner.manager.save(Order, temp[0]);
+
       // Customer 저장
       const updatedCustomer = await queryRunner.manager.save(Customer, temp[1]);
-      // Engineer 조회
-      const engineer = await queryRunner.manager.findOneByOrFail(Engineer, {
-        engineer_name: temp[2],
+
+      // Engineer 조회: engineer_name을 기반으로 조회
+      const engineer = await queryRunner.manager.findOneOrFail(Engineer, {
+        where: { engineer_name: temp[2] },
       });
-      // CustomerEngineerOrder 저장
-      await queryRunner.manager.update(
+
+      // CustomerEngineerOrder 엔티티 조회 (order_id를 기준으로)
+      const customerEngineerOrder = await queryRunner.manager.findOne(
         CustomerEngineerOrder,
-        { order_id: id },
         {
-          customer: updatedCustomer,
-          order: updatedOrderInfo,
-          engineer: engineer,
+          where: { order: { order_id: id } }, // order_id로 조회
+          relations: ['customer', 'order', 'engineer'],
         },
       );
 
+      if (customerEngineerOrder) {
+        // 기존 CustomerEngineerOrder 엔티티를 업데이트
+        customerEngineerOrder.customer = updatedCustomer;
+        customerEngineerOrder.order = updatedOrderInfo;
+        customerEngineerOrder.engineer = engineer;
+
+        await queryRunner.manager.save(
+          CustomerEngineerOrder,
+          customerEngineerOrder,
+        );
+      }
+
+      // 트랜잭션 커밋
       await queryRunner.commitTransaction();
 
       return { updatedOrderInfo, updatedCustomer };
     } catch (error) {
-      queryRunner.rollbackTransaction();
+      // 트랜잭션 롤백
+      await queryRunner.rollbackTransaction();
       throw error;
     } finally {
+      // 트랜잭션 종료
       if (!queryRunner.isReleased) {
         await queryRunner.release();
       }

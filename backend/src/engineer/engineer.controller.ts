@@ -17,7 +17,6 @@ import { ApiBody, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { EngineerWeeklyDetailDto } from './dto/search-engineer-weeklyEarningIsPaid.dto';
 import { EngineerScheduleDto } from './dto/search-engineer-schedule.dto';
 import { EngineerDailyEarning } from './entities/engineer_daily_earning.entity';
-import { Engineer } from './entities/engineer.entity';
 import { EngineerSkill } from './entities/engineer_skill.entity';
 
 @ApiTags('기사정보 API')

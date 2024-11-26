@@ -231,28 +231,22 @@ export class EngineerService {
 
     try {
       // 기사 가능품목만 구조분해 이후 따로 저장
+      // 1. 기사 정보 업데이트
       const { engineer_valid_skill, ...rest } = updateInfo;
-      const engineerSkill =
-        await this.skillService.findSkillIdsByNames(engineer_valid_skill);
-
-      await queryRunner.manager.delete(EngineerSkill, { engineer_id: id });
-
-      // map , forEach 등의 반복문은 비동기로 처리할 수 없다,
-      // 변수에 담아 Promise.all() 함수의 매개변수로 전달하여 반복문 내의 모든 작업을
-      // 한번에 병렬로 비동기 처리할 수 있다.
-      const promises = engineerSkill.map((skillNumber) => {
-        queryRunner.manager.delete(EngineerSkill, {
-          skill_id: skillNumber,
-        });
-        queryRunner.manager.save(EngineerSkill, { skill_id: skillNumber });
-      });
-
-      // 해당 함수를 통해 반복순회를 병렬로 비동기처리할 수 있다.
-      await Promise.all(promises);
-
-      // 기사 정보 업데이트
       await queryRunner.manager.update(Engineer, { engineer_id: id }, rest);
 
+      // 2. 기사 가능품목 업데이트
+      // 2-1. 기존 기사 가능품목 삭제
+      await queryRunner.manager.delete(EngineerSkill, { engineer_id: id });
+
+      // 2-2. 새로운 기사 가능품목 등록
+      const engineerSkill =
+        await this.skillService.findSkillIdsByNames(engineer_valid_skill);
+      const newEngineerSkills = engineerSkill.map((skillId) => ({
+        engineer_id: id,
+        skill_id: skillId,
+      }));
+      await queryRunner.manager.save(EngineerSkill, newEngineerSkills);
       // 업데이트된 엔지니어 ID에 대해서만 시퀀스 값을 맞춰줍니다.
       //   await queryRunner.manager.query(`
       //   SELECT setval('engineer_engineer_id_seq', (SELECT MAX(engineer_id) FROM engineer WHERE engineer_id <= ${id}));
