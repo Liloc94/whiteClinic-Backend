@@ -2,28 +2,23 @@ import { CreateOrderInfoDto } from './dto/create-order_info.dto';
 import { UpdateOrderInfoDto } from './dto/update-order_info.dto';
 import { Order } from './entities/order_info.entity';
 import { DataSource, Repository } from 'typeorm';
-import { Engineer } from 'src/engineer/entities/engineer.entity';
-import { Customer } from 'src/customer/entities/customer.entity';
-import { CustomerEngineerOrder } from './entities/customer_engineer_order.entity';
 import { IncomeInfoService } from 'src/income.service';
-import { ExcelService } from 'src/makeExcel.service';
 export declare class OrderInfoService {
     private readonly orderInfoRepository;
-    private readonly engineerRepository;
-    private readonly customerRepository;
-    private readonly OrderDetailRepository;
     private readonly dataSource;
     private readonly incomeInfoService;
-    private readonly makeExcelService;
-    constructor(orderInfoRepository: Repository<Order>, engineerRepository: Repository<Engineer>, customerRepository: Repository<Customer>, OrderDetailRepository: Repository<CustomerEngineerOrder>, dataSource: DataSource, incomeInfoService: IncomeInfoService, makeExcelService: ExcelService);
+    constructor(orderInfoRepository: Repository<Order>, dataSource: DataSource, incomeInfoService: IncomeInfoService);
     create(createOrderInfoDto: CreateOrderInfoDto): Promise<{
+        idx: number;
         savedOrderInfo: any;
         savedCustomer: any;
     }>;
     findAll(): Promise<Order[]>;
     findOrderDetails(): Promise<import("./dto/search-order-list.dto").OrderListDto[]>;
-    downloadExcel(): Promise<import("./dto/search-order-list.dto").OrderListDto[]>;
     findWithId(id: number): Promise<Order[]>;
-    update(id: number, updateOrderInfoDto: UpdateOrderInfoDto): Promise<void>;
+    update(id: number, updateOrderInfoDto: UpdateOrderInfoDto): Promise<{
+        updatedOrderInfo: any;
+        updatedCustomer: any;
+    }>;
     remove(id: number): Promise<void>;
 }

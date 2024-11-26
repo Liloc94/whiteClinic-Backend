@@ -48,7 +48,7 @@ let EngineerService = class EngineerService {
             throw error;
         }
     }
-    async findAll() {
+    async findAllEngineer() {
         const queryRunner = this.dataSource.createQueryRunner();
         queryRunner.connect();
         queryRunner.startTransaction();
@@ -71,12 +71,7 @@ let EngineerService = class EngineerService {
         queryRunner.connect();
         queryRunner.startTransaction();
         try {
-            const engineerSchedule = await queryRunner.manager
-                .createQueryBuilder(customer_engineer_order_entity_1.CustomerEngineerOrder, 'customerEngineerOrder')
-                .leftJoinAndSelect('customerEngineerOrder.customer', 'customer')
-                .leftJoinAndSelect('customerEngineerOrder.engineer', 'engineer')
-                .leftJoinAndSelect('customerEngineerOrder.order', 'order')
-                .getMany();
+            const engineerSchedule = await (0, DataHandlerFunc_1.extractOrderDetail)(this.dataSource, customer_engineer_order_entity_1.CustomerEngineerOrder);
             queryRunner.commitTransaction();
             return await (0, DataHandlerFunc_1.handleEngineerScheduleData)(engineerSchedule);
         }
@@ -140,16 +135,19 @@ let EngineerService = class EngineerService {
             throw error;
         }
     }
-    async findOne(id) {
+    async findEngineerWithSkill(id) {
         const queryRunner = this.dataSource.createQueryRunner();
         queryRunner.connect();
         queryRunner.startTransaction();
         try {
-            const exactEngineer = await queryRunner.manager.find(engineer_entity_1.Engineer, {
-                where: { engineer_id: id },
-            });
+            const exactEngineer = await queryRunner.manager
+                .createQueryBuilder(engineer_skill_entity_1.EngineerSkill, 'engineerSkill')
+                .leftJoinAndSelect('engineerSkill.engineer', 'engineer')
+                .leftJoinAndSelect('engineerSkill.skill', 'skill')
+                .where('engineer.engineer_id = :id', { id })
+                .getMany();
             await queryRunner.commitTransaction();
-            return exactEngineer;
+            return await (0, DataHandlerFunc_1.handleEngineerData)(exactEngineer);
         }
         catch (error) {
             await queryRunner.rollbackTransaction();
@@ -184,21 +182,27 @@ let EngineerService = class EngineerService {
     }
     async removeEngineerInfo(id) {
         const queryRunner = this.dataSource.createQueryRunner();
-        queryRunner.connect();
-        queryRunner.startTransaction();
+        await queryRunner.connect();
+        await queryRunner.startTransaction();
         try {
             const targetEngineer = await queryRunner.manager.findOneOrFail(engineer_entity_1.Engineer, {
                 where: { engineer_id: id },
             });
             await queryRunner.manager.save(temp_emgineer_info_entity_1.TempEngineer, { ...targetEngineer });
-            await queryRunner.manager.delete(engineer_entity_1.Engineer, {
-                where: { engineer_id: id },
-            });
+            await queryRunner.manager.delete(engineer_entity_1.Engineer, { engineer_id: id });
+            await queryRunner.manager.query(`
+        SELECT setval('engineer_engineer_id_seq', (SELECT MAX(engineer_id) FROM engineer));
+      `);
             await queryRunner.commitTransaction();
         }
         catch (error) {
-            queryRunner.rollbackTransaction();
+            await queryRunner.rollbackTransaction();
             throw error;
+        }
+        finally {
+            if (!queryRunner.isReleased) {
+                await queryRunner.release();
+            }
         }
     }
 };

@@ -1,5 +1,11 @@
-import { Engineer } from './engineer.entity';
-declare const TempEngineer_base: import("@nestjs/common").Type<Partial<Engineer>>;
-export declare class TempEngineer extends TempEngineer_base {
+export declare class TempEngineer {
+    idx: number;
+    engineer_name: string;
+    engineer_phone: string;
+    engineer_addr: string;
+    engineer_remark: string;
+    engineer_commission: number;
+    engineer_dayoff: string;
+    engineer_holiday: string[];
+    engineer_payday: string;
 }
-export {};

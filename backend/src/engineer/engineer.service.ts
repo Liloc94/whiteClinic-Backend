@@ -6,6 +6,7 @@ import { UpdateEngineerDto } from './dto/update-engineer.dto';
 import { Engineer } from './entities/engineer.entity';
 import { CustomerEngineerOrder } from 'src/order_info/entities/customer_engineer_order.entity';
 import {
+  extractOrderDetail,
   handleEngineerData,
   handleEngineerScheduleData,
 } from 'src/util/DataHandlerFunc';
@@ -79,7 +80,7 @@ export class EngineerService {
     }
   }
 
-  async findAll() {
+  async findAllEngineer() {
     const queryRunner = this.dataSource.createQueryRunner();
     queryRunner.connect();
     queryRunner.startTransaction();
@@ -107,12 +108,10 @@ export class EngineerService {
     queryRunner.startTransaction();
 
     try {
-      const engineerSchedule = await queryRunner.manager
-        .createQueryBuilder(CustomerEngineerOrder, 'customerEngineerOrder')
-        .leftJoinAndSelect('customerEngineerOrder.customer', 'customer')
-        .leftJoinAndSelect('customerEngineerOrder.engineer', 'engineer')
-        .leftJoinAndSelect('customerEngineerOrder.order', 'order')
-        .getMany();
+      const engineerSchedule = await extractOrderDetail(
+        this.dataSource,
+        CustomerEngineerOrder,
+      );
 
       queryRunner.commitTransaction();
 
@@ -202,17 +201,20 @@ export class EngineerService {
     }
   }
 
-  async findOne(id: number) {
+  async findEngineerWithSkill(id: number) {
     const queryRunner = this.dataSource.createQueryRunner();
     queryRunner.connect();
     queryRunner.startTransaction();
     try {
-      const exactEngineer = await queryRunner.manager.find(Engineer, {
-        where: { engineer_id: id },
-      });
+      const exactEngineer = await queryRunner.manager
+        .createQueryBuilder(EngineerSkill, 'engineerSkill')
+        .leftJoinAndSelect('engineerSkill.engineer', 'engineer')
+        .leftJoinAndSelect('engineerSkill.skill', 'skill')
+        .where('engineer.engineer_id = :id', { id })
+        .getMany();
 
       await queryRunner.commitTransaction();
-      return exactEngineer;
+      return await handleEngineerData(exactEngineer);
     } catch (error) {
       await queryRunner.rollbackTransaction();
       throw error;
@@ -250,6 +252,12 @@ export class EngineerService {
 
       // 기사 정보 업데이트
       await queryRunner.manager.update(Engineer, { engineer_id: id }, rest);
+
+      // 업데이트된 엔지니어 ID에 대해서만 시퀀스 값을 맞춰줍니다.
+      //   await queryRunner.manager.query(`
+      //   SELECT setval('engineer_engineer_id_seq', (SELECT MAX(engineer_id) FROM engineer WHERE engineer_id <= ${id}));
+      // `);
+
       await queryRunner.commitTransaction();
     } catch (error) {
       await queryRunner.rollbackTransaction();
@@ -260,8 +268,8 @@ export class EngineerService {
   async removeEngineerInfo(id: number) {
     const queryRunner = this.dataSource.createQueryRunner();
 
-    queryRunner.connect();
-    queryRunner.startTransaction();
+    await queryRunner.connect();
+    await queryRunner.startTransaction();
 
     try {
       const targetEngineer = await queryRunner.manager.findOneOrFail(Engineer, {
@@ -272,14 +280,23 @@ export class EngineerService {
       await queryRunner.manager.save(TempEngineer, { ...targetEngineer });
 
       // id 값을 가진 기사정보를 기사테이블에서 삭제
-      await queryRunner.manager.delete(Engineer, {
-        where: { engineer_id: id },
-      });
+      await queryRunner.manager.delete(Engineer, { engineer_id: id });
+
+      // 기사정보 테이블 시퀀스 수정으로 serial id 값 재조정을 통해
+      // 신규 기사정보 생성 시, 값의 공백을 없앨 수 있다.
+      await queryRunner.manager.query(`
+        SELECT setval('engineer_engineer_id_seq', (SELECT MAX(engineer_id) FROM engineer));
+      `);
 
       await queryRunner.commitTransaction();
     } catch (error) {
-      queryRunner.rollbackTransaction();
+      await queryRunner.rollbackTransaction();
       throw error;
+    } finally {
+      // QueryRunner 해제
+      if (!queryRunner.isReleased) {
+        await queryRunner.release();
+      }
     }
   }
 }

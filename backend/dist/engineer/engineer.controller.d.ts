@@ -5,7 +5,7 @@ import { UpdateEngineerDto } from './dto/update-engineer.dto';
 import { EngineerWeeklyDetailDto } from './dto/search-engineer-weeklyEarningIsPaid.dto';
 import { EngineerScheduleDto } from './dto/search-engineer-schedule.dto';
 import { EngineerDailyEarning } from './entities/engineer_daily_earning.entity';
-import { Engineer } from './entities/engineer.entity';
+import { EngineerSkill } from './entities/engineer_skill.entity';
 export declare class EngineerController {
     private readonly engineerService;
     constructor(engineerService: EngineerService);
@@ -15,7 +15,7 @@ export declare class EngineerController {
     getEngineerSalary(id: number): Promise<EngineerDailyEarning[]>;
     saveEngineerWeeklySalary(weeklySalary: EngineerWeeklySalaryDto): Promise<void>;
     getEngineerWeeklyDetail(idDate: EngineerWeeklyDetailDto): Promise<any>;
-    findOne(id: string): Promise<Engineer[]>;
+    findOne(id: string): Promise<EngineerSkill[]>;
     update(id: string, updateEngineerDto: UpdateEngineerDto): Promise<void>;
     remove(id: string): Promise<void>;
 }

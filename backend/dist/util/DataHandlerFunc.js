@@ -5,6 +5,8 @@ exports.handleMappedData = handleMappedData;
 exports.handleEngineerData = handleEngineerData;
 exports.handleOrderDetailsData = handleOrderDetailsData;
 exports.handleCreateOrderInfo = handleCreateOrderInfo;
+exports.extractOrderDetail = extractOrderDetail;
+const common_1 = require("@nestjs/common");
 async function handleEngineerScheduleData(orderDetails) {
     const scheduleList = orderDetails.map((detail) => {
         const { customer, engineer, order } = detail;
@@ -73,5 +75,30 @@ async function handleCreateOrderInfo(orderInfo) {
         customer_remark: order_customer_remark,
     };
     return [rest, customerInfo, engineer_name];
+}
+async function extractOrderDetail(dataSource, targetEntity) {
+    const queryRunner = dataSource.createQueryRunner();
+    await queryRunner.connect();
+    await queryRunner.startTransaction();
+    try {
+        const orderDetails = await queryRunner.manager
+            .createQueryBuilder(targetEntity, 'CustomerEngineerOrder')
+            .leftJoinAndSelect('CustomerEngineerOrder.customer', 'customer')
+            .leftJoinAndSelect('CustomerEngineerOrder.order', 'order')
+            .leftJoinAndSelect('CustomerEngineerOrder.engineer', 'engineer')
+            .getMany();
+        await queryRunner.commitTransaction();
+        return await handleOrderDetailsData(orderDetails);
+    }
+    catch (error) {
+        await queryRunner.rollbackTransaction();
+        console.log('트랜잭션 실패, 롤백실행');
+        throw new common_1.HttpException(error, common_1.HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+    finally {
+        if (!queryRunner.isReleased) {
+            await queryRunner.release();
+        }
+    }
 }
 //# sourceMappingURL=DataHandlerFunc.js.map

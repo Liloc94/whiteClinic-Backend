@@ -18,6 +18,7 @@ import { EngineerWeeklyDetailDto } from './dto/search-engineer-weeklyEarningIsPa
 import { EngineerScheduleDto } from './dto/search-engineer-schedule.dto';
 import { EngineerDailyEarning } from './entities/engineer_daily_earning.entity';
 import { Engineer } from './entities/engineer.entity';
+import { EngineerSkill } from './entities/engineer_skill.entity';
 
 @ApiTags('기사정보 API')
 @Controller('engineer-management')
@@ -61,7 +62,7 @@ export class EngineerController {
   @Get('engineers')
   async findAll(): Promise<any[]> {
     try {
-      return await this.engineerService.findAll();
+      return await this.engineerService.findAllEngineer();
     } catch (error) {
       throw new NotFoundException(error);
     }
@@ -127,9 +128,9 @@ export class EngineerController {
     description: '파라미터로 전달받은 id의 기사정보를 조회',
     summary: '특정 기사의 정보를 조회한다',
   })
-  async findOne(@Param('id') id: string): Promise<Engineer[]> {
+  async findOne(@Param('id') id: string): Promise<EngineerSkill[]> {
     try {
-      return await this.engineerService.findOne(+id);
+      return await this.engineerService.findEngineerWithSkill(+id);
     } catch (error) {
       throw new NotFoundException(error);
     }

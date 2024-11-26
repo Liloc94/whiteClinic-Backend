@@ -19,7 +19,7 @@ export class ExcelService {
     ];
 
     const rows = data.map((order) => [
-      order.order_date + ' 시',
+      order.order_date + '시',
       order.customer_name,
       order.customer_phone.replace(/^(\d{3})(\d{4})(\d{4})$/, '$1-$2-$3'),
       order.customer_addr,

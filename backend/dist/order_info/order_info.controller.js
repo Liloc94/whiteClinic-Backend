@@ -34,9 +34,8 @@ let OrderInfoController = class OrderInfoController {
         return await this.orderInfoService.findWithId(+id);
     }
     async downloadOrderExcel() {
-        console.log('GET: downloadOrderExcel controller entered');
         try {
-            const data = await this.orderInfoService.downloadExcel();
+            const data = await this.orderInfoService.findOrderDetails();
             const stream = await this.excelService.createExcelStream(data);
             const fileName = `주문상세_${new Date().toISOString().slice(0, 10)}.xlsx`;
             const encodedFileName = encodeURIComponent(fileName);
@@ -51,7 +50,7 @@ let OrderInfoController = class OrderInfoController {
         }
     }
     async update(id, updateOrderInfoDto) {
-        return await this.orderInfoService.update(+id, updateOrderInfoDto);
+        return await this.orderInfoService.update(id, updateOrderInfoDto);
     }
     async remove(id) {
         return await this.orderInfoService.remove(+id);
@@ -82,6 +81,7 @@ __decorate([
 __decorate([
     (0, common_1.Get)('orders/:id'),
     (0, swagger_1.ApiOperation)({
+        description: '주문정보 테이블로부터 매치되는 주문정보 참조',
         summary: '파라미터로 전달받은 id 를 기반으로 매치되는 주문정보를 호출한다.',
     }),
     __param(0, (0, common_1.Param)('id')),
@@ -93,7 +93,7 @@ __decorate([
     (0, common_1.Get)('orders/download/excel'),
     (0, common_1.Header)('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'),
     (0, swagger_1.ApiOperation)({
-        description: '모든 주문정보 일괄 조회후 엑셀파일로 다운로드 테스트',
+        description: '모든 주문정보 일괄 조회후 엑셀파일화 하여 다운로드',
         summary: '모든 주문정보 목록을 엑셀파일화 하여 클라이언트 측에서 바로 다운로드 받는다.',
     }),
     __metadata("design:type", Function),
@@ -105,7 +105,7 @@ __decorate([
     __param(0, (0, common_1.Param)('id')),
     __param(1, (0, common_1.Body)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String, update_order_info_dto_1.UpdateOrderInfoDto]),
+    __metadata("design:paramtypes", [Number, update_order_info_dto_1.UpdateOrderInfoDto]),
     __metadata("design:returntype", Promise)
 ], OrderInfoController.prototype, "update", null);
 __decorate([

@@ -22,16 +22,11 @@ const customer_entity_1 = require("../customer/entities/customer.entity");
 const customer_engineer_order_entity_1 = require("./entities/customer_engineer_order.entity");
 const DataHandlerFunc_1 = require("../util/DataHandlerFunc");
 const income_service_1 = require("../income.service");
-const makeExcel_service_1 = require("../makeExcel.service");
 let OrderInfoService = class OrderInfoService {
-    constructor(orderInfoRepository, engineerRepository, customerRepository, OrderDetailRepository, dataSource, incomeInfoService, makeExcelService) {
+    constructor(orderInfoRepository, dataSource, incomeInfoService) {
         this.orderInfoRepository = orderInfoRepository;
-        this.engineerRepository = engineerRepository;
-        this.customerRepository = customerRepository;
-        this.OrderDetailRepository = OrderDetailRepository;
         this.dataSource = dataSource;
         this.incomeInfoService = incomeInfoService;
-        this.makeExcelService = makeExcelService;
     }
     async create(createOrderInfoDto) {
         const queryRunner = this.dataSource.createQueryRunner();
@@ -59,7 +54,8 @@ let OrderInfoService = class OrderInfoService {
             await queryRunner.manager.save(customerEngineerOrder);
             await queryRunner.commitTransaction();
             await this.incomeInfoService.saveDailyIncome(incomes);
-            return { savedOrderInfo, savedCustomer };
+            const idx = customerEngineerOrder.idx;
+            return { idx, savedOrderInfo, savedCustomer };
         }
         catch (error) {
             await queryRunner.rollbackTransaction();
@@ -81,51 +77,7 @@ let OrderInfoService = class OrderInfoService {
         }
     }
     async findOrderDetails() {
-        const queryRunner = this.dataSource.createQueryRunner();
-        await queryRunner.connect();
-        await queryRunner.startTransaction();
-        try {
-            const orderDetails = await queryRunner.manager
-                .createQueryBuilder(customer_engineer_order_entity_1.CustomerEngineerOrder, 'CustomerEngineerOrder')
-                .leftJoinAndSelect('CustomerEngineerOrder.customer', 'customer')
-                .leftJoinAndSelect('CustomerEngineerOrder.order', 'order')
-                .leftJoinAndSelect('CustomerEngineerOrder.engineer', 'engineer')
-                .getMany();
-            await queryRunner.commitTransaction();
-            return await (0, DataHandlerFunc_1.handleOrderDetailsData)(orderDetails);
-        }
-        catch (error) {
-            await queryRunner.rollbackTransaction();
-            console.log('트랜잭션 실패, 롤백실행');
-            throw error;
-        }
-        finally {
-            if (!queryRunner.isReleased) {
-                await queryRunner.release();
-            }
-        }
-    }
-    async downloadExcel() {
-        console.log('downloadExcel called ');
-        const queryRunner = this.dataSource.createQueryRunner();
-        queryRunner.connect();
-        queryRunner.startTransaction();
-        try {
-            const orderDetails = await queryRunner.manager
-                .createQueryBuilder(customer_engineer_order_entity_1.CustomerEngineerOrder, 'CustomerEngineerOrder')
-                .leftJoinAndSelect('CustomerEngineerOrder.customer', 'customer')
-                .leftJoinAndSelect('CustomerEngineerOrder.order', 'order')
-                .leftJoinAndSelect('CustomerEngineerOrder.engineer', 'engineer')
-                .getMany();
-            queryRunner.commitTransaction();
-            const data = (0, DataHandlerFunc_1.handleOrderDetailsData)(orderDetails);
-            return await data;
-        }
-        catch (error) {
-            queryRunner.rollbackTransaction();
-            console.log('Transaction failed, rolling back', error);
-            throw new common_1.HttpException(`${error}`, common_1.HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+        return await (0, DataHandlerFunc_1.extractOrderDetail)(this.dataSource, customer_engineer_order_entity_1.CustomerEngineerOrder);
     }
     async findWithId(id) {
         try {
@@ -140,8 +92,19 @@ let OrderInfoService = class OrderInfoService {
         queryRunner.connect();
         queryRunner.startTransaction();
         try {
-            await queryRunner.manager.update(order_info_entity_1.Order, { order_id: id }, { ...updateOrderInfoDto });
+            const temp = (0, DataHandlerFunc_1.handleCreateOrderInfo)(updateOrderInfoDto);
+            const updatedOrderInfo = await queryRunner.manager.save(order_info_entity_1.Order, temp[0]);
+            const updatedCustomer = await queryRunner.manager.save(customer_entity_1.Customer, temp[1]);
+            const engineer = await queryRunner.manager.findOneByOrFail(engineer_entity_1.Engineer, {
+                engineer_name: temp[2],
+            });
+            await queryRunner.manager.update(customer_engineer_order_entity_1.CustomerEngineerOrder, { order_id: id }, {
+                customer: updatedCustomer,
+                order: updatedOrderInfo,
+                engineer: engineer,
+            });
             await queryRunner.commitTransaction();
+            return { updatedOrderInfo, updatedCustomer };
         }
         catch (error) {
             queryRunner.rollbackTransaction();
@@ -176,15 +139,8 @@ exports.OrderInfoService = OrderInfoService;
 exports.OrderInfoService = OrderInfoService = __decorate([
     (0, common_1.Injectable)(),
     __param(0, (0, typeorm_1.InjectRepository)(order_info_entity_1.Order)),
-    __param(1, (0, typeorm_1.InjectRepository)(engineer_entity_1.Engineer)),
-    __param(2, (0, typeorm_1.InjectRepository)(customer_entity_1.Customer)),
-    __param(3, (0, typeorm_1.InjectRepository)(customer_engineer_order_entity_1.CustomerEngineerOrder)),
     __metadata("design:paramtypes", [typeorm_2.Repository,
-        typeorm_2.Repository,
-        typeorm_2.Repository,
-        typeorm_2.Repository,
         typeorm_2.DataSource,
-        income_service_1.IncomeInfoService,
-        makeExcel_service_1.ExcelService])
+        income_service_1.IncomeInfoService])
 ], OrderInfoService);
 //# sourceMappingURL=order_info.service.js.map

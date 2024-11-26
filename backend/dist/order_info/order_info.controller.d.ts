@@ -8,12 +8,16 @@ export declare class OrderInfoController {
     private readonly excelService;
     constructor(orderInfoService: OrderInfoService, excelService: ExcelService);
     create(createOrderInfoDto: CreateOrderInfoDto): Promise<{
+        idx: number;
         savedOrderInfo: any;
         savedCustomer: any;
     }>;
     findAll(): Promise<import("./dto/search-order-list.dto").OrderListDto[]>;
     findOne(id: string): Promise<import("./entities/order_info.entity").Order[]>;
     downloadOrderExcel(): Promise<StreamableFile>;
-    update(id: string, updateOrderInfoDto: UpdateOrderInfoDto): Promise<void>;
+    update(id: number, updateOrderInfoDto: UpdateOrderInfoDto): Promise<{
+        updatedOrderInfo: any;
+        updatedCustomer: any;
+    }>;
     remove(id: string): Promise<void>;
 }

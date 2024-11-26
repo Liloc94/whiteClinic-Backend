@@ -1,8 +1,12 @@
+import { HttpException, HttpStatus } from '@nestjs/common';
+import { EntityClassOrSchema } from '@nestjs/typeorm/dist/interfaces/entity-class-or-schema.type';
 import { EngineerScheduleDto } from 'src/engineer/dto/search-engineer-schedule.dto';
 import { EngineerSkill } from 'src/engineer/entities/engineer_skill.entity';
 import { CreateOrderInfoDto } from 'src/order_info/dto/create-order_info.dto';
 import { OrderListDto } from 'src/order_info/dto/search-order-list.dto';
+import { UpdateOrderInfoDto } from 'src/order_info/dto/update-order_info.dto';
 import { CustomerEngineerOrder } from 'src/order_info/entities/customer_engineer_order.entity';
+import { DataSource } from 'typeorm';
 
 export async function handleEngineerScheduleData(
   orderDetails: any[],
@@ -91,7 +95,7 @@ export async function handleOrderDetailsData(
  * @returns [주문정보, 고객정보, 기사성함] 배열로 반환
  */
 export async function handleCreateOrderInfo(
-  orderInfo: CreateOrderInfoDto,
+  orderInfo: CreateOrderInfoDto | UpdateOrderInfoDto,
 ): Promise<any> {
   const {
     order_customer_addr,
@@ -110,4 +114,35 @@ export async function handleCreateOrderInfo(
   };
 
   return [rest, customerInfo, engineer_name];
+}
+
+export async function extractOrderDetail(
+  dataSource: DataSource,
+  targetEntity: EntityClassOrSchema,
+) {
+  const queryRunner = dataSource.createQueryRunner();
+
+  await queryRunner.connect();
+  await queryRunner.startTransaction();
+
+  try {
+    const orderDetails = await queryRunner.manager
+      .createQueryBuilder(targetEntity, 'CustomerEngineerOrder')
+      .leftJoinAndSelect('CustomerEngineerOrder.customer', 'customer')
+      .leftJoinAndSelect('CustomerEngineerOrder.order', 'order')
+      .leftJoinAndSelect('CustomerEngineerOrder.engineer', 'engineer')
+      .getMany();
+
+    await queryRunner.commitTransaction();
+    return await handleOrderDetailsData(orderDetails);
+  } catch (error) {
+    await queryRunner.rollbackTransaction();
+    console.log('트랜잭션 실패, 롤백실행');
+
+    throw new HttpException(error, HttpStatus.INTERNAL_SERVER_ERROR);
+  } finally {
+    if (!queryRunner.isReleased) {
+      await queryRunner.release();
+    }
+  }
 }

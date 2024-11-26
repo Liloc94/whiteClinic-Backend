@@ -44,6 +44,7 @@ export class OrderInfoController {
 
   @Get('orders/:id')
   @ApiOperation({
+    description: '주문정보 테이블로부터 매치되는 주문정보 참조',
     summary: '파라미터로 전달받은 id 를 기반으로 매치되는 주문정보를 호출한다.',
   })
   async findOne(@Param('id') id: string) {
@@ -56,28 +57,27 @@ export class OrderInfoController {
     'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
   )
   @ApiOperation({
-    description: '모든 주문정보 일괄 조회후 엑셀파일로 다운로드 테스트',
+    description: '모든 주문정보 일괄 조회후 엑셀파일화 하여 다운로드',
     summary:
       '모든 주문정보 목록을 엑셀파일화 하여 클라이언트 측에서 바로 다운로드 받는다.',
   })
   async downloadOrderExcel(): Promise<StreamableFile> {
-    console.log('GET: downloadOrderExcel controller entered');
-
     // 엑셀 파일 생성
     try {
-      const data = await this.orderInfoService.downloadExcel();
+      const data = await this.orderInfoService.findOrderDetails();
       const stream = await this.excelService.createExcelStream(data);
 
       // 파일명 동적으로 생성하기
       const fileName = `주문상세_${new Date().toISOString().slice(0, 10)}.xlsx`;
       const encodedFileName = encodeURIComponent(fileName);
 
+      // options를 생성자에서 직접 전달
       const file = new StreamableFile(stream, {
         type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
         disposition: `attachment; filename="${encodedFileName}"`,
-        // options를 생성자에서 직접 전달
       });
 
+      // 생성된 엑셀파일 반환
       return file;
     } catch (error) {
       throw new HttpException(
@@ -90,10 +90,10 @@ export class OrderInfoController {
 
   @Patch('orders/:id')
   async update(
-    @Param('id') id: string,
+    @Param('id') id: number,
     @Body() updateOrderInfoDto: UpdateOrderInfoDto,
   ) {
-    return await this.orderInfoService.update(+id, updateOrderInfoDto);
+    return await this.orderInfoService.update(id, updateOrderInfoDto);
   }
 
   @Delete('orders/:id')

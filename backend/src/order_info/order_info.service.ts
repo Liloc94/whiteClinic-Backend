@@ -1,9 +1,4 @@
-import {
-  Injectable,
-  NotFoundException,
-  HttpException,
-  HttpStatus,
-} from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateOrderInfoDto } from './dto/create-order_info.dto';
 import { UpdateOrderInfoDto } from './dto/update-order_info.dto';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -13,12 +8,11 @@ import { Engineer } from 'src/engineer/entities/engineer.entity';
 import { Customer } from 'src/customer/entities/customer.entity';
 import { CustomerEngineerOrder } from './entities/customer_engineer_order.entity';
 import {
+  extractOrderDetail,
   handleCreateOrderInfo,
-  handleOrderDetailsData,
 } from 'src/util/DataHandlerFunc';
 import { IncomeInfoService } from 'src/income.service';
 import { IncomeType } from 'src/util/constantTypes';
-import { ExcelService } from 'src/makeExcel.service';
 
 @Injectable()
 export class OrderInfoService {
@@ -26,21 +20,10 @@ export class OrderInfoService {
     // 주문정보 DB 연결
     @InjectRepository(Order)
     private readonly orderInfoRepository: Repository<Order>,
-    // 기사정보 DB 연결
-    @InjectRepository(Engineer)
-    private readonly engineerRepository: Repository<Engineer>,
-    // 고객정보 DB 연결
-    @InjectRepository(Customer)
-    private readonly customerRepository: Repository<Customer>,
-    // 기사, 주문, 고객 맵핑 테이블 DB 연결
-    @InjectRepository(CustomerEngineerOrder)
-    private readonly OrderDetailRepository: Repository<CustomerEngineerOrder>,
     // 쿼리러너 실행용 데이터소스
     private readonly dataSource: DataSource,
     // daily, weekly 매출 저장용 서비스
     private readonly incomeInfoService: IncomeInfoService,
-    // 엑셀파일 다운로드용 API 서비스
-    private readonly makeExcelService: ExcelService,
   ) {}
 
   async create(createOrderInfoDto: CreateOrderInfoDto) {
@@ -79,11 +62,12 @@ export class OrderInfoService {
       await queryRunner.manager.save(customerEngineerOrder);
       // 트랜잭션 커밋
       await queryRunner.commitTransaction();
-
       // 쿼리 실행 이후 시점의 아이디값을 참조하기 위해 commitTransaction 이후에 코드 추가
       await this.incomeInfoService.saveDailyIncome(incomes);
+      // 클라이언트 데이터 업데이트 지표용 idx
+      const idx = customerEngineerOrder.idx;
 
-      return { savedOrderInfo, savedCustomer };
+      return { idx, savedOrderInfo, savedCustomer };
     } catch (error) {
       // 에러 발생 시 롤백
       await queryRunner.rollbackTransaction();
@@ -107,57 +91,7 @@ export class OrderInfoService {
 
   // 상세 주문정보 리스트 반환 API
   async findOrderDetails() {
-    const queryRunner = this.dataSource.createQueryRunner();
-
-    await queryRunner.connect();
-    await queryRunner.startTransaction();
-
-    try {
-      const orderDetails = await queryRunner.manager
-        .createQueryBuilder(CustomerEngineerOrder, 'CustomerEngineerOrder')
-        .leftJoinAndSelect('CustomerEngineerOrder.customer', 'customer')
-        .leftJoinAndSelect('CustomerEngineerOrder.order', 'order')
-        .leftJoinAndSelect('CustomerEngineerOrder.engineer', 'engineer')
-        .getMany();
-
-      await queryRunner.commitTransaction();
-      return await handleOrderDetailsData(orderDetails);
-    } catch (error) {
-      await queryRunner.rollbackTransaction();
-      console.log('트랜잭션 실패, 롤백실행');
-
-      throw error;
-    } finally {
-      if (!queryRunner.isReleased) {
-        await queryRunner.release();
-      }
-    }
-  }
-
-  async downloadExcel() {
-    // DB에서 데이터를 가져오는 로직 (샘플 데이터 사용)
-    console.log('downloadExcel called ');
-    const queryRunner = this.dataSource.createQueryRunner();
-    queryRunner.connect();
-    queryRunner.startTransaction();
-
-    try {
-      const orderDetails = await queryRunner.manager
-        .createQueryBuilder(CustomerEngineerOrder, 'CustomerEngineerOrder')
-        .leftJoinAndSelect('CustomerEngineerOrder.customer', 'customer')
-        .leftJoinAndSelect('CustomerEngineerOrder.order', 'order')
-        .leftJoinAndSelect('CustomerEngineerOrder.engineer', 'engineer')
-        .getMany();
-
-      queryRunner.commitTransaction();
-      const data = handleOrderDetailsData(orderDetails);
-      return await data;
-    } catch (error) {
-      queryRunner.rollbackTransaction();
-      console.log('Transaction failed, rolling back', error);
-
-      throw new HttpException(`${error}`, HttpStatus.INTERNAL_SERVER_ERROR);
-    }
+    return await extractOrderDetail(this.dataSource, CustomerEngineerOrder);
   }
 
   async findWithId(id: number) {
@@ -174,13 +108,29 @@ export class OrderInfoService {
     queryRunner.startTransaction();
 
     try {
+      const temp = handleCreateOrderInfo(updateOrderInfoDto);
+      // OrderInfo 저장
+      const updatedOrderInfo = await queryRunner.manager.save(Order, temp[0]);
+      // Customer 저장
+      const updatedCustomer = await queryRunner.manager.save(Customer, temp[1]);
+      // Engineer 조회
+      const engineer = await queryRunner.manager.findOneByOrFail(Engineer, {
+        engineer_name: temp[2],
+      });
+      // CustomerEngineerOrder 저장
       await queryRunner.manager.update(
-        Order,
-        { order_id: id }, // 업데이트할 타겟 컬럼
-        { ...updateOrderInfoDto }, // 업데이트 정보 파라미터
+        CustomerEngineerOrder,
+        { order_id: id },
+        {
+          customer: updatedCustomer,
+          order: updatedOrderInfo,
+          engineer: engineer,
+        },
       );
 
       await queryRunner.commitTransaction();
+
+      return { updatedOrderInfo, updatedCustomer };
     } catch (error) {
       queryRunner.rollbackTransaction();
       throw error;
