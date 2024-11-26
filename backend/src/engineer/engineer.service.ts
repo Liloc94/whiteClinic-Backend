@@ -242,15 +242,13 @@ export class EngineerService {
       // 2-2. 새로운 기사 가능품목 등록
       const engineerSkill =
         await this.skillService.findSkillIdsByNames(engineer_valid_skill);
+
       const newEngineerSkills = engineerSkill.map((skillId) => ({
         engineer_id: id,
         skill_id: skillId,
       }));
+
       await queryRunner.manager.save(EngineerSkill, newEngineerSkills);
-      // 업데이트된 엔지니어 ID에 대해서만 시퀀스 값을 맞춰줍니다.
-      //   await queryRunner.manager.query(`
-      //   SELECT setval('engineer_engineer_id_seq', (SELECT MAX(engineer_id) FROM engineer WHERE engineer_id <= ${id}));
-      // `);
 
       await queryRunner.commitTransaction();
     } catch (error) {

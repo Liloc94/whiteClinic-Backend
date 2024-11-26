@@ -141,12 +141,12 @@ export class EngineerController {
     summary: '특정 기사의 정보를 업데이트한다.',
   })
   async update(
-    @Param('id') id: string,
+    @Param('id') id: number,
     @Body() updateEngineerDto: UpdateEngineerDto,
   ): Promise<void> {
     try {
       return await this.engineerService.updateEngineerInfo(
-        +id,
+        id,
         updateEngineerDto,
       );
     } catch (error) {

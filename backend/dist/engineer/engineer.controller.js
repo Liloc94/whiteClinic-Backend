@@ -77,7 +77,7 @@ let EngineerController = class EngineerController {
     }
     async update(id, updateEngineerDto) {
         try {
-            return await this.engineerService.updateEngineerInfo(+id, updateEngineerDto);
+            return await this.engineerService.updateEngineerInfo(id, updateEngineerDto);
         }
         catch (error) {
             throw new Error(error);
@@ -188,7 +188,7 @@ __decorate([
     __param(0, (0, common_1.Param)('id')),
     __param(1, (0, common_1.Body)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String, update_engineer_dto_1.UpdateEngineerDto]),
+    __metadata("design:paramtypes", [Number, update_engineer_dto_1.UpdateEngineerDto]),
     __metadata("design:returntype", Promise)
 ], EngineerController.prototype, "update", null);
 __decorate([

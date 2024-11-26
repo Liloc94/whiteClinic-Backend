@@ -16,6 +16,6 @@ export declare class EngineerController {
     saveEngineerWeeklySalary(weeklySalary: EngineerWeeklySalaryDto): Promise<void>;
     getEngineerWeeklyDetail(idDate: EngineerWeeklyDetailDto): Promise<any>;
     findOne(id: string): Promise<EngineerSkill[]>;
-    update(id: string, updateEngineerDto: UpdateEngineerDto): Promise<void>;
+    update(id: number, updateEngineerDto: UpdateEngineerDto): Promise<void>;
     remove(id: string): Promise<void>;
 }
