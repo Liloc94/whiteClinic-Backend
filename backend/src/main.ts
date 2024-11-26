@@ -7,6 +7,7 @@ import { BadRequestException, ValidationPipe } from '@nestjs/common';
 import { LOCAL_URL, SERVER_PORT, SERVER_URL } from './util/URLS';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import { ValidationExceptionFilter } from './util/ValidationExceptionFilter';
+import { Response } from 'express';
 
 async function bootstrap() {
   config(); // .env 파일 로드
@@ -42,6 +43,11 @@ async function bootstrap() {
   // 전역 파이프 설정
 
   setupSwagger(app);
+
+  // favicon 요청을 처리하지 않도록 무시하는 설정
+  app.use('/favicon.ico', (res: Response) => {
+    res.status(204).send(); // 빈 응답을 보내 404를 방지
+  });
 
   await app.listen(process.env.PORT || port);
 

@@ -10,10 +10,10 @@ import {
 import { CustomerService } from './customer.service';
 import { CreateCustomerDto } from './dto/create-customer.dto';
 import { UpdateCustomerDto } from './dto/update-customer.dto';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiOperation, ApiProperty, ApiTags } from '@nestjs/swagger';
 
 @ApiTags('고객정보 API')
-@Controller('customer')
+@Controller('customer-management')
 export class CustomerController {
   constructor(private readonly customerService: CustomerService) {}
 
@@ -22,12 +22,16 @@ export class CustomerController {
     return this.customerService.create(createCustomerDto);
   }
 
-  @Get()
-  findAll() {
+  @ApiOperation({
+    summary: '모든 고객정보 조회 API',
+    description: 'DB 내의 모든 고객 정보를 일괄 조회하여 반환한다.',
+  })
+  @Get('customers')
+  async findAll() {
     return this.customerService.findAll();
   }
 
-  @Get(':id')
+  @Get('customers/:id')
   findOne(@Param('id') id: string) {
     return this.customerService.findOne(+id);
   }

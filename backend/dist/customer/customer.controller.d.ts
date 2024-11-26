@@ -5,7 +5,7 @@ export declare class CustomerController {
     private readonly customerService;
     constructor(customerService: CustomerService);
     create(createCustomerDto: CreateCustomerDto): string;
-    findAll(): string;
+    findAll(): Promise<import("./entities/customer.entity").Customer[]>;
     findOne(id: string): string;
     update(id: string, updateCustomerDto: UpdateCustomerDto): string;
     remove(id: string): string;

@@ -25,7 +25,7 @@ let CustomerController = class CustomerController {
     create(createCustomerDto) {
         return this.customerService.create(createCustomerDto);
     }
-    findAll() {
+    async findAll() {
         return this.customerService.findAll();
     }
     findOne(id) {
@@ -47,13 +47,17 @@ __decorate([
     __metadata("design:returntype", void 0)
 ], CustomerController.prototype, "create", null);
 __decorate([
-    (0, common_1.Get)(),
+    (0, swagger_1.ApiOperation)({
+        summary: '모든 고객정보 조회 API',
+        description: 'DB 내의 모든 고객 정보를 일괄 조회하여 반환한다.',
+    }),
+    (0, common_1.Get)('customers'),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", []),
-    __metadata("design:returntype", void 0)
+    __metadata("design:returntype", Promise)
 ], CustomerController.prototype, "findAll", null);
 __decorate([
-    (0, common_1.Get)(':id'),
+    (0, common_1.Get)('customers/:id'),
     __param(0, (0, common_1.Param)('id')),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String]),
@@ -76,7 +80,7 @@ __decorate([
 ], CustomerController.prototype, "remove", null);
 exports.CustomerController = CustomerController = __decorate([
     (0, swagger_1.ApiTags)('고객정보 API'),
-    (0, common_1.Controller)('customer'),
+    (0, common_1.Controller)('customer-management'),
     __metadata("design:paramtypes", [customer_service_1.CustomerService])
 ], CustomerController);
 //# sourceMappingURL=customer.controller.js.map
