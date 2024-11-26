@@ -34,7 +34,7 @@ let EngineerController = class EngineerController {
     }
     async findAll() {
         try {
-            return await this.engineerService.findAll();
+            return await this.engineerService.findAllEngineer();
         }
         catch (error) {
             throw new common_1.NotFoundException(error);
@@ -69,7 +69,7 @@ let EngineerController = class EngineerController {
     }
     async findOne(id) {
         try {
-            return await this.engineerService.findOne(+id);
+            return await this.engineerService.findEngineerWithSkill(+id);
         }
         catch (error) {
             throw new common_1.NotFoundException(error);
