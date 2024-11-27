@@ -13,7 +13,7 @@ export declare class OrderInfoController {
         savedCustomer: any;
     }>;
     findAll(): Promise<import("./dto/search-order-list.dto").OrderListDto[]>;
-    findOne(id: string): Promise<import("./entities/order_info.entity").Order[]>;
+    findOne(id: number): Promise<import("./entities/order_info.entity").Order>;
     downloadOrderExcel(): Promise<StreamableFile>;
     update(id: number, updateOrderInfoDto: UpdateOrderInfoDto): Promise<{
         updatedOrderInfo: any;

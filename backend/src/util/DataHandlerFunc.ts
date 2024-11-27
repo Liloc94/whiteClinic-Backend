@@ -73,6 +73,7 @@ export async function handleOrderDetailsData(
 ): Promise<OrderListDto[]> {
   const orderList: OrderListDto[] = orderDetails.map((infos) => {
     return {
+      order_id: infos.order.order_id,
       order_date: infos.order.order_date,
       customer_name: infos.customer.customer_name,
       customer_phone: infos.customer.customer_phone,

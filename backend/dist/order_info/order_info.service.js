@@ -68,20 +68,14 @@ let OrderInfoService = class OrderInfoService {
             }
         }
     }
-    async findAll() {
-        try {
-            return await this.orderInfoRepository.find();
-        }
-        catch (error) {
-            throw new common_1.NotFoundException(error);
-        }
-    }
     async findOrderDetails() {
         return await (0, DataHandlerFunc_1.extractOrderDetail)(this.dataSource, customer_engineer_order_entity_1.CustomerEngineerOrder);
     }
     async findWithId(id) {
         try {
-            return await this.orderInfoRepository.find({ where: { order_id: id } });
+            return await this.orderInfoRepository.findOne({
+                where: { order_id: id },
+            });
         }
         catch (error) {
             throw new common_1.NotFoundException(error);
@@ -112,6 +106,7 @@ let OrderInfoService = class OrderInfoService {
             return { updatedOrderInfo, updatedCustomer };
         }
         catch (error) {
+            console.log(`update query failed : ${error}`);
             await queryRunner.rollbackTransaction();
             throw error;
         }

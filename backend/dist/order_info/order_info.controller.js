@@ -31,7 +31,7 @@ let OrderInfoController = class OrderInfoController {
         return await this.orderInfoService.findOrderDetails();
     }
     async findOne(id) {
-        return await this.orderInfoService.findWithId(+id);
+        return await this.orderInfoService.findWithId(id);
     }
     async downloadOrderExcel() {
         try {
@@ -86,7 +86,7 @@ __decorate([
     }),
     __param(0, (0, common_1.Param)('id')),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String]),
+    __metadata("design:paramtypes", [Number]),
     __metadata("design:returntype", Promise)
 ], OrderInfoController.prototype, "findOne", null);
 __decorate([

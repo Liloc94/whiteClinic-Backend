@@ -81,14 +81,6 @@ export class OrderInfoService {
     }
   }
 
-  async findAll() {
-    try {
-      return await this.orderInfoRepository.find();
-    } catch (error) {
-      throw new NotFoundException(error);
-    }
-  }
-
   // 상세 주문정보 리스트 반환 API
   async findOrderDetails() {
     return await extractOrderDetail(this.dataSource, CustomerEngineerOrder);
@@ -96,7 +88,9 @@ export class OrderInfoService {
 
   async findWithId(id: number) {
     try {
-      return await this.orderInfoRepository.find({ where: { order_id: id } });
+      return await this.orderInfoRepository.findOne({
+        where: { order_id: id },
+      });
     } catch (error) {
       throw new NotFoundException(error);
     }
@@ -149,6 +143,7 @@ export class OrderInfoService {
       return { updatedOrderInfo, updatedCustomer };
     } catch (error) {
       // 트랜잭션 롤백
+      console.log(`update query failed : ${error}`);
       await queryRunner.rollbackTransaction();
       throw error;
     } finally {

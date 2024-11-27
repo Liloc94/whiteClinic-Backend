@@ -1,11 +1,6 @@
 import { EngineerSkill } from 'src/engineer/entities/engineer_skill.entity';
 import { DataSource } from 'typeorm';
-import {
-  HttpException,
-  HttpStatus,
-  Injectable,
-  NotFoundException,
-} from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateEngineerDto } from './dto/create-engineer.dto';
 import { UpdateEngineerDto } from './dto/update-engineer.dto';
 import { Engineer } from './entities/engineer.entity';
@@ -13,7 +8,6 @@ import { CustomerEngineerOrder } from 'src/order_info/entities/customer_engineer
 import {
   extractScheduleDetail,
   handleEngineerData,
-  handleEngineerScheduleData,
 } from 'src/util/DataHandlerFunc';
 import { EngineerDailyEarning } from './entities/engineer_daily_earning.entity';
 import { SkillService } from 'src/skillUtil.service';

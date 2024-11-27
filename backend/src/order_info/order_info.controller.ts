@@ -47,8 +47,8 @@ export class OrderInfoController {
     description: '주문정보 테이블로부터 매치되는 주문정보 참조',
     summary: '파라미터로 전달받은 id 를 기반으로 매치되는 주문정보를 호출한다.',
   })
-  async findOne(@Param('id') id: string) {
-    return await this.orderInfoService.findWithId(+id);
+  async findOne(@Param('id') id: number) {
+    return await this.orderInfoService.findWithId(id);
   }
 
   @Get('orders/download/excel')
