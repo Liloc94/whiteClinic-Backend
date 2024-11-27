@@ -149,7 +149,7 @@ export class EngineerService {
     await queryRunner.startTransaction();
 
     try {
-      if (!idDate) {
+      if (idDate.engineer_id && idDate.weekly) {
         const searchedInfo = await queryRunner.manager.findOne(
           EngineerWeeklyEarning,
           { where: { engineer_id: idDate.engineer_id, weekly: idDate.weekly } },
