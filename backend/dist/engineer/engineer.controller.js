@@ -69,7 +69,7 @@ let EngineerController = class EngineerController {
     }
     async findOne(id) {
         try {
-            return await this.engineerService.findEngineerWithSkill(+id);
+            return await this.engineerService.findEngineerWithSkill(id);
         }
         catch (error) {
             throw new common_1.NotFoundException(error);
@@ -176,7 +176,7 @@ __decorate([
     }),
     __param(0, (0, common_1.Param)('id')),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String]),
+    __metadata("design:paramtypes", [Number]),
     __metadata("design:returntype", Promise)
 ], EngineerController.prototype, "findOne", null);
 __decorate([

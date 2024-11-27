@@ -275,7 +275,7 @@ export class EngineerService {
       await queryRunner.manager.delete(Engineer, { engineer_id: id });
 
       // 기사정보 테이블 시퀀스 수정으로 serial id 값 재조정을 통해
-      // 신규 기사정보 생성 시, 값의 공백을 없앨 수 있다.
+      // 신규 기사정보 생성 시, id 값의 공백을 없앨 수 있다.
       await queryRunner.manager.query(`
         SELECT setval('engineer_engineer_id_seq', (SELECT MAX(engineer_id) FROM engineer));
       `);

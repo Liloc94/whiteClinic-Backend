@@ -127,9 +127,9 @@ export class EngineerController {
     description: '파라미터로 전달받은 id의 기사정보를 조회',
     summary: '특정 기사의 정보를 조회한다',
   })
-  async findOne(@Param('id') id: string): Promise<EngineerSkill[]> {
+  async findOne(@Param('id') id: number): Promise<EngineerSkill[]> {
     try {
-      return await this.engineerService.findEngineerWithSkill(+id);
+      return await this.engineerService.findEngineerWithSkill(id);
     } catch (error) {
       throw new NotFoundException(error);
     }
