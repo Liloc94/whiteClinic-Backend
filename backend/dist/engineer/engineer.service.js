@@ -114,15 +114,10 @@ let EngineerService = class EngineerService {
         await queryRunner.connect();
         await queryRunner.startTransaction();
         try {
-            if (!!idDate.engineer_id && !!idDate.weekly) {
-                const searchedInfo = await queryRunner.manager.findOne(engineer_weekly_earning_entity_1.EngineerWeeklyEarning, { where: { engineer_id: idDate.engineer_id, weekly: idDate.weekly } });
-                await queryRunner.commitTransaction();
-                const { idx, ...rest } = searchedInfo;
-                return rest;
-            }
-            else {
-                return `${idDate.weekly}에 관련된 정보가 존재하지 않습니다.`;
-            }
+            const searchedInfo = await queryRunner.manager.findOne(engineer_weekly_earning_entity_1.EngineerWeeklyEarning, { where: { engineer_id: idDate.engineer_id, weekly: idDate.weekly } });
+            await queryRunner.commitTransaction();
+            const { idx, ...rest } = searchedInfo;
+            return rest;
         }
         catch (error) {
             await queryRunner.rollbackTransaction();

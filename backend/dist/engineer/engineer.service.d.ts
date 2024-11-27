@@ -14,7 +14,7 @@ export declare class EngineerService {
     getAllSchedule(): Promise<import("./dto/search-engineer-schedule.dto").EngineerScheduleDto[]>;
     getDailySalary(id: number): Promise<EngineerDailyEarning[]>;
     saveEngineerWeeklySalary(weeklySalary: EngineerWeeklySalaryDto): Promise<void>;
-    getEngineerWeeklyDetail(idDate: EngineerWeeklyDetailDto): Promise<string | {
+    getEngineerWeeklyDetail(idDate: EngineerWeeklyDetailDto): Promise<{
         engineer_id: number;
         weekly: string;
         weekly_earning: number;

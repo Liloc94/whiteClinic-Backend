@@ -149,21 +149,17 @@ export class EngineerService {
     await queryRunner.startTransaction();
 
     try {
-      if (!!idDate.engineer_id && !!idDate.weekly) {
-        const searchedInfo = await queryRunner.manager.findOne(
-          EngineerWeeklyEarning,
-          { where: { engineer_id: idDate.engineer_id, weekly: idDate.weekly } },
-        );
-        await queryRunner.commitTransaction();
+      const searchedInfo = await queryRunner.manager.findOne(
+        EngineerWeeklyEarning,
+        { where: { engineer_id: idDate.engineer_id, weekly: idDate.weekly } },
+      );
+      await queryRunner.commitTransaction();
 
-        // idx 불필요함, 구조분해 후 남겨두기
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        const { idx, ...rest } = searchedInfo;
+      // idx 불필요함, 구조분해 후 남겨두기
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const { idx, ...rest } = searchedInfo;
 
-        return rest;
-      } else {
-        return `${idDate.weekly}에 관련된 정보가 존재하지 않습니다.`;
-      }
+      return rest;
     } catch (error) {
       await queryRunner.rollbackTransaction();
       throw error;
