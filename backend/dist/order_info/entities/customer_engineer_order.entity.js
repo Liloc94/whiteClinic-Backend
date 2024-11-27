@@ -33,6 +33,7 @@ __decorate([
     (0, typeorm_1.ManyToOne)(() => order_info_entity_1.Order, {
         onDelete: 'CASCADE',
         onUpdate: 'CASCADE',
+        nullable: false,
     }),
     (0, typeorm_1.JoinColumn)({ name: 'order_id' }),
     __metadata("design:type", order_info_entity_1.Order)

@@ -1,7 +1,7 @@
 export declare class EngineerScheduleDto {
-    order_id: number;
-    engineer_id: number;
-    customer_id: number;
+    order_id?: number;
+    engineer_id?: number;
+    customer_id?: number;
     order_date: string;
     engineer_name: string;
     customer_name: string;

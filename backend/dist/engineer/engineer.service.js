@@ -41,24 +41,24 @@ let EngineerService = class EngineerService {
                 skill_id: skillId,
             }));
             await queryRunner.manager.insert(engineer_skill_entity_1.EngineerSkill, engineerSkills);
-            queryRunner.commitTransaction();
+            await queryRunner.commitTransaction();
         }
         catch (error) {
-            queryRunner.rollbackTransaction();
+            await queryRunner.rollbackTransaction();
             throw error;
         }
     }
     async findAllEngineer() {
         const queryRunner = this.dataSource.createQueryRunner();
-        queryRunner.connect();
-        queryRunner.startTransaction();
+        await queryRunner.connect();
+        await queryRunner.startTransaction();
         try {
             const engineerWithSkills = await queryRunner.manager
                 .createQueryBuilder(engineer_skill_entity_1.EngineerSkill, 'engineerSkill')
                 .leftJoinAndSelect('engineerSkill.engineer', 'engineer')
                 .leftJoinAndSelect('engineerSkill.skill', 'skill')
                 .getMany();
-            queryRunner.commitTransaction();
+            await queryRunner.commitTransaction();
             return await (0, DataHandlerFunc_1.handleEngineerData)(engineerWithSkills);
         }
         catch (error) {
@@ -67,23 +67,12 @@ let EngineerService = class EngineerService {
         }
     }
     async getAllSchedule() {
-        const queryRunner = this.dataSource.createQueryRunner();
-        queryRunner.connect();
-        queryRunner.startTransaction();
-        try {
-            const engineerSchedule = await (0, DataHandlerFunc_1.extractOrderDetail)(this.dataSource, customer_engineer_order_entity_1.CustomerEngineerOrder);
-            queryRunner.commitTransaction();
-            return await (0, DataHandlerFunc_1.handleEngineerScheduleData)(engineerSchedule);
-        }
-        catch (error) {
-            queryRunner.rollbackTransaction();
-            throw error;
-        }
+        return (0, DataHandlerFunc_1.extractScheduleDetail)(this.dataSource, customer_engineer_order_entity_1.CustomerEngineerOrder);
     }
     async getDailySalary(id) {
         const queryRunner = this.dataSource.createQueryRunner();
-        queryRunner.connect();
-        queryRunner.startTransaction();
+        await queryRunner.connect();
+        await queryRunner.startTransaction();
         try {
             const engineerDailyIncome = await queryRunner.manager.find(engineer_daily_earning_entity_1.EngineerDailyEarning, {
                 where: {
@@ -101,8 +90,8 @@ let EngineerService = class EngineerService {
     }
     async saveEngineerWeeklySalary(weeklySalary) {
         const queryRunner = this.dataSource.createQueryRunner();
-        queryRunner.connect();
-        queryRunner.startTransaction();
+        await queryRunner.connect();
+        await queryRunner.startTransaction();
         try {
             const isExistingWeekly = await queryRunner.manager.findOne(engineer_weekly_earning_entity_1.EngineerWeeklyEarning, { where: { weekly: weeklySalary.weekly } });
             if (!!isExistingWeekly) {
@@ -137,8 +126,8 @@ let EngineerService = class EngineerService {
     }
     async findEngineerWithSkill(id) {
         const queryRunner = this.dataSource.createQueryRunner();
-        queryRunner.connect();
-        queryRunner.startTransaction();
+        await queryRunner.connect();
+        await queryRunner.startTransaction();
         try {
             const exactEngineer = await queryRunner.manager
                 .createQueryBuilder(engineer_skill_entity_1.EngineerSkill, 'engineerSkill')
@@ -159,8 +148,8 @@ let EngineerService = class EngineerService {
     }
     async updateEngineerInfo(id, updateInfo) {
         const queryRunner = this.dataSource.createQueryRunner();
-        queryRunner.connect();
-        queryRunner.startTransaction();
+        await queryRunner.connect();
+        await queryRunner.startTransaction();
         try {
             const { engineer_valid_skill, ...rest } = updateInfo;
             await queryRunner.manager.update(engineer_entity_1.Engineer, { engineer_id: id }, rest);

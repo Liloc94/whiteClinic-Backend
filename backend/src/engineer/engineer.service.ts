@@ -1,12 +1,17 @@
 import { EngineerSkill } from 'src/engineer/entities/engineer_skill.entity';
 import { DataSource } from 'typeorm';
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  HttpException,
+  HttpStatus,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { CreateEngineerDto } from './dto/create-engineer.dto';
 import { UpdateEngineerDto } from './dto/update-engineer.dto';
 import { Engineer } from './entities/engineer.entity';
 import { CustomerEngineerOrder } from 'src/order_info/entities/customer_engineer_order.entity';
 import {
-  extractOrderDetail,
+  extractScheduleDetail,
   handleEngineerData,
   handleEngineerScheduleData,
 } from 'src/util/DataHandlerFunc';
@@ -23,24 +28,6 @@ export class EngineerService {
     // NOTE : QueryRunner 사용 시 DB 의존성 주입이 필요하지 않다,
     // 직접적으로 QueryRunner가 DB와의 연결을 담당하기 때문이다.
 
-    // 기사 정보 저장 테이블
-    // @InjectRepository(Engineer)
-    // private readonly engineerRepository: Repository<Engineer>,
-    //  기사 정보 임시저장 테이블
-    // @InjectRepository(TempEngineer)
-    // private readonly tempEngineerRepository: Repository<TempEngineer>,
-    //  매핑을 위한 가능품목 테이블
-    // @InjectRepository(Skill)
-    // private readonly skillRepository: Repository<Skill>,
-    //  기사와 가능품목 매핑테이블
-    // @InjectRepository(EngineerSkill)
-    // private readonly engineerSkillRepository: Repository<EngineerSkill>,
-    // @InjectRepository(CustomerEngineerOrder)
-    // private readonly orderDetailRepository: Repository<CustomerEngineerOrder>,
-    // @InjectRepository(EngineerDailyEarning)
-    // private readonly engineerDailyEarningRepository: Repository<EngineerDailyEarning>,
-
-    // module 내의 providers 배열에 추가가 필요함.
     private readonly skillService: SkillService, // 별도의 서비스 의존성 주입
     private readonly dataSource: DataSource,
   ) {}
@@ -73,17 +60,17 @@ export class EngineerService {
 
       await queryRunner.manager.insert(EngineerSkill, engineerSkills);
 
-      queryRunner.commitTransaction();
+      await queryRunner.commitTransaction();
     } catch (error) {
-      queryRunner.rollbackTransaction();
+      await queryRunner.rollbackTransaction();
       throw error;
     }
   }
 
   async findAllEngineer() {
     const queryRunner = this.dataSource.createQueryRunner();
-    queryRunner.connect();
-    queryRunner.startTransaction();
+    await queryRunner.connect();
+    await queryRunner.startTransaction();
 
     try {
       const engineerWithSkills = await queryRunner.manager
@@ -92,7 +79,7 @@ export class EngineerService {
         .leftJoinAndSelect('engineerSkill.skill', 'skill')
         .getMany();
 
-      queryRunner.commitTransaction();
+      await queryRunner.commitTransaction();
 
       return await handleEngineerData(engineerWithSkills);
     } catch (error) {
@@ -102,31 +89,14 @@ export class EngineerService {
   }
 
   async getAllSchedule() {
-    const queryRunner = this.dataSource.createQueryRunner();
-
-    queryRunner.connect();
-    queryRunner.startTransaction();
-
-    try {
-      const engineerSchedule = await extractOrderDetail(
-        this.dataSource,
-        CustomerEngineerOrder,
-      );
-
-      queryRunner.commitTransaction();
-
-      return await handleEngineerScheduleData(engineerSchedule);
-    } catch (error) {
-      queryRunner.rollbackTransaction();
-      throw error;
-    }
+    return extractScheduleDetail(this.dataSource, CustomerEngineerOrder);
   }
 
   async getDailySalary(id: number) {
     const queryRunner = this.dataSource.createQueryRunner();
 
-    queryRunner.connect();
-    queryRunner.startTransaction();
+    await queryRunner.connect();
+    await queryRunner.startTransaction();
 
     try {
       const engineerDailyIncome = await queryRunner.manager.find(
@@ -150,8 +120,8 @@ export class EngineerService {
   async saveEngineerWeeklySalary(weeklySalary: EngineerWeeklySalaryDto) {
     const queryRunner = this.dataSource.createQueryRunner();
 
-    queryRunner.connect();
-    queryRunner.startTransaction();
+    await queryRunner.connect();
+    await queryRunner.startTransaction();
 
     try {
       // 몇 주차인지 먼저 검증
@@ -203,8 +173,8 @@ export class EngineerService {
 
   async findEngineerWithSkill(id: number) {
     const queryRunner = this.dataSource.createQueryRunner();
-    queryRunner.connect();
-    queryRunner.startTransaction();
+    await queryRunner.connect();
+    await queryRunner.startTransaction();
     try {
       const exactEngineer = await queryRunner.manager
         .createQueryBuilder(EngineerSkill, 'engineerSkill')
@@ -226,8 +196,8 @@ export class EngineerService {
   async updateEngineerInfo(id: number, updateInfo: UpdateEngineerDto) {
     const queryRunner = this.dataSource.createQueryRunner();
 
-    queryRunner.connect();
-    queryRunner.startTransaction();
+    await queryRunner.connect();
+    await queryRunner.startTransaction();
 
     try {
       // 기사 가능품목만 구조분해 이후 따로 저장

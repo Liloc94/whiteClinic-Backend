@@ -34,9 +34,6 @@ async function bootstrap() {
     });
     app.useGlobalFilters(new HttpErrorFilter_1.HttpErrorFilter());
     (0, setupSwagger_1.setupSwagger)(app);
-    app.use('/favicon.ico', (res) => {
-        res.status(204).send();
-    });
     await app.listen(process.env.PORT || port);
     console.log(`server's now runnig on port ${URLS_1.SERVER_PORT}!!`);
 }

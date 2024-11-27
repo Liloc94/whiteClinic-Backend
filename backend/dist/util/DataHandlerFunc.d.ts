@@ -12,3 +12,4 @@ export declare function handleEngineerData(engineerWithSkill: EngineerSkill[]): 
 export declare function handleOrderDetailsData(orderDetails: CustomerEngineerOrder[]): Promise<OrderListDto[]>;
 export declare function handleCreateOrderInfo(orderInfo: CreateOrderInfoDto | UpdateOrderInfoDto): Promise<any>;
 export declare function extractOrderDetail(dataSource: DataSource, targetEntity: EntityClassOrSchema): Promise<OrderListDto[]>;
+export declare function extractScheduleDetail(dataSource: DataSource, targetEntity: EntityClassOrSchema): Promise<EngineerScheduleDto[]>;

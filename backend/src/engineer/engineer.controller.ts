@@ -9,6 +9,8 @@ import {
   Delete,
   BadRequestException,
   NotFoundException,
+  HttpException,
+  HttpStatus,
 } from '@nestjs/common';
 import { EngineerService } from './engineer.service';
 import { CreateEngineerDto } from './dto/create-engineer.dto';
@@ -69,14 +71,18 @@ export class EngineerController {
 
   @ApiOperation({
     summary: '전체 기사 스케쥴 일괄조회 API',
-    description: '모든 기사들의 스케쥴 정보의 일괄조회를 요청',
+    description: '모든 기사들의 스케쥴 정보를 요청',
   })
   @Get('engineers/schedules')
   async getAllSchedule(): Promise<EngineerScheduleDto[]> {
     try {
       return await this.engineerService.getAllSchedule();
     } catch (error) {
-      throw new NotFoundException(error);
+      console.error('Error in getAllSchedule:', error);
+      throw new HttpException(
+        'Failed to fetch schedules',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
     }
   }
 

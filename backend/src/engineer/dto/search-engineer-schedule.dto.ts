@@ -2,13 +2,13 @@ import { ApiProperty } from '@nestjs/swagger';
 
 export class EngineerScheduleDto {
   @ApiProperty({ description: '주문넘버' })
-  order_id: number;
+  order_id?: number;
 
   @ApiProperty({ description: '기사넘버' })
-  engineer_id: number;
+  engineer_id?: number;
 
   @ApiProperty({ description: '고객넘버' })
-  customer_id: number;
+  customer_id?: number;
 
   @ApiProperty({ description: '예약일자' })
   order_date: string;

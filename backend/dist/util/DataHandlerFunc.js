@@ -6,6 +6,7 @@ exports.handleEngineerData = handleEngineerData;
 exports.handleOrderDetailsData = handleOrderDetailsData;
 exports.handleCreateOrderInfo = handleCreateOrderInfo;
 exports.extractOrderDetail = extractOrderDetail;
+exports.extractScheduleDetail = extractScheduleDetail;
 const common_1 = require("@nestjs/common");
 async function handleEngineerScheduleData(orderDetails) {
     const scheduleList = orderDetails.map((detail) => {
@@ -46,7 +47,6 @@ async function handleEngineerData(engineerWithSkill) {
             });
         }
     });
-    console.log([...engineerMap]);
     return Array.from(engineerMap.values());
 }
 async function handleOrderDetailsData(orderDetails) {
@@ -87,18 +87,44 @@ async function extractOrderDetail(dataSource, targetEntity) {
             .leftJoinAndSelect('CustomerEngineerOrder.order', 'order')
             .leftJoinAndSelect('CustomerEngineerOrder.engineer', 'engineer')
             .getMany();
+        if (!orderDetails || orderDetails.some((detail) => !detail.order)) {
+            throw new common_1.NotFoundException('Some orders are missing');
+        }
         await queryRunner.commitTransaction();
-        return await handleOrderDetailsData(orderDetails);
+        return handleOrderDetailsData(orderDetails);
     }
     catch (error) {
         await queryRunner.rollbackTransaction();
-        console.log('트랜잭션 실패, 롤백실행');
-        throw new common_1.HttpException(error, common_1.HttpStatus.INTERNAL_SERVER_ERROR);
+        console.error('트랜잭션 실패:', error);
+        throw new common_1.HttpException('Failed to extract order details', common_1.HttpStatus.INTERNAL_SERVER_ERROR);
     }
     finally {
         if (!queryRunner.isReleased) {
             await queryRunner.release();
         }
+    }
+}
+async function extractScheduleDetail(dataSource, targetEntity) {
+    const queryRunner = dataSource.createQueryRunner();
+    await queryRunner.connect();
+    await queryRunner.startTransaction();
+    try {
+        const orderDetails = await queryRunner.manager
+            .createQueryBuilder(targetEntity, 'CustomerEngineerOrder')
+            .leftJoinAndSelect('CustomerEngineerOrder.customer', 'customer')
+            .leftJoinAndSelect('CustomerEngineerOrder.order', 'order')
+            .leftJoinAndSelect('CustomerEngineerOrder.engineer', 'engineer')
+            .getMany();
+        if (!orderDetails || orderDetails.some((detail) => !detail.order)) {
+            throw new common_1.NotFoundException('Some orders are missing');
+        }
+        await queryRunner.commitTransaction();
+        return handleEngineerScheduleData(orderDetails);
+    }
+    catch (error) {
+        await queryRunner.rollbackTransaction();
+        console.error('트랜잭션 실패:', error);
+        throw new common_1.HttpException('Failed to extract order details', common_1.HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }
 //# sourceMappingURL=DataHandlerFunc.js.map

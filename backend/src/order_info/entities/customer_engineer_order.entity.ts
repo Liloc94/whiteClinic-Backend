@@ -19,6 +19,7 @@ export class CustomerEngineerOrder {
   @ManyToOne(() => Order, {
     onDelete: 'CASCADE',
     onUpdate: 'CASCADE',
+    nullable: false,
   })
   @JoinColumn({ name: 'order_id' })
   order: Order;

@@ -1,4 +1,4 @@
-import { HttpException, HttpStatus } from '@nestjs/common';
+import { HttpException, HttpStatus, NotFoundException } from '@nestjs/common';
 import { EntityClassOrSchema } from '@nestjs/typeorm/dist/interfaces/entity-class-or-schema.type';
 import { EngineerScheduleDto } from 'src/engineer/dto/search-engineer-schedule.dto';
 import { EngineerSkill } from 'src/engineer/entities/engineer_skill.entity';
@@ -60,7 +60,6 @@ export async function handleEngineerData(engineerWithSkill: EngineerSkill[]) {
       });
     }
   });
-  console.log([...engineerMap]);
   return Array.from(engineerMap.values());
 }
 
@@ -133,16 +132,61 @@ export async function extractOrderDetail(
       .leftJoinAndSelect('CustomerEngineerOrder.engineer', 'engineer')
       .getMany();
 
+    // 데이터 검증
+    if (!orderDetails || orderDetails.some((detail) => !detail.order)) {
+      throw new NotFoundException('Some orders are missing');
+    }
+
     await queryRunner.commitTransaction();
-    return await handleOrderDetailsData(orderDetails);
+
+    return handleOrderDetailsData(orderDetails); // 트랜잭션 외부에서 데이터 처리
   } catch (error) {
     await queryRunner.rollbackTransaction();
-    console.log('트랜잭션 실패, 롤백실행');
+    console.error('트랜잭션 실패:', error);
 
-    throw new HttpException(error, HttpStatus.INTERNAL_SERVER_ERROR);
+    throw new HttpException(
+      'Failed to extract order details',
+      HttpStatus.INTERNAL_SERVER_ERROR,
+    );
   } finally {
     if (!queryRunner.isReleased) {
       await queryRunner.release();
     }
+  }
+}
+
+export async function extractScheduleDetail(
+  dataSource: DataSource,
+  targetEntity: EntityClassOrSchema,
+) {
+  const queryRunner = dataSource.createQueryRunner();
+
+  await queryRunner.connect();
+  await queryRunner.startTransaction();
+
+  try {
+    const orderDetails = await queryRunner.manager
+      .createQueryBuilder(targetEntity, 'CustomerEngineerOrder')
+      .leftJoinAndSelect('CustomerEngineerOrder.customer', 'customer')
+      .leftJoinAndSelect('CustomerEngineerOrder.order', 'order')
+      .leftJoinAndSelect('CustomerEngineerOrder.engineer', 'engineer')
+      .getMany();
+
+    // 데이터 검증
+    if (!orderDetails || orderDetails.some((detail) => !detail.order)) {
+      throw new NotFoundException('Some orders are missing');
+    }
+
+    await queryRunner.commitTransaction();
+
+    return handleEngineerScheduleData(orderDetails);
+  } catch (error) {
+    await queryRunner.rollbackTransaction();
+    console.error('트랜잭션 실패:', error);
+
+    throw new HttpException(
+      'Failed to extract order details',
+      HttpStatus.INTERNAL_SERVER_ERROR,
+    );
   }
 }

@@ -45,7 +45,8 @@ let EngineerController = class EngineerController {
             return await this.engineerService.getAllSchedule();
         }
         catch (error) {
-            throw new common_1.NotFoundException(error);
+            console.error('Error in getAllSchedule:', error);
+            throw new common_1.HttpException('Failed to fetch schedules', common_1.HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
     async getEngineerSalary(id) {
@@ -128,7 +129,7 @@ __decorate([
 __decorate([
     (0, swagger_1.ApiOperation)({
         summary: '전체 기사 스케쥴 일괄조회 API',
-        description: '모든 기사들의 스케쥴 정보의 일괄조회를 요청',
+        description: '모든 기사들의 스케쥴 정보를 요청',
     }),
     (0, common_1.Get)('engineers/schedules'),
     __metadata("design:type", Function),
