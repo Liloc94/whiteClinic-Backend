@@ -59,14 +59,14 @@ let EngineerController = class EngineerController {
     }
     async saveEngineerWeeklySalary(weeklySalary) {
         try {
-            return await this.engineerService.saveEngineerWeeklySalary(weeklySalary);
+            return this.engineerService.saveEngineerWeeklySalary(weeklySalary);
         }
         catch (error) {
             throw new common_1.BadRequestException(error);
         }
     }
     async getEngineerWeeklyDetail(idDate) {
-        return await this.engineerService.getEngineerWeeklyDetail(idDate);
+        return this.engineerService.getEngineerWeeklyDetail(idDate);
     }
     async findOne(id) {
         try {

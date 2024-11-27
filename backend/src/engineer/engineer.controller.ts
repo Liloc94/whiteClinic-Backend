@@ -110,7 +110,7 @@ export class EngineerController {
     @Body() weeklySalary: EngineerWeeklySalaryDto,
   ): Promise<void> {
     try {
-      return await this.engineerService.saveEngineerWeeklySalary(weeklySalary);
+      return this.engineerService.saveEngineerWeeklySalary(weeklySalary);
     } catch (error) {
       throw new BadRequestException(error);
     }
@@ -125,7 +125,7 @@ export class EngineerController {
   async getEngineerWeeklyDetail(
     @Body() idDate: EngineerWeeklyDetailDto,
   ): Promise<any> {
-    return await this.engineerService.getEngineerWeeklyDetail(idDate);
+    return this.engineerService.getEngineerWeeklyDetail(idDate);
   }
 
   @Get('engineers/:id')
