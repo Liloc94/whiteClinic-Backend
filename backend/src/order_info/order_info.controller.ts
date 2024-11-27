@@ -93,7 +93,7 @@ export class OrderInfoController {
     @Param('id') id: number,
     @Body() updateOrderInfoDto: UpdateOrderInfoDto,
   ) {
-    return await this.orderInfoService.update(id, updateOrderInfoDto);
+    return await this.orderInfoService.updateOrderInfo(id, updateOrderInfoDto);
   }
 
   @Delete('orders/:id')

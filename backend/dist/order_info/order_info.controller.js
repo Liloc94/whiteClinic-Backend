@@ -50,7 +50,7 @@ let OrderInfoController = class OrderInfoController {
         }
     }
     async update(id, updateOrderInfoDto) {
-        return await this.orderInfoService.update(id, updateOrderInfoDto);
+        return await this.orderInfoService.updateOrderInfo(id, updateOrderInfoDto);
     }
     async remove(id) {
         return await this.orderInfoService.remove(+id);

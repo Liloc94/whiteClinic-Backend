@@ -81,39 +81,25 @@ let OrderInfoService = class OrderInfoService {
             throw new common_1.NotFoundException(error);
         }
     }
-    async update(id, updateOrderInfoDto) {
+    async updateOrderInfo(id, updateOrderInfoDto) {
         const queryRunner = this.dataSource.createQueryRunner();
-        await queryRunner.connect();
-        await queryRunner.startTransaction();
         try {
-            const temp = (0, DataHandlerFunc_1.handleCreateOrderInfo)(updateOrderInfoDto);
-            const updatedOrderInfo = await queryRunner.manager.save(order_info_entity_1.Order, temp[0]);
-            const updatedCustomer = await queryRunner.manager.save(customer_entity_1.Customer, temp[1]);
-            const engineer = await queryRunner.manager.findOneOrFail(engineer_entity_1.Engineer, {
+            await queryRunner.connect();
+            await queryRunner.startTransaction();
+            const temp = await (0, DataHandlerFunc_1.handleCreateOrderInfo)(updateOrderInfoDto);
+            if (!temp || temp.length < 3 || temp.some((item) => !item)) {
+                throw new Error('handleCreateOrderInfo returned invalid data');
+            }
+            const engineer = await queryRunner.manager.findOne(engineer_entity_1.Engineer, {
                 where: { engineer_name: temp[2] },
             });
             const customerEngineerOrder = await queryRunner.manager.findOne(customer_engineer_order_entity_1.CustomerEngineerOrder, {
                 where: { order: { order_id: id } },
                 relations: ['customer', 'order', 'engineer'],
             });
-            if (customerEngineerOrder) {
-                customerEngineerOrder.customer = updatedCustomer;
-                customerEngineerOrder.order = updatedOrderInfo;
-                customerEngineerOrder.engineer = engineer;
-                await queryRunner.manager.save(customer_engineer_order_entity_1.CustomerEngineerOrder, customerEngineerOrder);
-            }
-            await queryRunner.commitTransaction();
-            return { updatedOrderInfo, updatedCustomer };
         }
         catch (error) {
-            console.log(`update query failed : ${error}`);
-            await queryRunner.rollbackTransaction();
             throw error;
-        }
-        finally {
-            if (!queryRunner.isReleased) {
-                await queryRunner.release();
-            }
         }
     }
     async remove(id) {

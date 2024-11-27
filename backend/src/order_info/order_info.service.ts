@@ -96,23 +96,21 @@ export class OrderInfoService {
     }
   }
 
-  async update(id: number, updateOrderInfoDto: UpdateOrderInfoDto) {
+  async updateOrderInfo(id: number, updateOrderInfoDto: UpdateOrderInfoDto) {
     const queryRunner = this.dataSource.createQueryRunner();
-    await queryRunner.connect();
-    await queryRunner.startTransaction();
 
     try {
+      await queryRunner.connect();
+      await queryRunner.startTransaction();
+
       // Order 및 Customer 관련 데이터 생성
-      const temp = handleCreateOrderInfo(updateOrderInfoDto);
-
-      // Order 저장
-      const updatedOrderInfo = await queryRunner.manager.save(Order, temp[0]);
-
-      // Customer 저장
-      const updatedCustomer = await queryRunner.manager.save(Customer, temp[1]);
+      const temp = await handleCreateOrderInfo(updateOrderInfoDto);
+      if (!temp || temp.length < 3 || temp.some((item) => !item)) {
+        throw new Error('handleCreateOrderInfo returned invalid data');
+      }
 
       // Engineer 조회: engineer_name을 기반으로 조회
-      const engineer = await queryRunner.manager.findOneOrFail(Engineer, {
+      const engineer = await queryRunner.manager.findOne(Engineer, {
         where: { engineer_name: temp[2] },
       });
 
@@ -124,33 +122,8 @@ export class OrderInfoService {
           relations: ['customer', 'order', 'engineer'],
         },
       );
-
-      if (customerEngineerOrder) {
-        // 기존 CustomerEngineerOrder 엔티티를 업데이트
-        customerEngineerOrder.customer = updatedCustomer;
-        customerEngineerOrder.order = updatedOrderInfo;
-        customerEngineerOrder.engineer = engineer;
-
-        await queryRunner.manager.save(
-          CustomerEngineerOrder,
-          customerEngineerOrder,
-        );
-      }
-
-      // 트랜잭션 커밋
-      await queryRunner.commitTransaction();
-
-      return { updatedOrderInfo, updatedCustomer };
     } catch (error) {
-      // 트랜잭션 롤백
-      console.log(`update query failed : ${error}`);
-      await queryRunner.rollbackTransaction();
       throw error;
-    } finally {
-      // 트랜잭션 종료
-      if (!queryRunner.isReleased) {
-        await queryRunner.release();
-      }
     }
   }
 
