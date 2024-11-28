@@ -15,6 +15,12 @@ export declare class OrderInfoService {
     }>;
     findOrderDetails(): Promise<import("./dto/search-order-list.dto").OrderListDto[]>;
     findWithId(id: number): Promise<Order>;
-    updateOrderInfo(id: number, updateOrderInfoDto: UpdateOrderInfoDto): Promise<void>;
+    updateOrderInfo(id: number, updateOrderInfoDto: UpdateOrderInfoDto): Promise<{
+        message: string;
+    }>;
     remove(id: number): Promise<void>;
+    private getOrderDetails;
+    private updateCustomer;
+    private updateOrder;
+    private getEngineerByName;
 }

@@ -15,6 +15,8 @@ export declare class OrderInfoController {
     findAll(): Promise<import("./dto/search-order-list.dto").OrderListDto[]>;
     findOne(id: number): Promise<import("./entities/order_info.entity").Order>;
     downloadOrderExcel(): Promise<StreamableFile>;
-    update(id: number, updateOrderInfoDto: UpdateOrderInfoDto): Promise<void>;
+    update(id: number, updateOrderInfoDto: UpdateOrderInfoDto): Promise<{
+        message: string;
+    }>;
     remove(id: string): Promise<void>;
 }

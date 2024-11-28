@@ -20,7 +20,7 @@ const typeorm_2 = require("typeorm");
 const engineer_entity_1 = require("../engineer/entities/engineer.entity");
 const customer_entity_1 = require("../customer/entities/customer.entity");
 const customer_engineer_order_entity_1 = require("./entities/customer_engineer_order.entity");
-const DataHandlerFunc_1 = require("../util/DataHandlerFunc");
+const DataHandlerFunc_1 = require("../util/helper/DataHandlerFunc");
 const income_service_1 = require("../income.service");
 let OrderInfoService = class OrderInfoService {
     constructor(orderInfoRepository, dataSource, incomeInfoService) {
@@ -45,7 +45,6 @@ let OrderInfoService = class OrderInfoService {
                 engineer: engineer,
             });
             const incomes = {
-                idx: null,
                 order_id: savedOrderInfo.order_id,
                 engineer_id: engineer.engineer_id,
                 daily_income: savedOrderInfo.order_total_amount,
@@ -82,25 +81,21 @@ let OrderInfoService = class OrderInfoService {
         }
     }
     async updateOrderInfo(id, updateOrderInfoDto) {
-        const queryRunner = this.dataSource.createQueryRunner();
-        try {
-            await queryRunner.connect();
-            await queryRunner.startTransaction();
-            const temp = await (0, DataHandlerFunc_1.handleCreateOrderInfo)(updateOrderInfoDto);
-            if (!temp || temp.length < 3 || temp.some((item) => !item)) {
-                throw new Error('handleCreateOrderInfo returned invalid data');
+        return this.dataSource.transaction(async (queryRunner) => {
+            const orderDetails = await this.getOrderDetails(queryRunner, id);
+            if (!orderDetails) {
+                throw new common_1.NotFoundException(`No existing record found for order ID ${id}`);
             }
-            const engineer = await queryRunner.manager.findOne(engineer_entity_1.Engineer, {
-                where: { engineer_name: temp[2] },
-            });
-            const customerEngineerOrder = await queryRunner.manager.findOne(customer_engineer_order_entity_1.CustomerEngineerOrder, {
-                where: { order: { order_id: id } },
-                relations: ['customer', 'order', 'engineer'],
-            });
-        }
-        catch (error) {
-            throw error;
-        }
+            const paramOrderData = await (0, DataHandlerFunc_1.handleCreateOrderInfo)(updateOrderInfoDto);
+            this.updateCustomer(orderDetails.customer, paramOrderData.customer);
+            this.updateOrder(orderDetails.order, paramOrderData.order);
+            const engineer = await this.getEngineerByName(queryRunner, paramOrderData.engineer_name);
+            orderDetails.engineer = engineer;
+            await queryRunner.save(orderDetails.customer);
+            await queryRunner.save(orderDetails.order);
+            await queryRunner.save(orderDetails);
+            return { message: 'Order updated successfully' };
+        });
     }
     async remove(id) {
         const queryRunner = this.dataSource.createQueryRunner();
@@ -119,6 +114,46 @@ let OrderInfoService = class OrderInfoService {
                 await queryRunner.release();
             }
         }
+    }
+    async getOrderDetails(queryRunner, id) {
+        return queryRunner
+            .createQueryBuilder('CustomerEngineerOrder', 'ceo')
+            .leftJoinAndSelect('ceo.customer', 'customer')
+            .leftJoinAndSelect('ceo.order', 'order')
+            .leftJoinAndSelect('ceo.engineer', 'engineer')
+            .where('ceo.order_id = :id', { id })
+            .getOne();
+    }
+    updateCustomer(customer, updatedCustomer) {
+        customer.customer_name = updatedCustomer.customer_name;
+        customer.customer_phone = updatedCustomer.customer_phone;
+        customer.customer_addr = updatedCustomer.customer_addr;
+        customer.customer_remark = updatedCustomer.customer_remark;
+    }
+    updateOrder(order, updatedOrder) {
+        order.order_category = updatedOrder.order_category;
+        order.order_date = updatedOrder.order_date;
+        order.order_product = updatedOrder.order_product;
+        order.order_total_amount = updatedOrder.order_total_amount;
+        order.order_count = updatedOrder.order_count;
+        order.order_isDiscount = updatedOrder.order_isDiscount;
+        order.order_discount_ratio = updatedOrder.order_discount_ratio;
+        order.order_remark = updatedOrder.order_remark;
+        order.order_deposit = updatedOrder.order_deposit;
+        order.deposit_paid = updatedOrder.deposit_paid;
+        order.order_payment = updatedOrder.order_payment;
+        order.order_receipt_docs = updatedOrder.order_receipt_docs;
+        order.receipt_docs_issued = updatedOrder.receipt_docs_issued;
+    }
+    async getEngineerByName(queryRunner, engineerName) {
+        const engineer = await queryRunner
+            .createQueryBuilder(engineer_entity_1.Engineer, 'engineer')
+            .where('engineer.engineer_name = :engineerName', { engineerName })
+            .getOne();
+        if (!engineer) {
+            throw new common_1.NotFoundException(`Engineer with name ${engineerName} not found`);
+        }
+        return engineer;
     }
 };
 exports.OrderInfoService = OrderInfoService;

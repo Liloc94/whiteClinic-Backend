@@ -18,7 +18,7 @@ export class CreateOrderInfoDto {
   order_customer_remark?: string;
 
   @ApiProperty({ description: '예약금여부', nullable: false })
-  deposit_payed: boolean;
+  deposit_paid: boolean;
 
   @ApiProperty({ description: '예약금' })
   order_deposit?: number;
@@ -59,7 +59,7 @@ export class CreateOrderInfoDto {
   order_isDiscount: boolean;
 
   @ApiProperty({ description: '할인율' })
-  order_discount_ratio: number;
+  order_discount_ratio?: number;
 
   // 기사 정보 등록 --------------------------------------------------
   @ApiProperty({ description: '담당 기사' })

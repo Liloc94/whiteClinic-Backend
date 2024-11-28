@@ -11,8 +11,8 @@ export declare class Order {
     order_discount_ratio?: number;
     order_remark?: string;
     order_deposit?: number;
-    deposit_payed: boolean;
+    deposit_paid: boolean;
     order_payment: string;
     order_receipt_docs: string;
-    reciept_docs_issued?: boolean;
+    receipt_docs_issued?: boolean;
 }

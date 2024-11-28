@@ -17,6 +17,7 @@ let Order = class Order {
 exports.Order = Order;
 __decorate([
     (0, typeorm_1.PrimaryGeneratedColumn)(),
+    (0, typeorm_1.JoinColumn)({ name: 'order_id' }),
     __metadata("design:type", Number)
 ], Order.prototype, "order_id", void 0);
 __decorate([
@@ -62,7 +63,7 @@ __decorate([
 __decorate([
     (0, typeorm_1.Column)({ type: 'boolean', default: false }),
     __metadata("design:type", Boolean)
-], Order.prototype, "deposit_payed", void 0);
+], Order.prototype, "deposit_paid", void 0);
 __decorate([
     (0, typeorm_1.Column)({ type: 'varchar', length: 20 }),
     __metadata("design:type", String)
@@ -74,7 +75,7 @@ __decorate([
 __decorate([
     (0, typeorm_1.Column)({ type: 'boolean', nullable: true }),
     __metadata("design:type", Boolean)
-], Order.prototype, "reciept_docs_issued", void 0);
+], Order.prototype, "receipt_docs_issued", void 0);
 exports.Order = Order = __decorate([
     (0, typeorm_1.Entity)('order')
 ], Order);

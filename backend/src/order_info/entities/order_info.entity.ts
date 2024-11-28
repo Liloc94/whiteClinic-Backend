@@ -1,10 +1,17 @@
 // order.entity.ts
 import { EngineerDailyEarning } from 'src/engineer/entities/engineer_daily_earning.entity';
-import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  OneToMany,
+  JoinColumn,
+} from 'typeorm';
 
 @Entity('order')
 export class Order {
   @PrimaryGeneratedColumn()
+  @JoinColumn({ name: 'order_id' })
   order_id: number;
 
   @OneToMany(() => EngineerDailyEarning, (dailyEarning) => dailyEarning.order)
@@ -38,7 +45,7 @@ export class Order {
   order_deposit?: number;
 
   @Column({ type: 'boolean', default: false })
-  deposit_payed: boolean;
+  deposit_paid: boolean;
 
   @Column({ type: 'varchar', length: 20 })
   order_payment: string;
@@ -47,5 +54,5 @@ export class Order {
   order_receipt_docs: string;
 
   @Column({ type: 'boolean', nullable: true })
-  reciept_docs_issued?: boolean;
+  receipt_docs_issued?: boolean;
 }

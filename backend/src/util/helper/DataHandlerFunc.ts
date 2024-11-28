@@ -7,6 +7,10 @@ import { OrderListDto } from 'src/order_info/dto/search-order-list.dto';
 import { UpdateOrderInfoDto } from 'src/order_info/dto/update-order_info.dto';
 import { CustomerEngineerOrder } from 'src/order_info/entities/customer_engineer_order.entity';
 import { DataSource } from 'typeorm';
+import {
+  ExtractedInfoReturnType,
+  ExtractOrderCustomerType,
+} from '../constantTypes';
 
 export async function handleEngineerScheduleData(
   orderDetails: any[],
@@ -83,7 +87,7 @@ export async function handleOrderDetailsData(
       order_product: infos.order.order_product,
       order_payment: infos.order.order_payment,
       order_receipt_docs: infos.order.order_receipt_docs,
-      receipt_docs_issued: infos.order.reciept_docs_issued,
+      receipt_docs_issued: infos.order.receipt_docs_issued,
     };
   });
   return orderList;
@@ -96,7 +100,7 @@ export async function handleOrderDetailsData(
  */
 export async function handleCreateOrderInfo(
   orderInfo: CreateOrderInfoDto | UpdateOrderInfoDto,
-): Promise<any> {
+): Promise<ExtractedInfoReturnType> {
   const {
     order_customer_addr,
     order_customer_name,
@@ -106,14 +110,20 @@ export async function handleCreateOrderInfo(
     ...rest
   } = orderInfo;
 
-  const customerInfo = {
+  const customerInfo: ExtractOrderCustomerType = {
     customer_name: order_customer_name,
     customer_phone: order_customer_phone,
     customer_addr: order_customer_addr,
     customer_remark: order_customer_remark,
   };
 
-  return [rest, customerInfo, engineer_name];
+  const returnValue: ExtractedInfoReturnType = {
+    order: rest,
+    customer: customerInfo,
+    engineer_name: engineer_name,
+  };
+
+  return returnValue;
 }
 
 export async function extractOrderDetail(

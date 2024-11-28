@@ -15,7 +15,7 @@ let Customer = class Customer {
 };
 exports.Customer = Customer;
 __decorate([
-    (0, typeorm_1.PrimaryGeneratedColumn)(),
+    (0, typeorm_1.PrimaryGeneratedColumn)({ name: 'customer_id' }),
     __metadata("design:type", Number)
 ], Customer.prototype, "customer_id", void 0);
 __decorate([

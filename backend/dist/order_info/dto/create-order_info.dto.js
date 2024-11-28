@@ -37,7 +37,7 @@ __decorate([
 __decorate([
     (0, swagger_1.ApiProperty)({ description: '예약금여부', nullable: false }),
     __metadata("design:type", Boolean)
-], CreateOrderInfoDto.prototype, "deposit_payed", void 0);
+], CreateOrderInfoDto.prototype, "deposit_paid", void 0);
 __decorate([
     (0, swagger_1.ApiProperty)({ description: '예약금' }),
     __metadata("design:type", Number)

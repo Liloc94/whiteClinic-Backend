@@ -26,16 +26,15 @@ __decorate([
         onDelete: 'CASCADE',
         onUpdate: 'CASCADE',
     }),
-    (0, typeorm_1.JoinColumn)({ name: 'customer_id' }),
+    (0, typeorm_1.JoinColumn)({ name: 'customer_id', referencedColumnName: 'customer_id' }),
     __metadata("design:type", customer_entity_1.Customer)
 ], CustomerEngineerOrder.prototype, "customer", void 0);
 __decorate([
     (0, typeorm_1.ManyToOne)(() => order_info_entity_1.Order, {
         onDelete: 'CASCADE',
         onUpdate: 'CASCADE',
-        nullable: false,
     }),
-    (0, typeorm_1.JoinColumn)({ name: 'order_id' }),
+    (0, typeorm_1.JoinColumn)({ name: 'order_id', referencedColumnName: 'order_id' }),
     __metadata("design:type", order_info_entity_1.Order)
 ], CustomerEngineerOrder.prototype, "order", void 0);
 __decorate([
@@ -43,7 +42,7 @@ __decorate([
         onDelete: 'CASCADE',
         onUpdate: 'CASCADE',
     }),
-    (0, typeorm_1.JoinColumn)({ name: 'engineer_id' }),
+    (0, typeorm_1.JoinColumn)({ name: 'engineer_id', referencedColumnName: 'engineer_id' }),
     __metadata("design:type", engineer_entity_1.Engineer)
 ], CustomerEngineerOrder.prototype, "engineer", void 0);
 exports.CustomerEngineerOrder = CustomerEngineerOrder = __decorate([

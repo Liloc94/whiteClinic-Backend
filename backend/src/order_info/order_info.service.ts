@@ -3,14 +3,14 @@ import { CreateOrderInfoDto } from './dto/create-order_info.dto';
 import { UpdateOrderInfoDto } from './dto/update-order_info.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Order } from './entities/order_info.entity';
-import { DataSource, Repository } from 'typeorm';
+import { DataSource, EntityManager, Repository } from 'typeorm';
 import { Engineer } from 'src/engineer/entities/engineer.entity';
 import { Customer } from 'src/customer/entities/customer.entity';
 import { CustomerEngineerOrder } from './entities/customer_engineer_order.entity';
 import {
   extractOrderDetail,
   handleCreateOrderInfo,
-} from 'src/util/DataHandlerFunc';
+} from 'src/util/helper/DataHandlerFunc';
 import { IncomeInfoService } from 'src/income.service';
 import { IncomeType } from 'src/util/constantTypes';
 
@@ -52,7 +52,6 @@ export class OrderInfoService {
       );
 
       const incomes: IncomeType = {
-        idx: null,
         order_id: savedOrderInfo.order_id,
         engineer_id: engineer.engineer_id,
         daily_income: savedOrderInfo.order_total_amount,
@@ -97,40 +96,45 @@ export class OrderInfoService {
   }
 
   async updateOrderInfo(id: number, updateOrderInfoDto: UpdateOrderInfoDto) {
-    const queryRunner = this.dataSource.createQueryRunner();
+    return this.dataSource.transaction(async (queryRunner) => {
+      const orderDetails = await this.getOrderDetails(queryRunner, id);
 
-    try {
-      await queryRunner.connect();
-      await queryRunner.startTransaction();
-
-      // Order 및 Customer 관련 데이터 생성
-      const temp = await handleCreateOrderInfo(updateOrderInfoDto);
-      if (!temp || temp.length < 3 || temp.some((item) => !item)) {
-        throw new Error('handleCreateOrderInfo returned invalid data');
+      if (!orderDetails) {
+        throw new NotFoundException(
+          `No existing record found for order ID ${id}`,
+        );
       }
 
-      // Engineer 조회: engineer_name을 기반으로 조회
-      const engineer = await queryRunner.manager.findOne(Engineer, {
-        where: { engineer_name: temp[2] },
-      });
+      const paramOrderData = await handleCreateOrderInfo(updateOrderInfoDto);
 
-      // CustomerEngineerOrder 엔티티 조회 (order_id를 기준으로)
-      const customerEngineerOrder = await queryRunner.manager.findOne(
-        CustomerEngineerOrder,
-        {
-          where: { order: { order_id: id } }, // order_id로 조회
-          relations: ['customer', 'order', 'engineer'],
-        },
+      // 1. 고객 정보 업데이트
+      this.updateCustomer(orderDetails.customer, paramOrderData.customer);
+
+      // 2. 주문 정보 업데이트
+      this.updateOrder(orderDetails.order, paramOrderData.order);
+
+      // 3. 엔지니어 정보 업데이트
+      const engineer = await this.getEngineerByName(
+        queryRunner,
+        paramOrderData.engineer_name,
       );
-    } catch (error) {
-      throw error;
-    }
+
+      orderDetails.engineer = engineer;
+
+      // 4. 데이터 저장
+      await queryRunner.save(orderDetails.customer);
+      await queryRunner.save(orderDetails.order);
+      await queryRunner.save(orderDetails);
+
+      return { message: 'Order updated successfully' };
+    });
   }
 
   async remove(id: number) {
     const queryRunner = this.dataSource.createQueryRunner();
     queryRunner.connect();
     queryRunner.startTransaction();
+
     try {
       await queryRunner.manager.delete(Order, { order_id: id });
       await queryRunner.commitTransaction();
@@ -142,5 +146,60 @@ export class OrderInfoService {
         await queryRunner.release();
       }
     }
+  }
+
+  // Helper 함수 1: CustomerEngineerOrder 조회
+  private async getOrderDetails(queryRunner: EntityManager, id: number) {
+    return queryRunner
+      .createQueryBuilder('CustomerEngineerOrder', 'ceo')
+      .leftJoinAndSelect('ceo.customer', 'customer')
+      .leftJoinAndSelect('ceo.order', 'order')
+      .leftJoinAndSelect('ceo.engineer', 'engineer')
+      .where('ceo.order_id = :id', { id })
+      .getOne();
+  }
+
+  // Helper 함수 2: 고객 데이터 업데이트
+  private updateCustomer(
+    customer: Customer,
+    updatedCustomer: Partial<Customer>,
+  ) {
+    customer.customer_name = updatedCustomer.customer_name;
+    customer.customer_phone = updatedCustomer.customer_phone;
+    customer.customer_addr = updatedCustomer.customer_addr;
+    customer.customer_remark = updatedCustomer.customer_remark;
+  }
+
+  // Helper 함수 3: 주문 데이터 업데이트
+  private updateOrder(order: Order, updatedOrder: Partial<Order>) {
+    order.order_category = updatedOrder.order_category;
+    order.order_date = updatedOrder.order_date;
+    order.order_product = updatedOrder.order_product;
+    order.order_total_amount = updatedOrder.order_total_amount;
+    order.order_count = updatedOrder.order_count;
+    order.order_isDiscount = updatedOrder.order_isDiscount;
+    order.order_discount_ratio = updatedOrder.order_discount_ratio;
+    order.order_remark = updatedOrder.order_remark;
+    order.order_deposit = updatedOrder.order_deposit;
+    order.deposit_paid = updatedOrder.deposit_paid;
+    order.order_payment = updatedOrder.order_payment;
+    order.order_receipt_docs = updatedOrder.order_receipt_docs;
+    order.receipt_docs_issued = updatedOrder.receipt_docs_issued;
+  }
+
+  // Helper 함수 4: 엔지니어 조회
+  private async getEngineerByName(queryRunner, engineerName: string) {
+    const engineer = await queryRunner
+      .createQueryBuilder(Engineer, 'engineer')
+      .where('engineer.engineer_name = :engineerName', { engineerName })
+      .getOne();
+
+    if (!engineer) {
+      throw new NotFoundException(
+        `Engineer with name ${engineerName} not found`,
+      );
+    }
+
+    return engineer;
   }
 }

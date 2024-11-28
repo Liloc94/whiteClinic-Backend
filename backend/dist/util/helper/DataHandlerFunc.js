@@ -62,7 +62,7 @@ async function handleOrderDetailsData(orderDetails) {
             order_product: infos.order.order_product,
             order_payment: infos.order.order_payment,
             order_receipt_docs: infos.order.order_receipt_docs,
-            receipt_docs_issued: infos.order.reciept_docs_issued,
+            receipt_docs_issued: infos.order.receipt_docs_issued,
         };
     });
     return orderList;
@@ -75,7 +75,12 @@ async function handleCreateOrderInfo(orderInfo) {
         customer_addr: order_customer_addr,
         customer_remark: order_customer_remark,
     };
-    return [rest, customerInfo, engineer_name];
+    const returnValue = {
+        order: rest,
+        customer: customerInfo,
+        engineer_name: engineer_name,
+    };
+    return returnValue;
 }
 async function extractOrderDetail(dataSource, targetEntity) {
     const queryRunner = dataSource.createQueryRunner();

@@ -4,7 +4,7 @@ export declare class CreateOrderInfoDto {
     order_customer_phone: string;
     order_customer_addr: string;
     order_customer_remark?: string;
-    deposit_payed: boolean;
+    deposit_paid: boolean;
     order_deposit?: number;
     order_payment: string;
     order_receipt_docs: string;
@@ -15,6 +15,6 @@ export declare class CreateOrderInfoDto {
     order_count: number;
     order_total_amount: number;
     order_isDiscount: boolean;
-    order_discount_ratio: number;
+    order_discount_ratio?: number;
     order_engineer_name: string;
 }
