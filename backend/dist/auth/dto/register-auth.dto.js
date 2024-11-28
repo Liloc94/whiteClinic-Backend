@@ -17,17 +17,17 @@ class RegisterAuthDTO extends (0, swagger_1.PartialType)(create_auth_dto_1.Creat
 }
 exports.RegisterAuthDTO = RegisterAuthDTO;
 __decorate([
-    (0, swagger_1.ApiProperty)({ description: 'adminID' }),
+    (0, swagger_1.ApiProperty)({ description: 'admin_id' }),
     (0, class_validator_1.IsString)(),
     (0, class_validator_1.IsNotEmpty)(),
     __metadata("design:type", String)
-], RegisterAuthDTO.prototype, "adminID", void 0);
+], RegisterAuthDTO.prototype, "admin_id", void 0);
 __decorate([
-    (0, swagger_1.ApiProperty)({ description: 'adminPW' }),
+    (0, swagger_1.ApiProperty)({ description: 'admin_pw' }),
     (0, class_validator_1.IsString)(),
     (0, class_validator_1.IsNotEmpty)(),
     __metadata("design:type", String)
-], RegisterAuthDTO.prototype, "adminPW", void 0);
+], RegisterAuthDTO.prototype, "admin_pw", void 0);
 __decorate([
     (0, swagger_1.ApiProperty)({ description: 'role' }),
     (0, class_validator_1.IsString)(),

@@ -27,12 +27,12 @@ let AuthController = class AuthController {
         this.authService = authService;
     }
     async register(registerDto) {
-        const { adminID, adminPW, role } = registerDto;
+        const { admin_id: adminID, adminPW, role } = registerDto;
         const admin = await this.authService.register(adminID, adminPW, role);
         return { message: '회원가입 성공', id: admin.idx };
     }
     async signIn(signInDto) {
-        return await this.authService.signIn(signInDto.adminID, signInDto.adminPW);
+        return await this.authService.signIn(signInDto.admin_id, signInDto.adminPW);
     }
     async refresh(refreshTokenDto) {
         const { refresh_token } = refreshTokenDto;

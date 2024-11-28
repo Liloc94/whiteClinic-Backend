@@ -3,15 +3,15 @@ import { ApiProperty, PartialType } from '@nestjs/swagger';
 import { IsNotEmpty, IsString } from 'class-validator';
 
 export class RegisterAuthDTO extends PartialType(CreateAuthDto) {
-  @ApiProperty({ description: 'adminID' })
+  @ApiProperty({ description: 'admin_id' })
   @IsString()
   @IsNotEmpty()
-  readonly adminID: string;
+  readonly admin_id: string;
 
-  @ApiProperty({ description: 'adminPW' })
+  @ApiProperty({ description: 'admin_pw' })
   @IsString()
   @IsNotEmpty()
-  readonly adminPW: string;
+  readonly admin_pw: string;
 
   @ApiProperty({ description: 'role' })
   @IsString()

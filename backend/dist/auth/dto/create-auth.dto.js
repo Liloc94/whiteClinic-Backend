@@ -20,7 +20,7 @@ __decorate([
     (0, class_validator_1.IsString)(),
     (0, class_validator_1.IsNotEmpty)(),
     __metadata("design:type", String)
-], CreateAuthDto.prototype, "adminID", void 0);
+], CreateAuthDto.prototype, "admin_id", void 0);
 __decorate([
     (0, swagger_1.ApiProperty)({ description: '관리자 비밀번호' }),
     (0, class_validator_1.IsString)(),

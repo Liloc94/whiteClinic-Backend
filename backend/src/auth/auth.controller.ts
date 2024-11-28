@@ -29,7 +29,7 @@ export class AuthController {
   @ApiBody({ type: RegisterAuthDTO })
   @ApiResponse({ status: 201, description: '회원가입 성공' })
   async register(@Body() registerDto: RegisterAuthDTO) {
-    const { adminID, adminPW, role } = registerDto;
+    const { admin_id: adminID, adminPW, role } = registerDto;
     const admin = await this.authService.register(adminID, adminPW, role);
 
     return { message: '회원가입 성공', id: admin.idx };
@@ -45,7 +45,7 @@ export class AuthController {
   @ApiBody({ type: CreateAuthDto })
   @ApiResponse({ status: 201, description: '로그인 성공' })
   async signIn(@Body() signInDto: CreateAuthDto) {
-    return await this.authService.signIn(signInDto.adminID, signInDto.adminPW);
+    return await this.authService.signIn(signInDto.admin_id, signInDto.adminPW);
   }
 
   // Refresh Token 사용하여 Access Token 갱신 ( 재발급 )

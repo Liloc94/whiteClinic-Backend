@@ -1,4 +1,4 @@
 export declare class CreateAuthDto {
-    readonly adminID: string;
+    readonly admin_id: string;
     readonly adminPW: string;
 }

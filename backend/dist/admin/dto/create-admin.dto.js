@@ -18,12 +18,12 @@ __decorate([
     (0, class_validator_1.IsString)(),
     (0, class_validator_1.IsNotEmpty)(),
     __metadata("design:type", String)
-], CreateAdminDto.prototype, "adminID", void 0);
+], CreateAdminDto.prototype, "admin_id", void 0);
 __decorate([
     (0, class_validator_1.IsString)(),
     (0, class_validator_1.IsNotEmpty)(),
     __metadata("design:type", String)
-], CreateAdminDto.prototype, "adminPW", void 0);
+], CreateAdminDto.prototype, "admin_pw", void 0);
 __decorate([
     (0, class_validator_1.IsString)(),
     (0, class_validator_1.IsNotEmpty)(),
