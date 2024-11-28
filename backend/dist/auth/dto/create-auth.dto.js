@@ -26,5 +26,5 @@ __decorate([
     (0, class_validator_1.IsString)(),
     (0, class_validator_1.IsNotEmpty)(),
     __metadata("design:type", String)
-], CreateAuthDto.prototype, "adminPW", void 0);
+], CreateAuthDto.prototype, "admin_pw", void 0);
 //# sourceMappingURL=create-auth.dto.js.map

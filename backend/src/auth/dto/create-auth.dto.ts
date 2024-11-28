@@ -10,5 +10,5 @@ export class CreateAuthDto {
   @ApiProperty({ description: '관리자 비밀번호' })
   @IsString()
   @IsNotEmpty()
-  readonly adminPW: string;
+  readonly admin_pw: string;
 }
