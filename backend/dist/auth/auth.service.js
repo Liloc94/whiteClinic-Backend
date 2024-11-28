@@ -73,7 +73,7 @@ let AuthService = class AuthService {
             tokenVersion: updateUser.token_version,
         };
         const accessToken = await this.jwtService.signAsync(payload, {
-            expiresIn: '5m',
+            expiresIn: '1h',
             algorithm: 'RS256',
         });
         return { access_token: accessToken, refresh_token: newRefreshToken };

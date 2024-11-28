@@ -110,7 +110,7 @@ export class AuthService {
     };
 
     const accessToken = await this.jwtService.signAsync(payload, {
-      expiresIn: '5m',
+      expiresIn: '1h',
       algorithm: 'RS256',
     });
 
