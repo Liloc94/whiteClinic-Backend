@@ -13,9 +13,6 @@ export class ValidationExceptionFilter implements ExceptionFilter {
     const response = ctx.getResponse<Response>();
     const request = ctx.getRequest<Request>();
 
-    // 여기서 로그를 찍어 확인
-    console.log('BadRequestException caught:', exception.getResponse());
-
     response.status(400).json({
       statusCode: 400,
       message: 'Validation failed',

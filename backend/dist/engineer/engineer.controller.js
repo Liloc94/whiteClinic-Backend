@@ -45,8 +45,7 @@ let EngineerController = class EngineerController {
             return await this.engineerService.getAllSchedule();
         }
         catch (error) {
-            console.error('Error in getAllSchedule:', error);
-            throw new common_1.HttpException('Failed to fetch schedules', common_1.HttpStatus.INTERNAL_SERVER_ERROR);
+            throw new common_1.HttpException('Failed to fetch schedules : ' + error, common_1.HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
     async getEngineerSalary(id) {
@@ -59,14 +58,14 @@ let EngineerController = class EngineerController {
     }
     async saveEngineerWeeklySalary(weeklySalary) {
         try {
-            return this.engineerService.saveEngineerWeeklySalary(weeklySalary);
+            return await this.engineerService.saveEngineerWeeklySalary(weeklySalary);
         }
         catch (error) {
             throw new common_1.BadRequestException(error);
         }
     }
     async getEngineerWeeklyDetail(idDate) {
-        return this.engineerService.getEngineerWeeklyDetail(idDate);
+        return await this.engineerService.getEngineerWeeklyDetail(idDate);
     }
     async findOne(id) {
         try {

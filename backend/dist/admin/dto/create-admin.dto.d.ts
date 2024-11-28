@@ -1,5 +1,5 @@
 export declare class CreateAdminDto {
-    readonly adminid: string;
-    readonly adminpw: string;
+    readonly adminID: string;
+    readonly adminPW: string;
     readonly role: string;
 }

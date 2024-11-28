@@ -23,8 +23,7 @@ async function bootstrap() {
             value: true,
         },
         exceptionFactory: (errors) => {
-            console.error('Validation errors:', errors);
-            return new common_1.BadRequestException('Validation failed');
+            return new common_1.BadRequestException('Validation failed : ' + errors);
         },
     }));
     app.enableCors({
@@ -35,7 +34,6 @@ async function bootstrap() {
     app.useGlobalFilters(new HttpErrorFilter_1.HttpErrorFilter());
     (0, setupSwagger_1.setupSwagger)(app);
     await app.listen(process.env.PORT || port);
-    console.log(`server's now runnig on port ${URLS_1.SERVER_PORT}!!`);
 }
 bootstrap();
 //# sourceMappingURL=main.js.map

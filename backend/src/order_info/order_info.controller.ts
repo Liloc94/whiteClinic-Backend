@@ -62,22 +62,18 @@ export class OrderInfoController {
       '모든 주문정보 목록을 엑셀파일화 하여 클라이언트 측에서 바로 다운로드 받는다.',
   })
   async downloadOrderExcel(): Promise<StreamableFile> {
-    // 엑셀 파일 생성
     try {
       const data = await this.orderInfoService.findOrderDetails();
       const stream = await this.excelService.createExcelStream(data);
 
-      // 파일명 동적으로 생성하기
       const fileName = `주문상세_${new Date().toISOString().slice(0, 10)}.xlsx`;
       const encodedFileName = encodeURIComponent(fileName);
 
-      // options를 생성자에서 직접 전달
       const file = new StreamableFile(stream, {
         type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
         disposition: `attachment; filename="${encodedFileName}"`,
       });
 
-      // 생성된 엑셀파일 반환
       return file;
     } catch (error) {
       throw new HttpException(

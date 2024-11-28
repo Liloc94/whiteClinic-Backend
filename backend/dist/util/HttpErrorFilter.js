@@ -20,7 +20,6 @@ let HttpErrorFilter = class HttpErrorFilter {
             path: request.url,
             message: exception.message,
         };
-        console.error('Error Response:', errorResponse);
         response.status(status).json(errorResponse);
     }
 };

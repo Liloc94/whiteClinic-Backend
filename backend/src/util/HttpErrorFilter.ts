@@ -20,7 +20,7 @@ export class HttpErrorFilter implements ExceptionFilter {
       message: exception.message,
     };
 
-    console.error('Error Response:', errorResponse);
+    // console.error('Error Response:', errorResponse);
     response.status(status).json(errorResponse);
   }
 }

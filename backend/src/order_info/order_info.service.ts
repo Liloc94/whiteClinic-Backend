@@ -17,12 +17,9 @@ import { IncomeType } from 'src/util/constantTypes';
 @Injectable()
 export class OrderInfoService {
   constructor(
-    // 주문정보 DB 연결
     @InjectRepository(Order)
     private readonly orderInfoRepository: Repository<Order>,
-    // 쿼리러너 실행용 데이터소스
     private readonly dataSource: DataSource,
-    // daily, weekly 매출 저장용 서비스
     private readonly incomeInfoService: IncomeInfoService,
   ) {}
 
@@ -33,15 +30,12 @@ export class OrderInfoService {
 
     try {
       const temp = await handleCreateOrderInfo(createOrderInfoDto);
-      // OrderInfo 저장
       const savedOrderInfo = await queryRunner.manager.save(Order, temp[0]);
-      // Customer 저장
       const savedCustomer = await queryRunner.manager.save(Customer, temp[1]);
-      // Engineer 조회
       const engineer = await queryRunner.manager.findOneByOrFail(Engineer, {
         engineer_name: temp[2],
       });
-      // CustomerEngineerOrder 저장
+
       const customerEngineerOrder = queryRunner.manager.create(
         CustomerEngineerOrder,
         {
@@ -70,7 +64,7 @@ export class OrderInfoService {
     } catch (error) {
       // 에러 발생 시 롤백
       await queryRunner.rollbackTransaction();
-      console.error('트랜잭션 실패, 롤백 실행', error.message);
+      // console.error('트랜잭션 실패, 롤백 실행', error.message);
       throw error;
     } finally {
       // QueryRunner 해제

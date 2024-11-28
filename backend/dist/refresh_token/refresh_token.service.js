@@ -35,8 +35,6 @@ let RefreshTokenService = class RefreshTokenService {
             where: { refresh_token },
             relations: ['admin'],
         });
-        console.log('RefreshResult Token 검증(로그아웃) : ', (await RefreshResult).refresh_token);
-        console.log((await RefreshResult).refresh_token);
         return RefreshResult;
     }
     async removeRefreshToken(refresh_token) {

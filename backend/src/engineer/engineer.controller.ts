@@ -78,9 +78,9 @@ export class EngineerController {
     try {
       return await this.engineerService.getAllSchedule();
     } catch (error) {
-      console.error('Error in getAllSchedule:', error);
+      // console.error('Error in getAllSchedule:', error);
       throw new HttpException(
-        'Failed to fetch schedules',
+        'Failed to fetch schedules : ' + error,
         HttpStatus.INTERNAL_SERVER_ERROR,
       );
     }
@@ -110,7 +110,7 @@ export class EngineerController {
     @Body() weeklySalary: EngineerWeeklySalaryDto,
   ): Promise<void> {
     try {
-      return this.engineerService.saveEngineerWeeklySalary(weeklySalary);
+      return await this.engineerService.saveEngineerWeeklySalary(weeklySalary);
     } catch (error) {
       throw new BadRequestException(error);
     }
@@ -125,7 +125,7 @@ export class EngineerController {
   async getEngineerWeeklyDetail(
     @Body() idDate: EngineerWeeklyDetailDto,
   ): Promise<any> {
-    return this.engineerService.getEngineerWeeklyDetail(idDate);
+    return await this.engineerService.getEngineerWeeklyDetail(idDate);
   }
 
   @Get('engineers/:id')

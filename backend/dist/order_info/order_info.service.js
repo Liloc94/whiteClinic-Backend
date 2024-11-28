@@ -58,7 +58,6 @@ let OrderInfoService = class OrderInfoService {
         }
         catch (error) {
             await queryRunner.rollbackTransaction();
-            console.error('트랜잭션 실패, 롤백 실행', error.message);
             throw error;
         }
         finally {

@@ -101,8 +101,7 @@ async function extractOrderDetail(dataSource, targetEntity) {
     }
     catch (error) {
         await queryRunner.rollbackTransaction();
-        console.error('트랜잭션 실패:', error);
-        throw new common_1.HttpException('Failed to extract order details', common_1.HttpStatus.INTERNAL_SERVER_ERROR);
+        throw new common_1.HttpException('Failed to extract order details : ' + error, common_1.HttpStatus.INTERNAL_SERVER_ERROR);
     }
     finally {
         if (!queryRunner.isReleased) {
@@ -129,8 +128,7 @@ async function extractScheduleDetail(dataSource, targetEntity) {
     }
     catch (error) {
         await queryRunner.rollbackTransaction();
-        console.error('트랜잭션 실패:', error);
-        throw new common_1.HttpException('Failed to extract order details', common_1.HttpStatus.INTERNAL_SERVER_ERROR);
+        throw new common_1.HttpException('Failed to extract order details : ' + error, common_1.HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }
 //# sourceMappingURL=DataHandlerFunc.js.map

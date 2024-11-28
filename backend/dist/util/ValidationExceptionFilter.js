@@ -13,7 +13,6 @@ let ValidationExceptionFilter = class ValidationExceptionFilter {
         const ctx = host.switchToHttp();
         const response = ctx.getResponse();
         const request = ctx.getRequest();
-        console.log('BadRequestException caught:', exception.getResponse());
         response.status(400).json({
             statusCode: 400,
             message: 'Validation failed',

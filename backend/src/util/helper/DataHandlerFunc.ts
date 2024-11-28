@@ -153,10 +153,10 @@ export async function extractOrderDetail(
     return handleOrderDetailsData(orderDetails); // 트랜잭션 외부에서 데이터 처리
   } catch (error) {
     await queryRunner.rollbackTransaction();
-    console.error('트랜잭션 실패:', error);
+    // console.error('트랜잭션 실패:', error);
 
     throw new HttpException(
-      'Failed to extract order details',
+      'Failed to extract order details : ' + error,
       HttpStatus.INTERNAL_SERVER_ERROR,
     );
   } finally {
@@ -193,10 +193,10 @@ export async function extractScheduleDetail(
     return handleEngineerScheduleData(orderDetails);
   } catch (error) {
     await queryRunner.rollbackTransaction();
-    console.error('트랜잭션 실패:', error);
+    // console.error('트랜잭션 실패:', error);
 
     throw new HttpException(
-      'Failed to extract order details',
+      'Failed to extract order details : ' + error,
       HttpStatus.INTERNAL_SERVER_ERROR,
     );
   }

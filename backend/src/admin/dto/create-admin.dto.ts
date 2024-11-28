@@ -3,11 +3,11 @@ import { IsNotEmpty, IsString } from 'class-validator';
 export class CreateAdminDto {
   @IsString()
   @IsNotEmpty()
-  readonly adminid: string;
+  readonly adminID: string;
 
   @IsString()
   @IsNotEmpty()
-  readonly adminpw: string;
+  readonly adminPW: string;
 
   @IsString()
   @IsNotEmpty()

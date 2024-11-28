@@ -55,7 +55,6 @@ let AdminService = class AdminService {
             return admin;
         }
         catch (error) {
-            console.error('Error finding admin:', error);
             throw error;
         }
     }
