@@ -30,7 +30,7 @@ export class RefreshTokenService {
   ): Promise<AdminRefreshToken | undefined> {
     const RefreshResult = this.refreshTokenRepository.findOne({
       where: { refresh_token },
-      relations: ['admin_refresh_token'],
+      relations: ['admin'],
     });
 
     return RefreshResult;

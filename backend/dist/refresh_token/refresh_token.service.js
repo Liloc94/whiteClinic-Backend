@@ -33,7 +33,7 @@ let RefreshTokenService = class RefreshTokenService {
     async findByToken(refresh_token) {
         const RefreshResult = this.refreshTokenRepository.findOne({
             where: { refresh_token },
-            relations: ['admin_refresh_token'],
+            relations: ['admin'],
         });
         return RefreshResult;
     }
