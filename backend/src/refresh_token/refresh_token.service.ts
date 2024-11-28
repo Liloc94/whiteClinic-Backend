@@ -40,7 +40,7 @@ export class RefreshTokenService {
     await this.refreshTokenRepository.delete({ refresh_token });
 
     await this.refreshTokenRepository.query(
-      ` SELECT setval('admin_refresh_tokens_idx_seq', (SELECT MAX(idx) FROM admin_refresh_tokens));`,
+      `SELECT setval('white_clinic."admin_refresh_tokens_idx_seq"', (SELECT MAX(idx) FROM white_clinic."admin_refresh_tokens"));`,
     );
   }
 
