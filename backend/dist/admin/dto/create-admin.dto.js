@@ -27,6 +27,7 @@ __decorate([
 __decorate([
     (0, class_validator_1.IsString)(),
     (0, class_validator_1.IsNotEmpty)(),
+    (0, class_validator_1.IsOptional)(),
     __metadata("design:type", String)
 ], CreateAdminDto.prototype, "role", void 0);
 //# sourceMappingURL=create-admin.dto.js.map

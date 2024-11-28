@@ -12,6 +12,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.AdminAccount = void 0;
 const typeorm_1 = require("typeorm");
 const refresh_token_entity_1 = require("../../refresh_token/entities/refresh_token.entity");
+const class_validator_1 = require("class-validator");
 let AdminAccount = class AdminAccount {
 };
 exports.AdminAccount = AdminAccount;
@@ -29,6 +30,7 @@ __decorate([
 ], AdminAccount.prototype, "admin_pw", void 0);
 __decorate([
     (0, typeorm_1.Column)({ type: 'varchar', length: 50 }),
+    (0, class_validator_1.IsOptional)(),
     __metadata("design:type", String)
 ], AdminAccount.prototype, "role", void 0);
 __decorate([

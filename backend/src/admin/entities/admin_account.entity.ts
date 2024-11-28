@@ -1,6 +1,7 @@
 // admin_account.entity.ts
 import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
 import { AdminRefreshToken } from '../../refresh_token/entities/refresh_token.entity';
+import { IsOptional } from 'class-validator';
 
 @Entity('admin_account')
 export class AdminAccount {
@@ -14,7 +15,8 @@ export class AdminAccount {
   admin_pw: string;
 
   @Column({ type: 'varchar', length: 50 })
-  role: string;
+  @IsOptional()
+  role?: string;
 
   @Column({ type: 'int', nullable: true, default: 0 })
   token_version?: number;
