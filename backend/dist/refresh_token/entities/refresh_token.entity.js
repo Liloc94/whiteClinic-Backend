@@ -32,14 +32,8 @@ __decorate([
     __metadata("design:type", Date)
 ], AdminRefreshToken.prototype, "expires_at", void 0);
 __decorate([
-    (0, typeorm_1.ManyToOne)(() => admin_account_entity_1.AdminAccount, {
-        onDelete: 'CASCADE',
-        onUpdate: 'CASCADE',
-    }),
-    __metadata("design:type", admin_account_entity_1.AdminAccount)
-], AdminRefreshToken.prototype, "parent", void 0);
-__decorate([
-    (0, typeorm_1.JoinColumn)({ name: 'admin_id' }),
+    (0, typeorm_1.ManyToOne)(() => admin_account_entity_1.AdminAccount, (admin) => admin.refreshTokens),
+    (0, typeorm_1.JoinColumn)({ name: 'parentIdx' }),
     __metadata("design:type", admin_account_entity_1.AdminAccount)
 ], AdminRefreshToken.prototype, "admin", void 0);
 exports.AdminRefreshToken = AdminRefreshToken = __decorate([

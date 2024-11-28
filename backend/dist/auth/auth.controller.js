@@ -32,7 +32,7 @@ let AuthController = class AuthController {
         return { message: '회원가입 성공', id: admin.idx };
     }
     async signIn(signInDto) {
-        return this.authService.signIn(signInDto.adminID, signInDto.adminPW);
+        return await this.authService.signIn(signInDto.adminID, signInDto.adminPW);
     }
     async refresh(refreshTokenDto) {
         const { refresh_token } = refreshTokenDto;

@@ -1,11 +1,5 @@
 // admin_account.entity.ts
-import {
-  Entity,
-  PrimaryGeneratedColumn,
-  Column,
-  OneToMany,
-  JoinColumn,
-} from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
 import { AdminRefreshToken } from '../../refresh_token/entities/refresh_token.entity';
 
 @Entity('admin_account')
@@ -26,6 +20,5 @@ export class AdminAccount {
   token_version?: number;
 
   @OneToMany(() => AdminRefreshToken, (refreshToken) => refreshToken.admin)
-  @JoinColumn()
   refreshTokens: AdminRefreshToken[];
 }

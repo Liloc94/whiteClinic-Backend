@@ -37,7 +37,6 @@ __decorate([
 ], AdminAccount.prototype, "token_version", void 0);
 __decorate([
     (0, typeorm_1.OneToMany)(() => refresh_token_entity_1.AdminRefreshToken, (refreshToken) => refreshToken.admin),
-    (0, typeorm_1.JoinColumn)(),
     __metadata("design:type", Array)
 ], AdminAccount.prototype, "refreshTokens", void 0);
 exports.AdminAccount = AdminAccount = __decorate([

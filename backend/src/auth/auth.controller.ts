@@ -45,7 +45,7 @@ export class AuthController {
   @ApiBody({ type: CreateAuthDto })
   @ApiResponse({ status: 201, description: '로그인 성공' })
   async signIn(@Body() signInDto: CreateAuthDto) {
-    return this.authService.signIn(signInDto.adminID, signInDto.adminPW);
+    return await this.authService.signIn(signInDto.adminID, signInDto.adminPW);
   }
 
   // Refresh Token 사용하여 Access Token 갱신 ( 재발급 )

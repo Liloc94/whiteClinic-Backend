@@ -5,8 +5,8 @@ import {
   PrimaryGeneratedColumn,
   Column,
   ManyToOne,
-  JoinColumn,
   CreateDateColumn,
+  JoinColumn,
 } from 'typeorm';
 
 @Entity('admin_refresh_tokens')
@@ -23,12 +23,7 @@ export class AdminRefreshToken {
   @Column({ type: 'varchar' })
   expires_at: Date | null;
 
-  @ManyToOne(() => AdminAccount, {
-    onDelete: 'CASCADE',
-    onUpdate: 'CASCADE',
-  })
-  parent: AdminAccount;
-
-  @JoinColumn({ name: 'admin_id' })
+  @ManyToOne(() => AdminAccount, (admin) => admin.refreshTokens)
+  @JoinColumn({ name: 'parentIdx' })
   admin: AdminAccount;
 }
