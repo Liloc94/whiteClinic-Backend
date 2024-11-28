@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsOptional, IsString } from 'class-validator';
+import { IsNotEmpty, IsString } from 'class-validator';
 
 export class CreateAdminDto {
   @IsString()
@@ -8,9 +8,4 @@ export class CreateAdminDto {
   @IsString()
   @IsNotEmpty()
   readonly admin_pw: string;
-
-  @IsString()
-  @IsNotEmpty()
-  @IsOptional()
-  readonly role?: string;
 }

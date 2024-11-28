@@ -29,7 +29,7 @@ __decorate([
     __metadata("design:type", String)
 ], AdminAccount.prototype, "admin_pw", void 0);
 __decorate([
-    (0, typeorm_1.Column)({ type: 'varchar', length: 50 }),
+    (0, typeorm_1.Column)({ type: 'varchar', length: 50, default: 'admin' }),
     (0, class_validator_1.IsOptional)(),
     __metadata("design:type", String)
 ], AdminAccount.prototype, "role", void 0);

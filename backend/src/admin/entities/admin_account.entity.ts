@@ -14,7 +14,7 @@ export class AdminAccount {
   @Column({ type: 'varchar', length: 255 })
   admin_pw: string;
 
-  @Column({ type: 'varchar', length: 50 })
+  @Column({ type: 'varchar', length: 50, default: 'admin' })
   @IsOptional()
   role?: string;
 
