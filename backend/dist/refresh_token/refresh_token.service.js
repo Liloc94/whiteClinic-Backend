@@ -33,13 +33,13 @@ let RefreshTokenService = class RefreshTokenService {
     async findByToken(refresh_token) {
         const RefreshResult = this.refreshTokenRepository.findOne({
             where: { refresh_token },
-            relations: ['admin'],
+            relations: ['admin_refresh_tokens'],
         });
         return RefreshResult;
     }
     async removeRefreshToken(refresh_token) {
         await this.refreshTokenRepository.delete({ refresh_token });
-        await this.refreshTokenRepository.query(` SELECT setval('admin_refresh_token_idx_seq', (SELECT MAX(idx) FROM admin_refresh_token));`);
+        await this.refreshTokenRepository.query(` SELECT setval('admin_refresh_tokens_idx_seq', (SELECT MAX(idx) FROM admin_refresh_token));`);
     }
     async removeAllRefreshToken(idx) {
         await this.refreshTokenRepository.delete({ idx });
