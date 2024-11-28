@@ -12,9 +12,4 @@ export class RegisterAuthDTO extends PartialType(CreateAuthDto) {
   @IsString()
   @IsNotEmpty()
   readonly admin_pw: string;
-
-  @ApiProperty({ description: 'role' })
-  @IsString()
-  @IsNotEmpty()
-  readonly role: string;
 }

@@ -29,8 +29,8 @@ export class AuthController {
   @ApiBody({ type: RegisterAuthDTO })
   @ApiResponse({ status: 201, description: '회원가입 성공' })
   async register(@Body() registerDto: RegisterAuthDTO) {
-    const { admin_id: adminID, admin_pw: adminPW, role } = registerDto;
-    const admin = await this.authService.register(adminID, adminPW, role);
+    const { admin_id: adminID, admin_pw: adminPW } = registerDto;
+    const admin = await this.authService.register(adminID, adminPW);
 
     return { message: '회원가입 성공', id: admin.idx };
   }

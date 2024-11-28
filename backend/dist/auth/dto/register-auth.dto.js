@@ -28,10 +28,4 @@ __decorate([
     (0, class_validator_1.IsNotEmpty)(),
     __metadata("design:type", String)
 ], RegisterAuthDTO.prototype, "admin_pw", void 0);
-__decorate([
-    (0, swagger_1.ApiProperty)({ description: 'role' }),
-    (0, class_validator_1.IsString)(),
-    (0, class_validator_1.IsNotEmpty)(),
-    __metadata("design:type", String)
-], RegisterAuthDTO.prototype, "role", void 0);
 //# sourceMappingURL=register-auth.dto.js.map
