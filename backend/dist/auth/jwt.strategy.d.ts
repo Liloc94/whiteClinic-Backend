@@ -5,6 +5,13 @@ import { AdminAccount } from 'src/admin/entities/admin_account.entity';
 interface JwtPayload {
     username: string;
     tokenVersion: number;
+    sub: string;
+    email?: string;
+    role?: string;
+    iat?: number;
+    exp?: number;
+    iss?: string;
+    aud?: string;
 }
 declare const JwtStrategy_base: new (...args: any[]) => Strategy;
 export declare class JwtStrategy extends JwtStrategy_base {

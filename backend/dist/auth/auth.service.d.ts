@@ -15,5 +15,5 @@ export declare class AuthService {
     refreshAccessToken(refreshToken: string): Promise<RefreshResponseDTO>;
     logout(refreshToken: string): Promise<void>;
     logoutAll(id: number): Promise<void>;
-    register(adminID: string, adminPW: string, role?: string): Promise<import("../admin/entities/admin_account.entity").AdminAccount>;
+    register(admin_id: string, admin_pw: string, role?: string): Promise<import("../admin/entities/admin_account.entity").AdminAccount>;
 }

@@ -75,6 +75,8 @@ let AuthService = class AuthService {
         const accessToken = await this.jwtService.signAsync(payload, {
             expiresIn: '1h',
             algorithm: 'RS256',
+            issuer: 'WhiteClinic',
+            audience: 'admin-api',
         });
         return { access_token: accessToken, refresh_token: newRefreshToken };
     }
@@ -89,8 +91,8 @@ let AuthService = class AuthService {
     async logoutAll(id) {
         await this.refreshTokenService.removeAllRefreshToken(id);
     }
-    async register(adminID, adminPW, role = 'admin') {
-        return this.adminService.createAdmin(adminID, adminPW, role);
+    async register(admin_id, admin_pw, role = 'admin') {
+        return this.adminService.createAdmin(admin_id, admin_pw, role);
     }
 };
 exports.AuthService = AuthService;

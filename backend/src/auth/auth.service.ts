@@ -112,6 +112,8 @@ export class AuthService {
     const accessToken = await this.jwtService.signAsync(payload, {
       expiresIn: '1h',
       algorithm: 'RS256',
+      issuer: 'WhiteClinic',
+      audience: 'admin-api',
     });
 
     return { access_token: accessToken, refresh_token: newRefreshToken };
@@ -137,7 +139,7 @@ export class AuthService {
   }
 
   // 회원가입
-  async register(adminID: string, adminPW: string, role: string = 'admin') {
-    return this.adminService.createAdmin(adminID, adminPW, role);
+  async register(admin_id: string, admin_pw: string, role: string = 'admin') {
+    return this.adminService.createAdmin(admin_id, admin_pw, role);
   }
 }

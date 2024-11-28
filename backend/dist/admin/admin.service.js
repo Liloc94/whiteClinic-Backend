@@ -55,7 +55,7 @@ let AdminService = class AdminService {
             return admin;
         }
         catch (error) {
-            throw error;
+            throw new common_1.HttpException(`에러 발생 : ${error}`, common_1.HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
     async incrementTokenVersion(token_version) {

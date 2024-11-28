@@ -1,4 +1,9 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import {
+  Injectable,
+  UnauthorizedException,
+  HttpStatus,
+  HttpException,
+} from '@nestjs/common';
 import { Repository, DataSource } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import * as bcrypt from 'bcrypt';
@@ -57,7 +62,10 @@ export class AdminService {
       return admin;
     } catch (error) {
       // console.error('Error finding admin:', error);
-      throw error;
+      throw new HttpException(
+        `에러 발생 : ${error}`,
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
     }
   }
 

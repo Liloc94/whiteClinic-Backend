@@ -34,6 +34,9 @@ let JwtStrategy = class JwtStrategy extends (0, passport_1.PassportStrategy)(pas
         if (user.token_version !== payload.tokenVersion) {
             throw new common_1.UnauthorizedException('토큰 버전이 맞지 않습니다.');
         }
+        if (payload.iss !== 'WhiteClinic' || payload.aud !== 'admin-api') {
+            throw new common_1.UnauthorizedException('유효하지 않은 토큰입니다.');
+        }
         return user;
     }
 };

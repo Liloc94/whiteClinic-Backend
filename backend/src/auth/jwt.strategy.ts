@@ -8,6 +8,13 @@ import { AdminAccount } from 'src/admin/entities/admin_account.entity';
 interface JwtPayload {
   username: string;
   tokenVersion: number;
+  sub: string; // 사용자 식별자
+  email?: string;
+  role?: string;
+  iat?: number; // 토큰 발급 시간
+  exp?: number; // 만료 시간
+  iss?: string; // 발급자
+  aud?: string; // 대상
 }
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
@@ -39,6 +46,10 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
 
     if (user.token_version !== payload.tokenVersion) {
       throw new UnauthorizedException('토큰 버전이 맞지 않습니다.');
+    }
+
+    if (payload.iss !== 'WhiteClinic' || payload.aud !== 'admin-api') {
+      throw new UnauthorizedException('유효하지 않은 토큰입니다.');
     }
 
     return user;
