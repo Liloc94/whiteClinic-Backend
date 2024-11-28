@@ -9,8 +9,8 @@ export declare class OrderInfoController {
     constructor(orderInfoService: OrderInfoService, excelService: ExcelService);
     create(createOrderInfoDto: CreateOrderInfoDto): Promise<{
         idx: number;
-        savedOrderInfo: any;
-        savedCustomer: any;
+        savedOrderInfo: import("../util/constantTypes").ExtractOrderType & import("./entities/order_info.entity").Order;
+        savedCustomer: import("../util/constantTypes").ExtractOrderCustomerType & import("../customer/entities/customer.entity").Customer;
     }>;
     findAll(): Promise<import("./dto/search-order-list.dto").OrderListDto[]>;
     findOne(id: number): Promise<import("./entities/order_info.entity").Order>;

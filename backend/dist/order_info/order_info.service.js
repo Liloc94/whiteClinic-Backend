@@ -34,10 +34,10 @@ let OrderInfoService = class OrderInfoService {
         await queryRunner.startTransaction();
         try {
             const temp = await (0, DataHandlerFunc_1.handleCreateOrderInfo)(createOrderInfoDto);
-            const savedOrderInfo = await queryRunner.manager.save(order_info_entity_1.Order, temp[0]);
-            const savedCustomer = await queryRunner.manager.save(customer_entity_1.Customer, temp[1]);
-            const engineer = await queryRunner.manager.findOneByOrFail(engineer_entity_1.Engineer, {
-                engineer_name: temp[2],
+            const savedOrderInfo = await queryRunner.manager.save(order_info_entity_1.Order, temp.order);
+            const savedCustomer = await queryRunner.manager.save(customer_entity_1.Customer, temp.customer);
+            const engineer = await queryRunner.manager.findOne(engineer_entity_1.Engineer, {
+                where: { engineer_name: temp.engineer_name },
             });
             const customerEngineerOrder = queryRunner.manager.create(customer_engineer_order_entity_1.CustomerEngineerOrder, {
                 customer: savedCustomer,

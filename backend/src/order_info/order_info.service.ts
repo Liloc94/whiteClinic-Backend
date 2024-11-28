@@ -27,13 +27,15 @@ export class OrderInfoService {
     const queryRunner = this.dataSource.createQueryRunner();
     await queryRunner.connect();
     await queryRunner.startTransaction();
-
     try {
       const temp = await handleCreateOrderInfo(createOrderInfoDto);
-      const savedOrderInfo = await queryRunner.manager.save(Order, temp[0]);
-      const savedCustomer = await queryRunner.manager.save(Customer, temp[1]);
-      const engineer = await queryRunner.manager.findOneByOrFail(Engineer, {
-        engineer_name: temp[2],
+      const savedOrderInfo = await queryRunner.manager.save(Order, temp.order);
+      const savedCustomer = await queryRunner.manager.save(
+        Customer,
+        temp.customer,
+      );
+      const engineer = await queryRunner.manager.findOne(Engineer, {
+        where: { engineer_name: temp.engineer_name },
       });
 
       const customerEngineerOrder = queryRunner.manager.create(
