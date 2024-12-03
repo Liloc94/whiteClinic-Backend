@@ -4,6 +4,7 @@ import { Order } from './entities/order_info.entity';
 import { DataSource, Repository } from 'typeorm';
 import { Customer } from 'src/customer/entities/customer.entity';
 import { IncomeInfoService } from 'src/income.service';
+import { ScheduleInfoDto } from './dto/search-schedule-dto';
 export declare class OrderInfoService {
     private readonly orderInfoRepository;
     private readonly dataSource;
@@ -15,7 +16,7 @@ export declare class OrderInfoService {
         savedCustomer: import("src/util/constantTypes").ExtractOrderCustomerType & Customer;
     }>;
     findOrderDetails(): Promise<import("./dto/search-order-list.dto").OrderListDto[]>;
-    findWithId(id: number): Promise<Order>;
+    findWithId(id: number): Promise<ScheduleInfoDto>;
     updateOrderInfo(id: number, updateOrderInfoDto: UpdateOrderInfoDto): Promise<{
         message: string;
     }>;
@@ -24,4 +25,5 @@ export declare class OrderInfoService {
     private updateCustomer;
     private updateOrder;
     private getEngineerByName;
+    private handleScheduleInfo;
 }

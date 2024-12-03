@@ -70,10 +70,20 @@ let OrderInfoService = class OrderInfoService {
         return await (0, DataHandlerFunc_1.extractOrderDetail)(this.dataSource, customer_engineer_order_entity_1.CustomerEngineerOrder);
     }
     async findWithId(id) {
+        const queryRunner = this.dataSource.createQueryRunner();
+        await queryRunner.connect();
+        await queryRunner.startTransaction();
         try {
-            return await this.orderInfoRepository.findOne({
-                where: { order_id: id },
-            });
+            const orderDetails = queryRunner.manager
+                .createQueryBuilder(customer_engineer_order_entity_1.CustomerEngineerOrder, 'ceo')
+                .leftJoinAndSelect('ceo.customer', 'customer')
+                .leftJoinAndSelect('ceo.order', 'order')
+                .leftJoinAndSelect('ceo.engineer', 'engineer')
+                .where({ order: id })
+                .getOne();
+            await queryRunner.commitTransaction();
+            const scheduleInfo = await this.handleScheduleInfo(await orderDetails);
+            return scheduleInfo;
         }
         catch (error) {
             throw new common_1.NotFoundException(error);
@@ -153,6 +163,31 @@ let OrderInfoService = class OrderInfoService {
             throw new common_1.NotFoundException(`Engineer with name ${engineerName} not found`);
         }
         return engineer;
+    }
+    async handleScheduleInfo(order) {
+        const scheduleObj = {
+            order_id: order.order.order_id,
+            engineer_id: order.engineer.engineer_id,
+            customer_id: order.customer.customer_id,
+            order_date: order.order.order_date,
+            customer_name: order.customer.customer_name,
+            customer_phone: order.customer.customer_phone,
+            customer_addr: order.customer.customer_addr,
+            customer_remark: order.customer.customer_remark,
+            order_deposit: order.order.order_deposit,
+            deposit_paid: order.order.deposit_paid,
+            order_total_amount: order.order.order_total_amount,
+            order_payment: order.order.order_payment,
+            order_receipt_docs: order.order.order_receipt_docs,
+            receipt_docs_issued: order.order.receipt_docs_issued,
+            order_category: order.order.order_category,
+            order_product: order.order.order_product,
+            order_count: order.order.order_count,
+            order_isDiscount: order.order.order_isDiscount,
+            order_discount_ratio: order.order.order_discount_ratio,
+            engineer_name: order.engineer.engineer_name,
+        };
+        return scheduleObj;
     }
 };
 exports.OrderInfoService = OrderInfoService;

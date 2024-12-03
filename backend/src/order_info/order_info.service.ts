@@ -13,6 +13,7 @@ import {
 } from 'src/util/helper/DataHandlerFunc';
 import { IncomeInfoService } from 'src/income.service';
 import { IncomeType } from 'src/util/constantTypes';
+import { ScheduleInfoDto } from './dto/search-schedule-dto';
 
 @Injectable()
 export class OrderInfoService {
@@ -82,10 +83,34 @@ export class OrderInfoService {
   }
 
   async findWithId(id: number) {
+    const queryRunner = this.dataSource.createQueryRunner();
+
+    await queryRunner.connect();
+    await queryRunner.startTransaction();
+
     try {
-      return await this.orderInfoRepository.findOne({
-        where: { order_id: id },
-      });
+      const orderDetails = queryRunner.manager
+        .createQueryBuilder(CustomerEngineerOrder, 'ceo')
+        .leftJoinAndSelect('ceo.customer', 'customer')
+        .leftJoinAndSelect('ceo.order', 'order')
+        .leftJoinAndSelect('ceo.engineer', 'engineer')
+        .where({ order: id })
+        .getOne();
+
+      await queryRunner.commitTransaction();
+
+      const scheduleInfo = await this.handleScheduleInfo(await orderDetails);
+
+      //api에서 추가를 바라는 부분
+      // 사용자 주소,
+      // 사용자 이름
+      // 사용자 전화번호
+      // 사용자 특이사항
+      // 담당기사 이름
+      // 결제 총액
+      // 엔지니어, 고객 id
+
+      return scheduleInfo;
     } catch (error) {
       throw new NotFoundException(error);
     }
@@ -197,5 +222,32 @@ export class OrderInfoService {
     }
 
     return engineer;
+  }
+
+  private async handleScheduleInfo(order: CustomerEngineerOrder) {
+    const scheduleObj: ScheduleInfoDto = {
+      order_id: order.order.order_id,
+      engineer_id: order.engineer.engineer_id,
+      customer_id: order.customer.customer_id,
+      order_date: order.order.order_date,
+      customer_name: order.customer.customer_name,
+      customer_phone: order.customer.customer_phone,
+      customer_addr: order.customer.customer_addr,
+      customer_remark: order.customer.customer_remark,
+      order_deposit: order.order.order_deposit,
+      deposit_paid: order.order.deposit_paid,
+      order_total_amount: order.order.order_total_amount,
+      order_payment: order.order.order_payment,
+      order_receipt_docs: order.order.order_receipt_docs,
+      receipt_docs_issued: order.order.receipt_docs_issued,
+      order_category: order.order.order_category,
+      order_product: order.order.order_product,
+      order_count: order.order.order_count,
+      order_isDiscount: order.order.order_isDiscount,
+      order_discount_ratio: order.order.order_discount_ratio,
+      engineer_name: order.engineer.engineer_name,
+    };
+
+    return scheduleObj;
   }
 }
