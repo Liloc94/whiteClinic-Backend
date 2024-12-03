@@ -82,7 +82,7 @@ let OrderInfoService = class OrderInfoService {
                 .where({ order: id })
                 .getOne();
             await queryRunner.commitTransaction();
-            const scheduleInfo = await this.handleScheduleInfo(await orderDetails);
+            const scheduleInfo = await this.transformToScheduleData(await orderDetails);
             return scheduleInfo;
         }
         catch (error) {
@@ -164,7 +164,7 @@ let OrderInfoService = class OrderInfoService {
         }
         return engineer;
     }
-    async handleScheduleInfo(order) {
+    async transformToScheduleData(order) {
         const scheduleObj = {
             order_id: order.order.order_id,
             engineer_id: order.engineer.engineer_id,

@@ -99,16 +99,9 @@ export class OrderInfoService {
 
       await queryRunner.commitTransaction();
 
-      const scheduleInfo = await this.handleScheduleInfo(await orderDetails);
-
-      //api에서 추가를 바라는 부분
-      // 사용자 주소,
-      // 사용자 이름
-      // 사용자 전화번호
-      // 사용자 특이사항
-      // 담당기사 이름
-      // 결제 총액
-      // 엔지니어, 고객 id
+      const scheduleInfo = await this.transformToScheduleData(
+        await orderDetails,
+      );
 
       return scheduleInfo;
     } catch (error) {
@@ -224,7 +217,7 @@ export class OrderInfoService {
     return engineer;
   }
 
-  private async handleScheduleInfo(order: CustomerEngineerOrder) {
+  private async transformToScheduleData(order: CustomerEngineerOrder) {
     const scheduleObj: ScheduleInfoDto = {
       order_id: order.order.order_id,
       engineer_id: order.engineer.engineer_id,

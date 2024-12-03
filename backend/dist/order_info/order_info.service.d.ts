@@ -25,5 +25,5 @@ export declare class OrderInfoService {
     private updateCustomer;
     private updateOrder;
     private getEngineerByName;
-    private handleScheduleInfo;
+    private transformToScheduleData;
 }
