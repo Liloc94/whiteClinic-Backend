@@ -38,7 +38,7 @@ export class OrderInfoService {
       const engineer = await queryRunner.manager.findOne(Engineer, {
         where: { engineer_name: temp.engineer_name },
       });
-
+      // console.log("test");
       const customerEngineerOrder = queryRunner.manager.create(
         CustomerEngineerOrder,
         {
