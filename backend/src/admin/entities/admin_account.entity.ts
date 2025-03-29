@@ -1,6 +1,6 @@
 // admin_account.entity.ts
 import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
-import { AdminRefreshToken } from '../../refresh_token/entities/refresh_token.entity';
+import { AdminRefreshToken } from '../../refreshToken/entities/refresh_token.entity';
 import { IsOptional } from 'class-validator';
 
 @Entity('admin_account')

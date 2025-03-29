@@ -43,6 +43,9 @@ $ npm run start:dev
 
 # production mode
 $ npm run start:prod
+
+# build the project
+$ npm run build
 ```
 
 ## Run tests
@@ -56,6 +59,18 @@ $ npm run test:e2e
 
 # test coverage
 $ npm run test:cov
+```
+
+# Run the project with Docker
+
+```bash
+
+# Build Docker image
+$ docker build -t my-nestjs-app .
+
+# Run Docker container
+$ docker run -p 3000:3000 my-nestjs-app
+
 ```
 
 ## Resources
@@ -83,4 +98,5 @@ Nest is an MIT-licensed open source project. It can grow thanks to the sponsors 
 ## License
 
 Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+
 - 테스트

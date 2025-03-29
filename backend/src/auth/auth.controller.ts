@@ -9,7 +9,7 @@ import {
 } from '@nestjs/swagger';
 import { RegisterAuthDTO } from './dto/register-auth.dto';
 import { CreateAuthDto } from './dto/create-auth.dto';
-import { RefreshTokenDTO } from 'src/refresh_token/dto/refresh_token.dto';
+import { RefreshTokenDTO } from 'src/refreshToken/dto/refresh_token.dto';
 import { JwtAuthGuard } from './guards/jwt_auth.guard';
 import { RolesGuard } from './guards/roles.guard';
 import { Roles } from './decorators/roles.decorator';

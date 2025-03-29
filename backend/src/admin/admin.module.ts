@@ -3,7 +3,7 @@ import { AdminService } from './admin.service';
 import { AdminController } from './admin.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AdminAccount } from './entities/admin_account.entity';
-import { AdminRefreshToken } from 'src/refresh_token/entities/refresh_token.entity';
+import { AdminRefreshToken } from 'src/refreshToken/entities/refresh_token.entity';
 
 @Module({
   imports: [TypeOrmModule.forFeature([AdminAccount, AdminRefreshToken])],

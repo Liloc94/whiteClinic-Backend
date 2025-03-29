@@ -14,12 +14,13 @@ const engineer_skill_entity_1 = require("./entities/engineer_skill.entity");
 const typeorm_1 = require("typeorm");
 const common_1 = require("@nestjs/common");
 const engineer_entity_1 = require("./entities/engineer.entity");
-const customer_engineer_order_entity_1 = require("../order_info/entities/customer_engineer_order.entity");
-const DataHandlerFunc_1 = require("../util/helper/DataHandlerFunc");
+const customer_engineer_order_entity_1 = require("../order/entities/customer_engineer_order.entity");
 const engineer_daily_earning_entity_1 = require("./entities/engineer_daily_earning.entity");
 const skillUtil_service_1 = require("../skillUtil.service");
 const temp_emgineer_info_entity_1 = require("./entities/temp_emgineer_info.entity");
 const engineer_weekly_earning_entity_1 = require("./entities/engineer_weekly_earning.entity");
+const extractScheduleDetails_1 = require("../util/helperFunctions/extractScheduleDetails");
+const getEngineerDataWithSkills_1 = require("../util/helperFunctions/getEngineerDataWithSkills");
 let EngineerService = class EngineerService {
     constructor(skillService, dataSource) {
         this.skillService = skillService;
@@ -59,7 +60,7 @@ let EngineerService = class EngineerService {
                 .leftJoinAndSelect('engineerSkill.skill', 'skill')
                 .getMany();
             await queryRunner.commitTransaction();
-            return await (0, DataHandlerFunc_1.handleEngineerData)(engineerWithSkills);
+            return await (0, getEngineerDataWithSkills_1.default)(engineerWithSkills);
         }
         catch (error) {
             queryRunner.rollbackTransaction();
@@ -67,7 +68,7 @@ let EngineerService = class EngineerService {
         }
     }
     async getAllSchedule() {
-        return (0, DataHandlerFunc_1.extractScheduleDetail)(this.dataSource, customer_engineer_order_entity_1.CustomerEngineerOrder);
+        return await (0, extractScheduleDetails_1.default)(this.dataSource, customer_engineer_order_entity_1.CustomerEngineerOrder);
     }
     async getDailySalary(id) {
         const queryRunner = this.dataSource.createQueryRunner();
@@ -94,7 +95,7 @@ let EngineerService = class EngineerService {
         await queryRunner.startTransaction();
         try {
             const isExistingWeekly = await queryRunner.manager.findOne(engineer_weekly_earning_entity_1.EngineerWeeklyEarning, { where: { weekly: weeklySalary.weekly } });
-            if (!!isExistingWeekly) {
+            if (isExistingWeekly) {
                 await queryRunner.manager.update(engineer_weekly_earning_entity_1.EngineerWeeklyEarning, { weekly: weeklySalary.weekly }, { ...weeklySalary });
             }
             else {
@@ -141,7 +142,7 @@ let EngineerService = class EngineerService {
                 .where('engineer.engineer_id = :id', { id })
                 .getMany();
             await queryRunner.commitTransaction();
-            return await (0, DataHandlerFunc_1.handleEngineerData)(exactEngineer);
+            return await (0, getEngineerDataWithSkills_1.default)(exactEngineer);
         }
         catch (error) {
             await queryRunner.rollbackTransaction();

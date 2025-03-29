@@ -66,6 +66,6 @@ __decorate([
     __metadata("design:type", String)
 ], Engineer.prototype, "engineer_payday", void 0);
 exports.Engineer = Engineer = __decorate([
-    (0, typeorm_1.Entity)('engineer', { schema: 'white_clinic' })
+    (0, typeorm_1.Entity)('engineer')
 ], Engineer);
 //# sourceMappingURL=engineer.entity.js.map

@@ -1,12 +1,12 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { setupSwagger } from './util/setupSwagger';
-import { HttpErrorFilter } from './util/HttpErrorFilter';
+import { HttpErrorFilter } from 'src/util/filters/HttpErrorFilter';
 import { config } from 'dotenv';
 import { BadRequestException, ValidationPipe } from '@nestjs/common';
-import { LOCAL_URL, SERVER_PORT, SERVER_URL } from './util/URLS';
+import { LOCAL_URL, SERVER_PORT, SERVER_URL } from 'src/util/constants/urls';
 import { NestExpressApplication } from '@nestjs/platform-express';
-import { ValidationExceptionFilter } from './util/ValidationExceptionFilter';
+import { ValidationExceptionFilter } from 'src/util/filters/ValidationExceptionFilter';
 
 async function bootstrap() {
   config();
@@ -27,7 +27,6 @@ async function bootstrap() {
         value: true,
       },
       exceptionFactory: (errors) => {
-        // console.error('Validation errors:', errors);
         return new BadRequestException('Validation failed : ' + errors);
       },
     }),

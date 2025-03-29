@@ -1,12 +1,12 @@
 import { Module } from '@nestjs/common';
 import { AppController } from './app/app.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { RefreshTokenModule } from './refresh_token/refresh_token.module';
+import { RefreshTokenModule } from './refreshToken/refresh_token.module';
 import { AdminModule } from './admin/admin.module';
 import { ConfigModule } from '@nestjs/config';
 import { AuthModule } from './auth/auth.module';
 import { JwtModule } from '@nestjs/jwt';
-import { OrderInfoModule } from './order_info/order_info.module';
+import { OrderInfoModule } from './order/order_info.module';
 import { CustomerModule } from './customer/customer.module';
 import { EngineerModule } from './engineer/engineer.module';
 

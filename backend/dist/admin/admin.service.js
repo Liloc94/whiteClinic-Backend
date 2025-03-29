@@ -16,7 +16,7 @@ exports.AdminService = void 0;
 const common_1 = require("@nestjs/common");
 const typeorm_1 = require("typeorm");
 const typeorm_2 = require("@nestjs/typeorm");
-const bcrypt = require("bcrypt");
+const bcrypt = require("bcryptjs");
 const admin_account_entity_1 = require("./entities/admin_account.entity");
 let AdminService = class AdminService {
     constructor(adminRepository, dataSource) {
