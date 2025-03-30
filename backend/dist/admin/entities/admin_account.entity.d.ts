@@ -1,4 +1,4 @@
-import { AdminRefreshToken } from '../../refresh_token/entities/refresh_token.entity';
+import { AdminRefreshToken } from '../../refreshToken/entities/refresh_token.entity';
 export declare class AdminAccount {
     idx: number;
     admin_id: string;

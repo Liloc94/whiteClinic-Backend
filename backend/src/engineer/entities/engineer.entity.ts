@@ -4,7 +4,7 @@ import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
 import { EngineerDailyEarning } from './engineer_daily_earning.entity';
 import { EngineerWeeklyEarning } from './engineer_weekly_earning.entity';
 
-@Entity('engineer', { schema: 'white_clinic' })
+@Entity('engineer')
 export class Engineer {
   @PrimaryGeneratedColumn({
     type: 'integer',

@@ -2,7 +2,7 @@ import { Module } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { AuthController } from './auth.controller';
 import { AdminModule } from 'src/admin/admin.module';
-import { RefreshTokenModule } from 'src/refresh_token/refresh_token.module';
+import { RefreshTokenModule } from 'src/refreshToken/refresh_token.module';
 import { PassportModule } from '@nestjs/passport';
 import { JwtModule } from '@nestjs/jwt';
 import { JwtStrategy } from './jwt.strategy';

@@ -4,17 +4,15 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateEngineerDto } from './dto/create-engineer.dto';
 import { UpdateEngineerDto } from './dto/update-engineer.dto';
 import { Engineer } from './entities/engineer.entity';
-import { CustomerEngineerOrder } from 'src/order_info/entities/customer_engineer_order.entity';
-import {
-  extractScheduleDetail,
-  handleEngineerData,
-} from 'src/util/helper/DataHandlerFunc';
+import { CustomerEngineerOrder } from 'src/order/entities/customer_engineer_order.entity';
 import { EngineerDailyEarning } from './entities/engineer_daily_earning.entity';
 import { SkillService } from 'src/skillUtil.service';
 import { TempEngineer } from './entities/temp_emgineer_info.entity';
 import { EngineerWeeklySalaryDto } from './dto/save-engineer-weeklyEarning.dto';
 import { EngineerWeeklyEarning } from './entities/engineer_weekly_earning.entity';
 import { EngineerWeeklyDetailDto } from './dto/search-engineer-weeklyEarningIsPaid.dto';
+import extractScheduleDetail from 'src/util/helperFunctions/extractScheduleDetails';
+import handleEngineerData from 'src/util/helperFunctions/getEngineerDataWithSkills';
 
 @Injectable()
 export class EngineerService {
@@ -83,7 +81,7 @@ export class EngineerService {
   }
 
   async getAllSchedule() {
-    return extractScheduleDetail(this.dataSource, CustomerEngineerOrder);
+    return await extractScheduleDetail(this.dataSource, CustomerEngineerOrder);
   }
 
   async getDailySalary(id: number) {
@@ -124,7 +122,7 @@ export class EngineerService {
         { where: { weekly: weeklySalary.weekly } },
       );
 
-      if (!!isExistingWeekly) {
+      if (isExistingWeekly) {
         await queryRunner.manager.update(
           EngineerWeeklyEarning,
           { weekly: weeklySalary.weekly },

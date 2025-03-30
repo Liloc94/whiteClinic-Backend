@@ -1,12 +1,13 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { setupSwagger } from './util/setupSwagger';
-import { HttpErrorFilter } from './util/HttpErrorFilter';
+import { HttpErrorFilter } from 'src/util/filters/HttpErrorFilter';
 import { config } from 'dotenv';
 import { BadRequestException, ValidationPipe } from '@nestjs/common';
-import { LOCAL_URL, SERVER_PORT, SERVER_URL } from './util/URLS';
+import { LOCAL_URL, SERVER_PORT, SERVER_URL } from 'src/util/constants/urls';
 import { NestExpressApplication } from '@nestjs/platform-express';
-import { ValidationExceptionFilter } from './util/ValidationExceptionFilter';
+import { ValidationExceptionFilter } from 'src/util/filters/ValidationExceptionFilter';
+import * as compression from 'compression';
 
 async function bootstrap() {
   config();
@@ -16,6 +17,11 @@ async function bootstrap() {
   });
 
   const port = SERVER_PORT;
+
+  // compression 라이브러리 전역으로 적용
+  // 미들웨어 레벨에서 모든 HTTP 응답에 대해 압축 적용
+  // 이 라이브러리를 추가하면 자동으로 모든 HTTP 응답이 압축되어 전송되어, 전반적인 애플리케이션 성능이 향상. 특히 API 응답이 큰 경우에 효과적
+  app.use(compression());
 
   app.useGlobalFilters(new ValidationExceptionFilter());
   app.useGlobalPipes(
@@ -27,8 +33,14 @@ async function bootstrap() {
         value: true,
       },
       exceptionFactory: (errors) => {
-        // console.error('Validation errors:', errors);
-        return new BadRequestException('Validation failed : ' + errors);
+        const messages = errors.map((error) => {
+          const constraints = Object.values(error.constraints || {});
+          return `${error.property}: ${constraints.join(', ')}`;
+        });
+        return new BadRequestException({
+          message: 'Validation failed',
+          errors: messages,
+        });
       },
     }),
   );
@@ -43,5 +55,6 @@ async function bootstrap() {
   setupSwagger(app);
 
   await app.listen(process.env.PORT || port);
+  console.log(`Application is running on: ${await app.getUrl()}`);
 }
 bootstrap();

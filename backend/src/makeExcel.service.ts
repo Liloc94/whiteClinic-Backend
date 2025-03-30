@@ -58,6 +58,7 @@ export class ExcelService {
     return await XLSX.write(workbook, {
       bookType: 'xlsx',
       type: 'buffer',
+      password: 'whiteclinic',
     });
   }
   catch(error: Error) {

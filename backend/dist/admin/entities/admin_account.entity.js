@@ -11,7 +11,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.AdminAccount = void 0;
 const typeorm_1 = require("typeorm");
-const refresh_token_entity_1 = require("../../refresh_token/entities/refresh_token.entity");
+const refresh_token_entity_1 = require("../../refreshToken/entities/refresh_token.entity");
 const class_validator_1 = require("class-validator");
 let AdminAccount = class AdminAccount {
 };

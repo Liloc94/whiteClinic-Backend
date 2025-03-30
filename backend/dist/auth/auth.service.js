@@ -12,7 +12,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.AuthService = void 0;
 const common_1 = require("@nestjs/common");
 const admin_service_1 = require("../admin/admin.service");
-const refresh_token_service_1 = require("../refresh_token/refresh_token.service");
+const refresh_token_service_1 = require("../refreshToken/refresh_token.service");
 const jwt_1 = require("@nestjs/jwt");
 const bcrypt = require("bcrypt");
 const crypto = require("crypto");

@@ -1,7 +1,7 @@
 import { AuthService } from './auth.service';
 import { RegisterAuthDTO } from './dto/register-auth.dto';
 import { CreateAuthDto } from './dto/create-auth.dto';
-import { RefreshTokenDTO } from 'src/refresh_token/dto/refresh_token.dto';
+import { RefreshTokenDTO } from 'src/refreshToken/dto/refresh_token.dto';
 import { Request } from 'express';
 export declare class AuthController {
     private readonly authService;
@@ -14,7 +14,7 @@ export declare class AuthController {
         access_token: string;
         refresh_token: string;
     }>;
-    refresh(refreshTokenDto: RefreshTokenDTO): Promise<import("../refresh_token/dto/refresh_response.dto").RefreshResponseDTO>;
+    refresh(refreshTokenDto: RefreshTokenDTO): Promise<import("../refreshToken/dto/refresh_response.dto").RefreshResponseDTO>;
     logout(body: RefreshTokenDTO): Promise<{
         message: string;
     }>;

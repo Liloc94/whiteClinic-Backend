@@ -12,7 +12,7 @@ const admin_service_1 = require("./admin.service");
 const admin_controller_1 = require("./admin.controller");
 const typeorm_1 = require("@nestjs/typeorm");
 const admin_account_entity_1 = require("./entities/admin_account.entity");
-const refresh_token_entity_1 = require("../refresh_token/entities/refresh_token.entity");
+const refresh_token_entity_1 = require("../refreshToken/entities/refresh_token.entity");
 let AdminModule = class AdminModule {
 };
 exports.AdminModule = AdminModule;

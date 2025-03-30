@@ -1,7 +1,7 @@
 import { AdminService } from 'src/admin/admin.service';
-import { RefreshTokenService } from 'src/refresh_token/refresh_token.service';
+import { RefreshTokenService } from 'src/refreshToken/refresh_token.service';
 import { JwtService } from '@nestjs/jwt';
-import { RefreshResponseDTO } from 'src/refresh_token/dto/refresh_response.dto';
+import { RefreshResponseDTO } from 'src/refreshToken/dto/refresh_response.dto';
 export declare class AuthService {
     private readonly adminService;
     private readonly refreshTokenService;

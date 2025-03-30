@@ -12,7 +12,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.EngineerDailyEarning = void 0;
 const typeorm_1 = require("typeorm");
 const engineer_entity_1 = require("./engineer.entity");
-const order_info_entity_1 = require("../../order_info/entities/order_info.entity");
+const order_info_entity_1 = require("../../order/entities/order_info.entity");
 let EngineerDailyEarning = class EngineerDailyEarning {
 };
 exports.EngineerDailyEarning = EngineerDailyEarning;

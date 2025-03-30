@@ -7,7 +7,7 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { Engineer } from './engineer.entity';
-import { Order } from 'src/order_info/entities/order_info.entity';
+import { Order } from 'src/order/entities/order_info.entity';
 
 @Entity('engineer_daily_earning')
 export class EngineerDailyEarning {
