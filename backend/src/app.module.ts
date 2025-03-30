@@ -1,14 +1,14 @@
 import { Module } from '@nestjs/common';
 import { AppController } from './app/app.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { RefreshTokenModule } from 'src/refreshToken/refresh_token.module';
-import { AdminModule } from 'src/admin/admin.module';
+import { RefreshTokenModule } from './refreshToken/refresh_token.module';
+import { AdminModule } from './admin/admin.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { AuthModule } from 'src/auth/auth.module';
+import { AuthModule } from './auth/auth.module';
 import { JwtModule } from '@nestjs/jwt';
-import { OrderInfoModule } from 'src/order/order_info.module';
-import { CustomerModule } from 'src/customer/customer.module';
-import { EngineerModule } from 'src/engineer/engineer.module';
+import { OrderInfoModule } from './order/order_info.module';
+import { CustomerModule } from './customer/customer.module';
+import { EngineerModule } from './engineer/engineer.module';
 
 @Module({
   imports: [

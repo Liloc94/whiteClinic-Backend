@@ -40,7 +40,8 @@ async function bootstrap() {
 
     // compression 라이브러리 전역으로 적용
     // 미들웨어 레벨에서 모든 HTTP 응답에 대해 압축 적용
-    // 이 라이브러리를 추가하면 자동으로 모든 HTTP 응답이 압축되어 전송되어, 전반적인 애플리케이션 성능이 향상. 특히 API 응답이 큰 경우에 효과적
+    // 이 라이브러리를 추가하면 자동으로 모든 HTTP 응답이 압축되어 전송되어, 전반적인 애플리케이션 성능이 향상.
+    // 특히 API 응답이 큰 경우에 효과적
     app.use(compression());
 
     app.useGlobalFilters(new ValidationExceptionFilter());
@@ -82,12 +83,10 @@ async function bootstrap() {
   }
 }
 
-// Handle unhandled promise rejections
 process.on('unhandledRejection', (reason, promise) => {
   console.error('Unhandled Rejection at:', promise, 'reason:', reason);
 });
 
-// Handle graceful shutdown
 process.on('SIGTERM', async () => {
   if (app) {
     await app.close();
@@ -95,7 +94,6 @@ process.on('SIGTERM', async () => {
   process.exit(0);
 });
 
-// For Vercel serverless
 export const handler = async (req: any, res: any) => {
   if (!app) {
     await bootstrap();
