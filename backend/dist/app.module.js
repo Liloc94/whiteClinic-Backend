@@ -26,21 +26,33 @@ exports.AppModule = AppModule = __decorate([
         imports: [
             config_1.ConfigModule.forRoot({
                 isGlobal: true,
+                cache: true,
             }),
-            typeorm_1.TypeOrmModule.forRoot({
-                type: 'postgres',
-                host: 'ep-cold-band-a71ed1zj-pooler.ap-southeast-2.aws.neon.tech',
-                url: 'postgres://default:hNOtdfu8sWy3@ep-cold-band-a71ed1zj-pooler.ap-southeast-2.aws.neon.tech:5432/verceldb?sslmode=require',
-                ssl: { rejectUnauthorized: false },
-                username: 'default',
-                password: 'hNOtdfu8sWy3',
-                database: 'verceldb',
-                schema: 'white_clinic',
-                entities: [],
-                autoLoadEntities: true,
-                synchronize: false,
-                migrationsRun: true,
-                logging: true,
+            typeorm_1.TypeOrmModule.forRootAsync({
+                imports: [config_1.ConfigModule],
+                useFactory: (configService) => {
+                    const dbUrl = configService.get('DATABASE_URL');
+                    if (!dbUrl) {
+                        throw new Error('DATABASE_URL is not defined');
+                    }
+                    return {
+                        type: 'postgres',
+                        url: dbUrl,
+                        ssl: { rejectUnauthorized: false },
+                        schema: 'white_clinic',
+                        entities: [],
+                        autoLoadEntities: true,
+                        synchronize: false,
+                        migrationsRun: true,
+                        logging: configService.get('NODE_ENV') === 'development',
+                        poolSize: 1,
+                        extra: {
+                            max: 1,
+                            connectionTimeoutMillis: 5000,
+                        },
+                    };
+                },
+                inject: [config_1.ConfigService],
             }),
             refresh_token_module_1.RefreshTokenModule,
             admin_module_1.AdminModule,
@@ -49,7 +61,6 @@ exports.AppModule = AppModule = __decorate([
             order_info_module_1.OrderInfoModule,
             customer_module_1.CustomerModule,
             engineer_module_1.EngineerModule,
-            refresh_token_module_1.RefreshTokenModule,
         ],
         controllers: [app_controller_1.AppController],
         providers: [],
