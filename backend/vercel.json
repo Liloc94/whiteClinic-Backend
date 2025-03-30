@@ -2,38 +2,32 @@
   "version": 2,
   "builds": [
     {
-      "src": "src/main.ts",
-      "use": "@vercel/node",
+      "src": "package.json",
+      "use": "@vercel/static-build",
       "config": {
-        "maxLambdaSize": "50mb"
+        "distDir": "dist"
       }
     }
   ],
   "routes": [
     {
       "src": "/api-docs",
-      "dest": "/src/main.ts"
+      "dest": "/api"
     },
     {
       "src": "/api-docs/(.*)",
-      "dest": "/src/main.ts"
+      "dest": "/api"
     },
     {
       "src": "/api/(.*)",
-      "dest": "/src/main.ts"
+      "dest": "/api"
     },
     {
       "src": "/(.*)",
-      "dest": "/src/main.ts"
+      "dest": "/api"
     }
   ],
   "env": {
     "NODE_ENV": "production"
-  },
-  "functions": {
-    "src/main.ts": {
-      "memory": 1024,
-      "maxDuration": 60
-    }
   }
 }
