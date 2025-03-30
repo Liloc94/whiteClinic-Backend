@@ -2,38 +2,40 @@
   "version": 2,
   "builds": [
     {
-      "src": "dist/main.js",
+      "src": "src/main.ts",
       "use": "@vercel/node",
       "config": {
-        "maxLambdaSize": "50mb"
+        "maxLambdaSize": "50mb",
+        "buildCommand": "yarn global add @nestjs/cli && yarn install && yarn build",
+        "outputDirectory": "dist"
       }
     }
   ],
   "routes": [
     {
       "src": "/api-docs",
-      "dest": "/dist/main.js"
+      "dest": "/src/main.ts"
     },
     {
       "src": "/api-docs/(.*)",
-      "dest": "/dist/main.js"
+      "dest": "/src/main.ts"
     },
     {
       "src": "/api/(.*)",
-      "dest": "/dist/main.js"
+      "dest": "/src/main.ts"
     },
     {
       "src": "/(.*)",
-      "dest": "/dist/main.js"
+      "dest": "/src/main.ts"
     }
   ],
   "env": {
     "NODE_ENV": "production"
   },
   "functions": {
-    "dist/main.js": {
+    "src/main.ts": {
       "memory": 1024,
-      "maxDuration": 10
+      "maxDuration": 60
     }
   }
 }
