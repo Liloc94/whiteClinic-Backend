@@ -1,12 +1,12 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { setupSwagger } from './util/setupSwagger';
-import { HttpErrorFilter } from 'src/util/filters/HttpErrorFilter';
+import { HttpErrorFilter } from './util/filters/HttpErrorFilter';
 import { config } from 'dotenv';
 import { BadRequestException, ValidationPipe, Logger } from '@nestjs/common';
-import { LOCAL_URL, SERVER_PORT, SERVER_URL } from 'src/util/constants/urls';
+import { LOCAL_URL, SERVER_PORT, SERVER_URL } from './util/constants/urls';
 import { NestExpressApplication } from '@nestjs/platform-express';
-import { ValidationExceptionFilter } from 'src/util/filters/ValidationExceptionFilter';
+import { ValidationExceptionFilter } from './util/filters/ValidationExceptionFilter';
 import * as compression from 'compression';
 
 function validateEnv() {
