@@ -100,7 +100,9 @@ export const handler = async (req: any, res: any) => {
   if (!app) {
     await bootstrap();
   }
-  return app.getHttpAdapter().getInstance()._router.handle(req, res);
+  const httpAdapter = app.getHttpAdapter();
+  const instance = httpAdapter.getInstance();
+  return instance(req, res);
 };
 
 // For local development
