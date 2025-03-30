@@ -18,17 +18,28 @@ import { EngineerModule } from 'src/engineer/engineer.module';
     }),
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
-      useFactory: (configService: ConfigService) => ({
-        type: 'postgres',
-        url: configService.get('DATABASE_URL'),
-        ssl: { rejectUnauthorized: false },
-        schema: 'white_clinic',
-        entities: [],
-        autoLoadEntities: true,
-        synchronize: false,
-        migrationsRun: true,
-        logging: configService.get('NODE_ENV') === 'development',
-      }),
+      useFactory: (configService: ConfigService) => {
+        const dbUrl = configService.get('DATABASE_URL');
+        if (!dbUrl) {
+          throw new Error('DATABASE_URL is not defined');
+        }
+        return {
+          type: 'postgres',
+          url: dbUrl,
+          ssl: { rejectUnauthorized: false },
+          schema: 'white_clinic',
+          entities: [],
+          autoLoadEntities: true,
+          synchronize: false,
+          migrationsRun: true,
+          logging: configService.get('NODE_ENV') === 'development',
+          poolSize: 1,
+          extra: {
+            max: 1,
+            connectionTimeoutMillis: 5000,
+          },
+        };
+      },
       inject: [ConfigService],
     }),
     RefreshTokenModule,

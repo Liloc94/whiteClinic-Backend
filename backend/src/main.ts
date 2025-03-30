@@ -23,6 +23,8 @@ function validateEnv() {
   }
 }
 
+let app: NestExpressApplication;
+
 async function bootstrap() {
   const logger = new Logger('Bootstrap');
 
@@ -30,7 +32,7 @@ async function bootstrap() {
     config();
     validateEnv();
 
-    const app = await NestFactory.create<NestExpressApplication>(AppModule, {
+    app = await NestFactory.create<NestExpressApplication>(AppModule, {
       logger: ['error', 'warn', 'log', 'debug', 'verbose'],
     });
 
@@ -83,7 +85,25 @@ async function bootstrap() {
 // Handle unhandled promise rejections
 process.on('unhandledRejection', (reason, promise) => {
   console.error('Unhandled Rejection at:', promise, 'reason:', reason);
-  // Application specific logging, throwing an error, or other logic here
 });
 
-bootstrap();
+// Handle graceful shutdown
+process.on('SIGTERM', async () => {
+  if (app) {
+    await app.close();
+  }
+  process.exit(0);
+});
+
+// For Vercel serverless
+export const handler = async (req: any, res: any) => {
+  if (!app) {
+    await bootstrap();
+  }
+  return app.getHttpAdapter().getInstance()._router.handle(req, res);
+};
+
+// For local development
+if (process.env.NODE_ENV !== 'production') {
+  bootstrap();
+}
