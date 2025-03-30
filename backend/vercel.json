@@ -29,5 +29,11 @@
   ],
   "env": {
     "NODE_ENV": "production"
+  },
+  "functions": {
+    "dist/main.js": {
+      "memory": 1024,
+      "maxDuration": 10
+    }
   }
 }
